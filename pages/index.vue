@@ -4,10 +4,21 @@
       <h1 class="text-4xl font-extrabold">My_Maker Portfolio</h1>
       <div class="text-sm font-medium text-neutral-600">powered by <span class="text-neutral-900 font-bold">Nuxt 3</span>, <span class="text-neutral-900 font-bold">Vite</span>, <span class="text-neutral-900 font-bold">Tailwind</span>, <span class="text-neutral-900 font-bold">Supabase</span> and <span class="text-neutral-900 font-bold">Vercel</span>.</div>
     </div>
+    <div class="flex flex-col border-2 border-neutral-900 rounded-xl min-w-fit w-96">
+      <div class="p-4 border-b-2 border-neutral-900">
+        <h1 class="text-xl font-bold whitespace-nowrap">Projects</h1>
+      </div>
+      <div class="p-4 border-b-2 border-neutral-900 last:border-b-0" v-for="project in projects.projects" :key="project.slug">
+        <h1 class="text-md text-neutral-700 font-bold whitespace-nowrap">{{project.displayName}}</h1>
+        <p class="text-sm text-neutral-600 whitespace-nowrap">{{project.summary}}</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+const { data: projects } = useFetch('/api/projects');
+
 useHead({
   title: "My_Maker"
 })
