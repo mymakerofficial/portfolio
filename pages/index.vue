@@ -7,11 +7,12 @@
     <div class="flex flex-col border-2 border-neutral-900 rounded-xl min-w-fit w-96">
       <div class="p-4 border-b-2 border-neutral-900">
         <h1 class="text-xl font-bold whitespace-nowrap">Projects</h1>
+        <a href="/api/projects" class="text-sm text-blue-600 underline">/api/projects</a>
       </div>
-      <div class="p-4 border-b-2 border-neutral-900 last:border-b-0" v-for="project in projects.projects" :key="project.slug">
+      <NuxtLink v-if="projects" :to="project.htmlUrl" class="p-4 border-b-2 border-neutral-900 last:border-b-0" v-for="project in projects.projects" :key="project.slug">
         <h1 class="text-md text-neutral-700 font-bold whitespace-nowrap">{{project.displayName}}</h1>
         <p class="text-sm text-neutral-600 whitespace-nowrap">{{project.summary}}</p>
-      </div>
+      </NuxtLink>
     </div>
   </div>
 </template>

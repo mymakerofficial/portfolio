@@ -17,16 +17,16 @@ export default defineEventHandler(async () => {
 
   const { data, error } = await supabase
     .from('projects')
-    .select('slug, display_name, summary')
+    .select('slug, displayName: display_name, summary')
 
   if (!data || error) {
     throw new Error('Error fetching projects');
   }
 
   const projects = data.map((project) => ({
-    slug: project.slug,
-    displayName: project.display_name,
-    summary: project.summary,
+    ...project,
+    htmlUrl: `/projects/${project.slug}`,
+    url: `/api/projects/${project.slug}`,
   }));
 
   return {
