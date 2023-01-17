@@ -3,7 +3,7 @@
     <div class="flex flex-col gap-4">
       <h1 class="text-4xl font-extrabold">{{ project?.displayName || 'loading..' }}</h1>
       <div class="text-sm font-medium text-neutral-600">{{ project?.summary || 'loading..' }}</div>
-      <a :href="`/api/projects/${useRoute().params.slug}`" class="text-sm text-blue-600 underline">/api/projects/{{ useRoute().params.slug }}</a>
+      <a :href="`/api/v1/projects/${useRoute().params.slug}`" class="text-sm text-blue-600 underline">/api/v1/projects/{{ useRoute().params.slug }}</a>
     </div>
     <img v-if="project?.thumbnailUrl" :src="project.thumbnailUrl" alt="thumbnail" class="rounded-xl w-96">
     <div v-if="project" class="flex flex-col border-2 border-neutral-900 rounded-xl min-w-fit w-96">
@@ -16,5 +16,5 @@
 </template>
 
 <script setup lang="ts">
-const { data: project } = useFetch(`/api/projects/${useRoute().params.slug}`);
+const { data: project } = useFetch(`/api/v1/projects/${useRoute().params.slug}`);
 </script>
