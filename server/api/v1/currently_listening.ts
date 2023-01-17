@@ -78,7 +78,7 @@ export default defineEventHandler(async () => {
 
   return {
     //responses: responses.map((response) => { return { ...response, response: response.response.data } }),
-    contentProvider: provider,
+    contentProvider: !data.state || data.state !== "idle" ? provider : null,
     contentId: data.attributes.media_content_id ?? null,
     state: data.state ?? null,
     artistName: data.attributes.media_artist ?? null,

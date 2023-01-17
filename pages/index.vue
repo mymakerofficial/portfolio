@@ -6,26 +6,32 @@
     </div>
     <div v-if="listening" class="p-4 border-2 border-neutral-900 rounded-xl lg:min-w-fit lg:w-1/2">
       <div class="flex flex-col lg:flex-row gap-4">
-        <div>
-          <img :alt="listening.albumName" :src="listening.albumArtUrl" class="w-24 h-24" />
+        <div v-if="listening.albumArtUrl">
+          <img :alt="listening.albumName" :src="listening.albumArtUrl" class="w-28 h-28" />
         </div>
-        <div class="flex flex-col gap-2">
-          <h1 class="text-md text-neutral-700 font-bold">{{listening.trackTitle}}</h1>
-          <p class="text-sm text-neutral-600">{{listening.artistName}}</p>
-          <p class="text-sm text-neutral-600">{{listening.albumName}}</p>
+        <div v-if="listening.state === 'idle' || !listening.state">
+          <h1 class="text-md text-neutral-700 font-bold">Not listening to anything at the moment</h1>
+        </div>
+        <div v-else class="flex flex-col gap-2 justify-between">
+          <div class="flex flex-col gap-2">
+            <h1 class="text-md text-neutral-700 font-bold">{{listening.trackTitle}}</h1>
+            <p class="text-sm text-neutral-600">{{listening.artistName}}</p>
+          </div>
           <div class="flex flex-wrap gap-2">
             <span class="text-xs font-medium text-neutral-600 bg-neutral-100 px-1.5 py-0.5 rounded-md">{{ listening.state }}</span>
-            <span class="text-xs font-medium text-neutral-600 bg-neutral-100 px-1.5 py-0.5 rounded-md">{{ listening.playbackPosition }}s / {{ listening.playbackDuration }}s</span>
-            <span class="text-xs font-medium text-neutral-600 bg-neutral-100 px-1.5 py-0.5 rounded-md">shuffle: {{ listening.playbackShuffle ? "on" : "off" }}</span>
-            <span class="text-xs font-medium text-neutral-600 bg-neutral-100 px-1.5 py-0.5 rounded-md">repeat: {{ listening.playbackRepeat }}</span>
-          </div>
-          <div v-if="listening.shareUrl" class="mt-2">
-            <a :href="listening?.shareUrl" target="_blank" class="text-md font-medium text-neutral-800 border-2 border-b-4 border-r-4 border-neutral-800 px-2 py-0.5 rounded-lg">play on {{ listening.contentProvider }}</a>
+            <span v-if="listening.playbackDuration !== null && listening.playbackDuration !== 0" class="text-xs font-medium text-neutral-600 bg-neutral-100 px-1.5 py-0.5 rounded-md">{{ listening.playbackPosition }}s / {{ listening.playbackDuration }}s</span>
+            <span v-if="listening.playbackShuffle !== null" class="text-xs font-medium text-neutral-600 bg-neutral-100 px-1.5 py-0.5 rounded-md">shuffle: {{ listening.playbackShuffle ? "on" : "off" }}</span>
+            <span v-if="listening.playbackRepeat !== null" class="text-xs font-medium text-neutral-600 bg-neutral-100 px-1.5 py-0.5 rounded-md">repeat: {{ listening.playbackRepeat }}</span>
           </div>
         </div>
-        <div class="ml-auto">
-          <img v-if="listening.contentProvider === 'spotify'" alt="Spotify" src="~/assets/img/Spotify_Logo_RGB_Green.png" class="h-6" />
-          <img v-else-if="listening.contentProvider === 'plex'" alt="Plex" src="~/assets/img/plex-logo-full-color-on-white.png" class="h-6" />
+        <div class="ml-auto flex flex-row-reverse w-full lg:w-auto lg:flex-col items-end gap-4 justify-between" v-if="listening.contentProvider">
+          <div>
+            <img v-if="listening.contentProvider === 'spotify'" alt="Spotify" src="~/assets/img/Spotify_Logo_RGB_Green.png" class="h-6" />
+            <img v-else-if="listening.contentProvider === 'plex'" alt="Plex" src="~/assets/img/plex-logo-full-color-on-white.png" class="h-6" />
+          </div>
+          <div v-if="listening.shareUrl">
+            <a :href="listening?.shareUrl" target="_blank" class="text-md font-medium text-neutral-800 border-2 border-b-4 border-r-4 border-neutral-800 px-2 py-0.5 rounded-lg">play on {{ listening.contentProvider }}</a>
+          </div>
         </div>
       </div>
     </div>
