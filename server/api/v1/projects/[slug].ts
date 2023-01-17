@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
 
   const { data: projectData, error } = await supabase
     .from('projects')
-    .select('slug, displayName: display_name, summary, url, featured, releaseDate: released_at_date, startedDate: started_at_date, tags ( slug, displayName: display_name ), collaborators: people ( name, websiteUrl: website_url ), technologies ( slug, displayName: display_name, shortDisplayName: short_display_name, type: technology_type_id ( slug, displayName: display_name, shortDisplayName: short_display_name ) ), thumbnailId: thumbnail_id')
+    .select('slug, displayName: display_name, summary, url, releaseDate: released_at_date, startedDate: started_at_date, tags ( slug, displayName: display_name ), collaborators: people ( slug, displayName: display_name, websiteUrl: website_url ), technologies ( slug, displayName: display_name, shortDisplayName: short_display_name, type: technology_type_id ( slug, displayName: display_name, shortDisplayName: short_display_name ) ), thumbnailId: thumbnail_id')
     .eq('slug', event.context.params.slug)
     .single()
 
@@ -54,7 +54,6 @@ export default defineEventHandler(async (event) => {
     displayName: projectData.displayName,
     summary: projectData.summary,
     websiteUrl: projectData.url,
-    featured: projectData.featured,
     releaseDate: projectData.releaseDate,
     startedDate: projectData.startedDate,
     tags: projectData.tags,
