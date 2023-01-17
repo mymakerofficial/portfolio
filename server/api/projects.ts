@@ -29,7 +29,5 @@ export default defineEventHandler(async () => {
     url: `/api/projects/${project.slug}`,
   }));
 
-  return {
-    projects,
-  };
+  return projects;
 });
