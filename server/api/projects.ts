@@ -17,7 +17,7 @@ export default defineEventHandler(async () => {
 
   const { data, error } = await supabase
     .from('projects')
-    .select('slug, displayName: display_name, summary')
+    .select('slug, displayName: display_name, summary, releaseData: released_at_date, featured')
 
   if (!data || error) {
     throw new Error('Error fetching projects');
