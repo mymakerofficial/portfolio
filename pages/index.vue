@@ -5,13 +5,20 @@
       <div class="text-sm font-medium text-neutral-600">powered by <span class="text-neutral-900 font-bold">Nuxt 3</span>, <span class="text-neutral-900 font-bold">Vite</span>, <span class="text-neutral-900 font-bold">Tailwind</span>, <span class="text-neutral-900 font-bold">Supabase</span> and <span class="text-neutral-900 font-bold">Vercel</span>.</div>
     </div>
     <div v-if="listening" class="p-4 border-2 border-neutral-900 rounded-xl lg:min-w-fit lg:w-1/2">
-      <div class="flex flex-row gap-4">
+      <div class="flex flex-col lg:flex-row gap-4">
         <div>
           <img :alt="listening.albumName" :src="listening.albumArtUrl" class="w-24 h-24" />
         </div>
         <div class="flex flex-col gap-2">
-          <h1 class="text-md text-neutral-700 font-bold whitespace-nowrap">{{listening.trackTitle}}</h1>
-          <p class="text-sm text-neutral-600 whitespace-nowrap">{{listening.artistName}}</p>
+          <h1 class="text-md text-neutral-700 font-bold">{{listening.trackTitle}}</h1>
+          <p class="text-sm text-neutral-600">{{listening.artistName}}</p>
+          <p class="text-sm text-neutral-600">{{listening.albumName}}</p>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs font-medium text-neutral-600 bg-neutral-100 px-1.5 py-0.5 rounded-md">{{ listening.state }}</span>
+            <span class="text-xs font-medium text-neutral-600 bg-neutral-100 px-1.5 py-0.5 rounded-md">{{ listening.playbackPosition }}s / {{ listening.playbackDuration }}s</span>
+            <span class="text-xs font-medium text-neutral-600 bg-neutral-100 px-1.5 py-0.5 rounded-md">shuffle: {{ listening.playbackShuffle ? "on" : "off" }}</span>
+            <span class="text-xs font-medium text-neutral-600 bg-neutral-100 px-1.5 py-0.5 rounded-md">repeat: {{ listening.playbackRepeat }}</span>
+          </div>
           <div v-if="listening.shareUrl" class="mt-2">
             <a :href="listening?.shareUrl" target="_blank" class="text-md font-medium text-neutral-800 border-2 border-b-4 border-r-4 border-neutral-800 px-2 py-0.5 rounded-lg">play on {{ listening.contentProvider }}</a>
           </div>

@@ -1,8 +1,13 @@
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 
 interface Entity {
   id: string;
   provider: string;
+}
+
+interface EntityData {
+  response: AxiosResponse<any, any>;
+  entity: Entity;
 }
 
 export default defineEventHandler(async () => {
@@ -32,22 +37,35 @@ export default defineEventHandler(async () => {
     }
   ]
 
-  let response = null;
-  let provider = null;
+  let responses: EntityData[] = [];
+
   for (const entity of entities) {
-    if (!entity.id) { continue; }
-    response = await axios.get(`${homeAssistantUrl}/api/states/${entity.id}`, { headers });
-    provider = entity.provider;
-    if (response.data.state === 'playing') {
-      break;
-    }
+    if (!entity.id) continue; // skip if no entity id
+
+    const response = await axios.get(`${homeAssistantUrl}/api/states/${entity.id}`, { headers });
+
+    responses.push({
+      response,
+      entity,
+    })
+
+    if (response.data.state === 'playing') break; // stop if we find a playing entity
+
   }
 
-  if (!response?.data || response?.status !== 200) {
+  if (!responses[0]?.response.data || responses[0]?.response.status !== 200) {
     throw new Error('Error fetching data');
   }
 
-  const data = response.data;
+  // choose last response
+  let data = responses[responses.length - 1]?.response.data;
+  let provider = responses[responses.length - 1]?.entity.provider;
+
+  // if last entity is not playing, return the first entity
+  if (data.state !== 'playing') {
+    data = responses[0]?.response.data;
+    provider = responses[0]?.entity.provider;
+  }
 
   const getShareUrl = () => {
     if (data.attributes.media_content_id && typeof data.attributes.media_content_id === 'string') {
@@ -59,6 +77,7 @@ export default defineEventHandler(async () => {
   }
 
   return {
+    //responses: responses.map((response) => { return { ...response, response: response.response.data } }),
     contentProvider: provider,
     contentId: data.attributes.media_content_id ?? null,
     state: data.state ?? null,
