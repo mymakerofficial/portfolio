@@ -60,6 +60,6 @@ export default defineEventHandler(async (event) => {
     tags: projectData.tags,
     collaborators: projectData.collaborators,
     technologies: technologiesOut,
-    thumbnailUrl: projectData.thumbnailId ? `/api/projects/${projectData.slug}/thumbnail` : null,
+    thumbnailUrl: projectData.thumbnailId ? `/api/v1/projects/${projectData.slug}/thumbnail` : null,
   };
 });

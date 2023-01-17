@@ -26,7 +26,7 @@ export default defineEventHandler(async () => {
   const projects = data.map((project) => ({
     ...project,
     htmlUrl: `/projects/${project.slug}`,
-    url: `/api/projects/${project.slug}`,
+    url: `/api/v1/projects/${project.slug}`,
   }));
 
   return projects;
