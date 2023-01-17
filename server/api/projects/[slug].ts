@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
 
   const { data: projectData, error } = await supabase
     .from('projects')
-    .select('slug, displayName: display_name, summary, url, featured, releaseDate: released_at_date, startedDate: started_at_date, tags ( name ), collaborators: people ( name, websiteUrl: website_url ), thumbnail')
+    .select('slug, displayName: display_name, summary, url, featured, releaseDate: released_at_date, startedDate: started_at_date, tags ( slug, displayName: display_name ), collaborators: people ( name, websiteUrl: website_url ), technologies ( slug, displayName: display_name, shortDisplayName: short_display_name, type: technology_type_id ( slug, displayName: display_name, shortDisplayName: short_display_name ) ), thumbnailId: thumbnail_id')
     .eq('slug', event.context.params.slug)
     .single()
 
@@ -25,8 +25,29 @@ export default defineEventHandler(async (event) => {
     throw new Error(error.message || 'Error fetching project');
   }
 
-  // @ts-ignore
-  const tags = projectData.tags ? projectData.tags.map((tag: any) => tag.name) : []
+  let technologiesOut: any[] = []
+  let types: any = {}
+
+  if (projectData.technologies) {
+    // @ts-ignore
+    for (let technology of projectData.technologies) {
+      let type = technology.type
+      if (!types[type.slug]) {
+        types[type.slug] = {
+          slug: type.slug,
+          displayName: type.displayName,
+          shortDisplayName: type.shortDisplayName,
+          technologies: []
+        }
+        technologiesOut.push(types[type.slug])
+      }
+      types[type.slug].technologies.push({
+        slug: technology.slug,
+        displayName: technology.displayName,
+        shortDisplayName: technology.shortDisplayName
+      })
+    }
+  }
 
   return {
     slug: projectData.slug,
@@ -36,8 +57,9 @@ export default defineEventHandler(async (event) => {
     featured: projectData.featured,
     releaseDate: projectData.releaseDate,
     startedDate: projectData.startedDate,
-    tags: tags,
+    tags: projectData.tags,
     collaborators: projectData.collaborators,
-    thumbnailUrl: projectData.thumbnail ? `/api/projects/${projectData.slug}/thumbnail` : null,
+    technologies: technologiesOut,
+    thumbnailUrl: projectData.thumbnailId ? `/api/projects/${projectData.slug}/thumbnail` : null,
   };
 });

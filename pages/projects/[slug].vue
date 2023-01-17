@@ -9,7 +9,7 @@
     <div v-if="project" class="flex flex-col border-2 border-neutral-900 rounded-xl min-w-fit w-96">
       <div class="p-4 flex flex-row gap-4 items-center border-b-2 border-neutral-900 last:border-b-0" v-for="key in Object.keys(project)" :key="key">
         <h1 class="text-md text-neutral-700 font-bold whitespace-nowrap">{{ key }}</h1>
-        <p class="text-sm text-neutral-600 whitespace-nowrap">{{ project[key] || 'null' }}</p>
+        <p class="text-sm text-neutral-600 whitespace-nowrap"><pre>{{ project[key] || 'null' }}</pre></p>
       </div>
     </div>
   </div>

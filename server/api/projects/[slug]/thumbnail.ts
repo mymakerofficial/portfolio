@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
   // get the thumbnail storage object id from the projects table
   const { data: projectData } = await supabase
     .from('projects')
-    .select('thumbnail')
+    .select('thumbnailId: thumbnail_id')
     .eq('slug', event.context.params.slug)
     .single()
 
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
   }
 
   // find the storage object that matches the thumbnail id
-  const thumbnail = storageData.find((file: any) => file.id === projectData.thumbnail)
+  const thumbnail = storageData.find((file: any) => file.id === projectData.thumbnailId)
 
   if (!thumbnail) {
     throw new Error('Error finding thumbnail');
