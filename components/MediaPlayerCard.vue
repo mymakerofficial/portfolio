@@ -10,12 +10,12 @@
         </div>
         <div v-else class="flex-1 flex flex-col gap-2 justify-between">
           <div class="flex flex-col gap-2">
-            <h1 class="text-md text-neutral-700 font-bold">{{listening.trackTitle}}</h1>
-            <p class="text-sm text-neutral-600">{{listening.artistName}}</p>
-            <p class="text-sm text-neutral-600">{{listening.albumName}}</p>
+            <h1 class="text-md text-green-900 font-bold">{{listening.trackTitle}}</h1>
+            <p class="text-sm text-green-900">{{listening.artistName}}</p>
+            <p class="text-sm text-green-900">{{listening.albumName}}</p>
           </div>
           <div>
-            <div class="h-1 w-full bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-neutral-900 transition-[width] duration-1000" :style="{ width: `${(playbackPosition / listening.playbackDuration) * 100}%` }"></div></div>
+            <div class="h-1 w-full bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-green-900 transition-[width] duration-1000" :style="{ width: `${(playbackPosition / listening.playbackDuration) * 100}%` }"></div></div>
           </div>
         </div>
         <div class="flex flex-row-reverse w-full lg:w-auto lg:flex-col items-end gap-4 justify-between" v-if="listening.contentProvider">
@@ -23,15 +23,15 @@
         </div>
       </div>
       <div v-else class="flex flex-col lg:flex-row gap-4">
-        <div class="w-28 h-28 bg-neutral-200 animate-pulse" />
+        <div class="w-28 h-28 bg-green-900/20 animate-pulse" />
         <div class="flex-1 flex flex-col gap-2 justify-between">
           <div class="flex flex-col gap-2">
-            <div class="w-28 h-4 bg-neutral-200 animate-pulse rounded-md" />
-            <div class="w-16 h-4 bg-neutral-200 animate-pulse rounded-md" />
-            <div class="w-20 h-4 bg-neutral-200 animate-pulse rounded-md" />
+            <div class="w-28 h-4 bg-green-900/20 animate-pulse rounded-md" />
+            <div class="w-16 h-4 bg-green-900/20 animate-pulse rounded-md" />
+            <div class="w-20 h-4 bg-green-900/20 animate-pulse rounded-md" />
           </div>
           <div>
-            <div class="h-1 w-full bg-neutral-200 animate-pulse rounded-full" />
+            <div class="h-1 w-full bg-green-900/20 animate-pulse rounded-full" />
           </div>
         </div>
       </div>
