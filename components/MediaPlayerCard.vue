@@ -1,6 +1,6 @@
 <template>
   <a :href="listening?.shareUrl" target="_blank">
-    <Card>
+    <Card class="shadow-green-300/40 border-green-200 bg-green-50">
       <div v-if="listening" class="flex flex-col lg:flex-row gap-4">
         <div v-if="listening.albumArtUrl">
           <img :alt="listening.albumName" :src="listening.albumArtUrl" class="w-28 h-28" />
