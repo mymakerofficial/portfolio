@@ -19,7 +19,7 @@
             <div class="h-1 w-full bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-green-900 transition-[width] duration-1000" :style="{ width: `${(playbackPosition / listening.playbackDuration) * 100}%` }"></div></div>
           </div>
         </div>
-        <div class="flex flex-row-reverse w-full lg:w-auto lg:flex-col items-end gap-4 justify-between" v-if="listening.contentProvider">
+        <div class="absolute top-0 right-0 z-10" v-if="listening.contentProvider">
           <img v-if="listening.contentProvider === 'spotify'" alt="Spotify" src="~/assets/img/Spotify_Icon_RGB_Green.png" class="h-6" />
         </div>
       </div>
