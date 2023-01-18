@@ -86,7 +86,7 @@ export default defineEventHandler(async (): Promise<CurrentlyPlayingResponse> =>
   const { data: settingsData } = await supabase
     .from('page_settings')
     .select('value')
-    .eq('key', 'enable-realtime-data-api')
+    .eq('key', 'enable-currently-playing')
     .single()
 
   // if this endpoint is disabled, return null
