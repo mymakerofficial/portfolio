@@ -48,8 +48,8 @@
             <div class="flex flex-col gap-2 justify-between">
               <div class="flex flex-col gap-2">
                 <h1 class="text-md text-neutral-700 font-bold">{{ playing.gameName }}</h1>
-                <p class="text-sm text-neutral-600">{{ playing.developers.join(', ') }}</p>
-                <p class="text-sm text-neutral-600">{{ playing.publishers.join(', ') }}</p>
+                <p v-if="playing.developers !== null" class="text-sm text-neutral-600">{{ playing.developers.join(', ') }}</p>
+                <p v-if="playing.publishers !== null" class="text-sm text-neutral-600">{{ playing.publishers.join(', ') }}</p>
               </div>
             </div>
           </div>
