@@ -6,16 +6,14 @@
     </div>
     <MediaPlayerCard />
     <CurrentGameCard />
-    <div class="flex flex-col border-2 border-neutral-900 rounded-xl lg:min-w-fit lg:w-1/2">
-      <div class="p-4 border-b-2 border-neutral-900">
-        <h1 class="text-xl font-bold whitespace-nowrap">Projects</h1>
-        <a href="/api/v1/projects" class="text-sm text-blue-600 underline">/api/v1/projects</a>
-      </div>
-      <NuxtLink v-if="projects" :to="project.htmlUrl" class="p-4 border-b-2 border-neutral-900 last:border-b-0" v-for="project in projects" :key="project.slug">
-        <h1 class="text-md text-neutral-700 font-bold whitespace-nowrap">{{project.displayName}}</h1>
-        <p class="text-sm text-neutral-600 whitespace-nowrap">{{project.summary}}</p>
-      </NuxtLink>
-    </div>
+    <NuxtLink v-if="projects" :to="project.htmlUrl" v-for="project in projects" :key="project.slug">
+      <Card>
+        <div class="flex flex-col gap-2">
+          <h1 class="text-md text-neutral-700 font-bold whitespace-nowrap">{{project.displayName}}</h1>
+          <p class="text-sm text-neutral-600 whitespace-nowrap">{{project.summary}}</p>
+        </div>
+      </Card>
+    </NuxtLink>
   </div>
 </template>
 
