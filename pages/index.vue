@@ -35,6 +35,36 @@
         </div>
       </div>
     </div>
+    <div v-if="playing" class="p-4 border-2 border-neutral-900 rounded-xl lg:min-w-fit lg:w-1/2">
+      <div class="flex flex-col lg:flex-row gap-4">
+        <div class="flex flex-col gap-4">
+          <div>
+            <h1 class="text-md text-neutral-700 font-bold">{{ playing.state === 'idle' ? "Last played" : "Currently playing" }}</h1>
+          </div>
+          <div class="flex flex-col lg:flex-row gap-4">
+            <div v-if="playing.headerImageUrl">
+              <img :alt="playing.gameName" :src="playing.headerImageUrl" class="h-28" />
+            </div>
+            <div class="flex flex-col gap-2 justify-between">
+              <div class="flex flex-col gap-2">
+                <h1 class="text-md text-neutral-700 font-bold">{{ playing.gameName }}</h1>
+                <p class="text-sm text-neutral-600">{{ playing.developers.join(', ') }}</p>
+                <p class="text-sm text-neutral-600">{{ playing.publishers.join(', ') }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ml-auto flex flex-row-reverse w-full lg:w-auto lg:flex-col items-end gap-4 justify-between" v-if="playing.contentProvider">
+          <div>
+            <img v-if="playing.contentProvider === 'spotify'" alt="Spotify" src="~/assets/img/Spotify_Logo_RGB_Green.png" class="h-6" />
+            <img v-else-if="playing.contentProvider === 'plex'" alt="Plex" src="~/assets/img/plex-logo-full-color-on-white.png" class="h-6" />
+          </div>
+          <div v-if="playing.steamUrl">
+            <a :href="playing?.steamUrl" target="_blank" class="text-md font-medium text-neutral-800 border-2 border-b-4 border-r-4 border-neutral-800 px-2 py-0.5 rounded-lg">view on {{ playing.contentProvider }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="flex flex-col border-2 border-neutral-900 rounded-xl lg:min-w-fit lg:w-1/2">
       <div class="p-4 border-b-2 border-neutral-900">
         <h1 class="text-xl font-bold whitespace-nowrap">Projects</h1>
@@ -51,6 +81,7 @@
 <script setup lang="ts">
 const { data: projects } = useFetch('/api/v1/projects');
 const { data: listening } = useFetch('/api/v1/fun/currently_listening');
+const { data: playing } = useFetch('/api/v1/fun/currently_playing');
 
 useHead({
   title: "My_Maker"
