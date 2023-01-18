@@ -1,4 +1,14 @@
-import { createClient } from '@supabase/supabase-js'
+import {createClient} from '@supabase/supabase-js'
+
+export interface CompactProjectInfo {
+  slug: string;
+  displayName: string;
+  summary: string;
+  releaseDate: string;
+  featured: boolean;
+  htmlUrl: string;
+  url: string;
+}
 
 export default defineEventHandler(async () => {
   if (!process.env.SUPABASE_URL) {
@@ -23,11 +33,9 @@ export default defineEventHandler(async () => {
     throw new Error('Error fetching projects');
   }
 
-  const projects = data.map((project) => ({
+  return data.map((project) => ({
     ...project,
     htmlUrl: `/projects/${project.slug}`,
     url: `/api/v1/projects/${project.slug}`,
   }));
-
-  return projects;
 });

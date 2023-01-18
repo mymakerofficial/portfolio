@@ -1,28 +1,72 @@
 <template>
-  <div class="p-8 flex flex-col gap-8">
-    <div class="flex flex-col gap-4">
-      <h1 class="text-4xl font-extrabold">My_Maker Portfolio</h1>
-      <div class="text-sm font-medium text-neutral-600">powered by <span class="text-neutral-900 font-bold">Nuxt 3</span>, <span class="text-neutral-900 font-bold">Vite</span>, <span class="text-neutral-900 font-bold">Tailwind</span>, <span class="text-neutral-900 font-bold">Supabase</span> and <span class="text-neutral-900 font-bold">Vercel</span>.</div>
-    </div>
-    <MediaPlayerCard />
-    <CurrentGameCard />
-    <NuxtLink v-if="projects" :to="project.htmlUrl" v-for="project in projects" :key="project.slug">
-      <Card>
-        <div class="flex flex-col gap-2">
-          <h1 class="text-md text-neutral-700 font-bold whitespace-nowrap">{{project.displayName}}</h1>
-          <p class="text-sm text-neutral-600 whitespace-nowrap">{{project.summary}}</p>
+  <div class="mx-3 sm:mx-auto sm:w-3/4 lg:w-2/3 2xl:w-11/12 max-w-7xl">
+    <div class="flex flex-col gap-12 my-12">
+      <div class="flex flex-col gap-2">
+        <h1 class="text-xl font-extrabold">My_Maker</h1>
+        <div class="text-sm font-medium text-neutral-600">Hai im My_Maker, I like making things</div>
+      </div>
+      <div class="flex flex-col xl:grid xl:grid-cols-3 gap-4 md:gap-8">
+        <div class="flex flex-col gap-4 md:gap-8" v-for="(col, index) in grid || []" :key="index">
+          <div v-for="(item, index) in col || []" :key="index">
+            <ProjectCard v-if="item.type === 0" :project="item.data" />
+            <MediaPlayerCard v-else-if="item.type === 2" />
+            <CurrentGameCard v-else-if="item.type === 1"/>
+          </div>
         </div>
-      </Card>
-    </NuxtLink>
+      </div>
+    </div>
   </div>
 </template>
 
-<script setup lang="ts">
-import MediaPlayerCard from "~/components/MediaPlayerCard.vue";
+<script lang="ts">
+enum CardTypes {
+  Project,
+  CurrentGame,
+  MediaPlayer,
+}
 
-const { data: projects } = useFetch('/api/v1/projects');
+interface CardObject {
+  type: CardTypes;
+  data: any | null;
+}
 
-useHead({
-  title: "My_Maker"
-})
+export default defineNuxtComponent({
+  async asyncData () {
+    const { data: projects } = await useFetch('/api/v1/projects');
+
+    let list: CardObject[] = [];
+
+    if (projects.value !== null) {
+      projects.value.forEach((project: any) => {
+        list.push({
+          type: CardTypes.Project,
+          data: project,
+        });
+      });
+    }
+
+    list.push({
+      type: CardTypes.CurrentGame,
+      data: null,
+    });
+
+    list.push({
+      type: CardTypes.MediaPlayer,
+      data: null,
+    });
+
+    const shuffledList: CardObject[] = list.sort(() => 0.5 - Math.random());
+
+    const grid: CardObject[][] = [[], [], []];
+    for (let i = 0; i < shuffledList.length; i++) {
+      grid[i%3].push(shuffledList[i]);
+    }
+
+    return {
+      list,
+      shuffledList,
+      grid,
+    }
+  },
+});
 </script>
