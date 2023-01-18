@@ -9,8 +9,9 @@
         <div class="flex flex-col gap-4 md:gap-8" v-for="(col, index) in grid || []" :key="index">
           <div v-for="(item, index) in col || []" :key="index">
             <ProjectCard v-if="item.type === 0" :project="item.data" />
-            <MediaPlayerCard v-else-if="item.type === 2" />
             <CurrentGameCard v-else-if="item.type === 1"/>
+            <MediaPlayerCard v-else-if="item.type === 2" />
+            <PhoneBatteryCard v-else-if="item.type === 3" />
           </div>
         </div>
       </div>
@@ -23,6 +24,7 @@ enum CardTypes {
   Project,
   CurrentGame,
   MediaPlayer,
+  PhoneBattery,
 }
 
 interface CardObject {
@@ -52,6 +54,11 @@ export default defineNuxtComponent({
 
     list.push({
       type: CardTypes.MediaPlayer,
+      data: null,
+    });
+
+    list.push({
+      type: CardTypes.PhoneBattery,
       data: null,
     });
 

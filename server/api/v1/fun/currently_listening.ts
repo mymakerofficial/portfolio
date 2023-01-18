@@ -29,11 +29,11 @@ export interface CurrentlyListeningResponse {
 
 const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
 
-export const getCurrentlyListening = async (): Promise<CurrentlyListeningResponse> => {
-  const headers = {
-    "Authorization": `Bearer ${process.env.HOME_ASSISTANT_ACCESS_TOKEN}`,
-  }
+const headers = {
+  "Authorization": `Bearer ${process.env.HOME_ASSISTANT_ACCESS_TOKEN}`,
+}
 
+export const getCurrentlyListening = async (): Promise<CurrentlyListeningResponse> => {
   const response = await axios.get(`${process.env.HOME_ASSISTANT_URL}/api/states/${process.env.HOME_ASSISTANT_SPOTIFY_ENTITY_ID}`, { headers });
 
   if (!response?.data || response?.status !== 200) {
