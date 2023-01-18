@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 const { data: projects } = useFetch('/api/v1/projects');
-const { data: listening } = useFetch('/api/v1/currently_listening');
+const { data: listening } = useFetch('/api/v1/fun/currently_listening');
 
 useHead({
   title: "My_Maker"

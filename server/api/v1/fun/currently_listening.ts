@@ -1,16 +1,32 @@
 import axios, {AxiosResponse} from "axios";
 
-interface Entity {
+export interface Entity {
   id: string;
   provider: string;
 }
 
-interface EntityData {
+export interface EntityData {
   response: AxiosResponse<any, any>;
   entity: Entity;
 }
 
-export default defineEventHandler(async () => {
+export interface CurrentlyListeningResponse {
+  contentProvider: string | null;
+  contentId: string | null,
+  state: string | null,
+  artistName: string | null,
+  albumArtistName: string | null,
+  trackTitle: string | null,
+  albumName: string | null,
+  albumArtUrl: string | null,
+  playbackDuration: number | null,
+  playbackPosition: number | null,
+  playbackShuffle: boolean | null,
+  playbackRepeat: string | null,
+  shareUrl: string | null,
+}
+
+export const getCurrentlyListeningResponse = async (): Promise<CurrentlyListeningResponse> => {
   const homeAssistantUrl = process.env.HOME_ASSISTANT_URL || '';
   const homeAssistantToken = process.env.HOME_ASSISTANT_ACCESS_TOKEN || '';
 
@@ -37,34 +53,33 @@ export default defineEventHandler(async () => {
     }
   ]
 
-  let responses: EntityData[] = [];
+  let dataList: EntityData[] = [];
 
   for (const entity of entities) {
     if (!entity.id) continue; // skip if no entity id
 
     const response = await axios.get(`${homeAssistantUrl}/api/states/${entity.id}`, { headers });
 
-    responses.push({
+    dataList.push({
       response,
       entity,
     })
 
     if (response.data.state === 'playing') break; // stop if we find a playing entity
-
   }
 
-  if (!responses[0]?.response.data || responses[0]?.response.status !== 200) {
+  if (!dataList[0]?.response.data || dataList[0]?.response.status !== 200) {
     throw new Error('Error fetching data');
   }
 
   // choose last response
-  let data = responses[responses.length - 1]?.response.data;
-  let provider = responses[responses.length - 1]?.entity.provider;
+  let data = dataList[dataList.length - 1]?.response.data;
+  let provider = dataList[dataList.length - 1]?.entity.provider;
 
   // if last entity is not playing, return the first entity
   if (data.state !== 'playing') {
-    data = responses[0]?.response.data;
-    provider = responses[0]?.entity.provider;
+    data = dataList[0]?.response.data;
+    provider = dataList[0]?.entity.provider;
   }
 
   const getShareUrl = () => {
@@ -91,5 +106,14 @@ export default defineEventHandler(async () => {
     playbackShuffle: data.attributes.shuffle ?? null,
     playbackRepeat: data.attributes.repeat ?? null,
     shareUrl: getShareUrl(),
+  };
+}
+
+export default defineEventHandler(async (): Promise<CurrentlyListeningResponse> => {
+  const res = await getCurrentlyListeningResponse()
+
+  return {
+    ...res,
+    albumArtUrl: res.albumArtUrl ? "/api/v1/fun/currently_listening/media_proxy_album_art" : null,
   };
 });
