@@ -1,3 +1,13 @@
 @tailwind base;
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    position: relative;
+    font-weight: normal;
+}
+
 @tailwind components;
 @tailwind utilities;

@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import axios from "axios";
 
-interface CurrentlyPlayingResponse {
+export interface CurrentlyPlayingResponse {
   contentProvider: string | null;
   contentId: string | null,
   state: string | null;
