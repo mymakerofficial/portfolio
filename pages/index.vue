@@ -25,10 +25,6 @@
           </div>
         </div>
         <div class="ml-auto flex flex-row-reverse w-full lg:w-auto lg:flex-col items-end gap-4 justify-between" v-if="playing.contentProvider">
-          <div>
-            <img v-if="playing.contentProvider === 'spotify'" alt="Spotify" src="~/assets/img/Spotify_Logo_RGB_Green.png" class="h-6" />
-            <img v-else-if="playing.contentProvider === 'plex'" alt="Plex" src="~/assets/img/plex-logo-full-color-on-white.png" class="h-6" />
-          </div>
           <div v-if="playing.steamUrl">
             <a :href="playing?.steamUrl" target="_blank" class="text-md font-medium text-neutral-800 border-2 border-b-4 border-r-4 border-neutral-800 px-2 py-0.5 rounded-lg">view on {{ playing.contentProvider }}</a>
           </div>

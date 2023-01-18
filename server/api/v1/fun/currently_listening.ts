@@ -30,60 +30,18 @@ export interface CurrentlyListeningResponse {
 const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
 
 export const getCurrentlyListening = async (): Promise<CurrentlyListeningResponse> => {
-  const homeAssistantUrl = process.env.HOME_ASSISTANT_URL || '';
-  const homeAssistantToken = process.env.HOME_ASSISTANT_ACCESS_TOKEN || '';
-
   const headers = {
-    "Authorization": `Bearer ${homeAssistantToken}`,
+    "Authorization": `Bearer ${process.env.HOME_ASSISTANT_ACCESS_TOKEN}`,
   }
 
-  const entities: Entity[] = [
-    {
-      id: process.env.HOME_ASSISTANT_SPOTIFY_ENTITY_ID || '',
-      provider: 'spotify',
-    },
-    {
-      id: process.env.HOME_ASSISTANT_MOBILE_PLEXAMP_ENTITY_ID || '',
-      provider: 'plex',
-    },
-    {
-      id: process.env.HOME_ASSISTANT_DESKTOP_PLEXAMP_ENTITY_ID || '',
-      provider: 'plex',
-    },
-    {
-      id: process.env.HOME_ASSISTANT_LAPTOP_PLEXAMP_ENTITY_ID || '',
-      provider: 'plex',
-    }
-  ]
+  const response = await axios.get(`${process.env.HOME_ASSISTANT_URL}/api/states/${process.env.HOME_ASSISTANT_SPOTIFY_ENTITY_ID}`, { headers });
 
-  let dataList: EntityData[] = [];
-
-  for (const entity of entities) {
-    if (!entity.id) continue; // skip if no entity id
-
-    const response = await axios.get(`${homeAssistantUrl}/api/states/${entity.id}`, { headers });
-
-    dataList.push({
-      response,
-      entity,
-    })
-
-    if (response.data.state === 'playing') break; // stop if we find a playing entity
-  }
-
-  if (!dataList[0]?.response.data || dataList[0]?.response.status !== 200) {
+  if (!response?.data || response?.status !== 200) {
     throw new Error('Error fetching data');
   }
 
-  // choose last response
-  let data = dataList[dataList.length - 1]?.response.data;
-  let provider = dataList[dataList.length - 1]?.entity.provider;
-
-  // if last entity is not playing, return the first entity
-  if (data.state !== 'playing') {
-    data = dataList[0]?.response.data;
-    provider = dataList[0]?.entity.provider;
-  }
+  let data = response.data;
+  let provider = "spotify";
 
   const getShareUrl = () => {
     if (data.attributes.media_content_id && typeof data.attributes.media_content_id === 'string') {
@@ -103,7 +61,7 @@ export const getCurrentlyListening = async (): Promise<CurrentlyListeningRespons
     albumArtistName: data.attributes.media_album_artist || data.attributes.media_artist || null,
     trackTitle: data.attributes.media_title ?? null,
     albumName: data.attributes.media_album_name ?? null,
-    albumArtUrl: data.attributes.entity_picture ? `${homeAssistantUrl}${data.attributes.entity_picture}` : null,
+    albumArtUrl: data.attributes.entity_picture ? `${process.env.HOME_ASSISTANT_URL}${data.attributes.entity_picture}` : null,
     playbackDuration: data.attributes.media_duration ?? null,
     playbackPosition: data.attributes.media_position ?? null,
     playbackShuffle: data.attributes.shuffle ?? null,
