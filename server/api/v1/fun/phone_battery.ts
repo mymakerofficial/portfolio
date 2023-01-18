@@ -1,4 +1,5 @@
-import axios, {AxiosResponse} from "axios";
+import axios from "axios";
+import {createClient} from "@supabase/supabase-js";
 
 export interface PhoneBatteryResponse {
   batteryLevel: number | null;
@@ -8,6 +9,8 @@ export interface PhoneBatteryResponse {
 const headers = {
   "Authorization": `Bearer ${process.env.HOME_ASSISTANT_ACCESS_TOKEN}`,
 }
+
+const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
 
 export const getPhoneBattery = async (): Promise<PhoneBatteryResponse> => {
   const levelResponse = await axios.get(`${process.env.HOME_ASSISTANT_URL}/api/states/${process.env.HOME_ASSISTANT_PHONE_BATTERY_LEVEL_ENTITY_ID}`, { headers });
@@ -19,5 +22,20 @@ export const getPhoneBattery = async (): Promise<PhoneBatteryResponse> => {
 }
 
 export default defineEventHandler(async (): Promise<PhoneBatteryResponse> => {
-  return getPhoneBattery();
+  // load settings from supabase
+  const { data: settingsData } = await supabase
+    .from('page_settings')
+    .select('value')
+    .eq('key', 'enable-phone-battery')
+    .single()
+
+  // if this endpoint is disabled, return null
+  if (!settingsData || settingsData?.value.value !== true) {
+    return {
+      batteryLevel: null,
+      charging: null,
+    }
+  } else {
+    return getPhoneBattery();
+  }
 });

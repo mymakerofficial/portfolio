@@ -4,7 +4,7 @@
       <div :class="`absolute h-full bg-${color}-200/50`" :style="{ width: `${ battery.batteryLevel }%` }" />
       <div class="p-8 flex flex-col gap-4">
         <h2 :class="`text-md font-medium text-${color}-900`">Phone Battery</h2>
-        <h1  :class="`text-4xl font-bold text-${color}-900`">{{ battery.batteryLevel }}%</h1>
+        <h1  :class="`text-4xl font-bold text-${color}-900`">{{ battery.batteryLevel !== null ? `${battery.batteryLevel}%` : "N/A" }}</h1>
       </div>
     </div>
     <div v-else class="p-8 flex flex-col gap-4">
