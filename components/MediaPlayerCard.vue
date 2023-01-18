@@ -10,7 +10,7 @@
           <h1 class="text-md text-neutral-700 font-bold">Not listening to anything at the moment</h1>
         </div>
         <div v-else class="flex-1 flex flex-col gap-2 justify-between">
-          <div class="flex flex-col gap-2">
+          <div class="flex flex-col gap-2 mr-9">
             <h1 class="text-md text-green-900 font-bold">{{listening.trackTitle}}</h1>
             <p class="text-sm text-green-900">{{listening.artistName}}</p>
             <p class="text-sm text-green-900">{{listening.albumName}}</p>
