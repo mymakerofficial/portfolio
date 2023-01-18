@@ -12,6 +12,7 @@
             <CurrentGameCard v-else-if="item.type === 1"/>
             <MediaPlayerCard v-else-if="item.type === 2" />
             <PhoneBatteryCard v-else-if="item.type === 3" />
+            <ClockCard v-else-if="item.type === 4" />
           </div>
         </div>
       </div>
@@ -25,6 +26,7 @@ enum CardTypes {
   CurrentGame,
   MediaPlayer,
   PhoneBattery,
+  Clock
 }
 
 interface CardObject {
@@ -59,6 +61,11 @@ export default defineNuxtComponent({
 
     list.push({
       type: CardTypes.PhoneBattery,
+      data: null,
+    });
+
+    list.push({
+      type: CardTypes.Clock,
       data: null,
     });
 
