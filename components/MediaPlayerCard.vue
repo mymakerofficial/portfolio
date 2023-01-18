@@ -1,6 +1,6 @@
 <template>
   <a :href="listening?.shareUrl" target="_blank">
-    <Card class="shadow-green-300/40 border-green-200 bg-green-50">
+    <Card class="p-8 shadow-green-500/10 bg-green-50">
       <div v-if="listening" class="flex flex-col lg:flex-row gap-4">
         <div v-if="listening.albumArtUrl">
           <img :alt="listening.albumName" :src="listening.albumArtUrl" class="w-28 h-28" />
@@ -15,7 +15,7 @@
             <p class="text-sm text-neutral-600">{{listening.albumName}}</p>
           </div>
           <div>
-            <div class="h-1 w-full bg-neutral-100 rounded-full overflow-hidden"><div class="h-full bg-neutral-900 transition-[width] duration-1000" :style="{ width: `${(playbackPosition / listening.playbackDuration) * 100}%` }"></div></div>
+            <div class="h-1 w-full bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-neutral-900 transition-[width] duration-1000" :style="{ width: `${(playbackPosition / listening.playbackDuration) * 100}%` }"></div></div>
           </div>
         </div>
         <div class="flex flex-row-reverse w-full lg:w-auto lg:flex-col items-end gap-4 justify-between" v-if="listening.contentProvider">

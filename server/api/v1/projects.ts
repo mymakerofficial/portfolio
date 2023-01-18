@@ -6,6 +6,7 @@ export interface CompactProjectInfo {
   summary: string;
   releaseDate: string;
   featured: boolean;
+  thumbnailUrl: string;
   htmlUrl: string;
   url: string;
 }
@@ -27,14 +28,19 @@ export default defineEventHandler(async () => {
 
   const { data, error } = await supabase
     .from('projects')
-    .select('slug, displayName: display_name, summary, releaseData: released_at_date, featured')
+    .select('slug, displayName: display_name, summary, releaseDate: released_at_date, featured, thumbnailId: thumbnail_id')
 
   if (!data || error) {
     throw new Error('Error fetching projects');
   }
 
   return data.map((project) => ({
-    ...project,
+    slug: project.slug,
+    displayName: project.displayName,
+    summary: project.summary,
+    releaseDate: project.releaseDate,
+    featured: project.featured,
+    thumbnailUrl: project.thumbnailId ? `/api/v1/projects/${project.slug}/thumbnail` : null,
     htmlUrl: `/projects/${project.slug}`,
     url: `/api/v1/projects/${project.slug}`,
   }));
