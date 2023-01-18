@@ -1,21 +1,9 @@
 import { send } from 'h3'
 import { createClient } from '@supabase/supabase-js'
 
+const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
+
 export default defineEventHandler(async (event) => {
-  if (!process.env.SUPABASE_URL) {
-    throw new Error('Missing SUPABASE_URL environment variable');
-  }
-
-  if (!process.env.SUPABASE_KEY) {
-    throw new Error('Missing SUPABASE_KEY environment variable');
-  }
-
-  const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
-
-  if (!supabase) {
-    throw new Error('Could not create Supabase client')
-  }
-
   // get the thumbnail storage object id from the projects table
   const { data: projectData } = await supabase
     .from('projects')

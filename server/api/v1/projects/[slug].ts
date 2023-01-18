@@ -1,20 +1,8 @@
 import {createClient} from '@supabase/supabase-js'
 
+const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
+
 export default defineEventHandler(async (event) => {
-  if (!process.env.SUPABASE_URL) {
-    throw new Error('Missing SUPABASE_URL environment variable');
-  }
-
-  if (!process.env.SUPABASE_KEY) {
-    throw new Error('Missing SUPABASE_KEY environment variable');
-  }
-
-  const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
-
-  if (!supabase) {
-    throw new Error('Could not create Supabase client')
-  }
-
   const { data: projectData, error } = await supabase
     .from('projects')
     .select('slug, displayName: display_name, summary, url, releaseDate: released_at_date, startedDate: started_at_date, tags ( slug, displayName: display_name ), collaborators: people ( slug, displayName: display_name, websiteUrl: website_url ), technologies ( slug, displayName: display_name, shortDisplayName: short_display_name, type: technology_type_id ( slug, displayName: display_name, shortDisplayName: short_display_name ) ), thumbnailId: thumbnail_id')

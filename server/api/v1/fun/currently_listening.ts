@@ -1,4 +1,5 @@
 import axios, {AxiosResponse} from "axios";
+import {createClient} from "@supabase/supabase-js";
 
 export interface Entity {
   id: string;
@@ -26,7 +27,9 @@ export interface CurrentlyListeningResponse {
   shareUrl: string | null,
 }
 
-export const getCurrentlyListeningResponse = async (): Promise<CurrentlyListeningResponse> => {
+const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
+
+export const getCurrentlyListening = async (): Promise<CurrentlyListeningResponse> => {
   const homeAssistantUrl = process.env.HOME_ASSISTANT_URL || '';
   const homeAssistantToken = process.env.HOME_ASSISTANT_ACCESS_TOKEN || '';
 
@@ -110,10 +113,36 @@ export const getCurrentlyListeningResponse = async (): Promise<CurrentlyListenin
 }
 
 export default defineEventHandler(async (): Promise<CurrentlyListeningResponse> => {
-  const res = await getCurrentlyListeningResponse()
+  // load settings from supabase
+  const { data: settingsData } = await supabase
+    .from('page_settings')
+    .select('value')
+    .eq('key', 'enable-realtime-data-api')
+    .single()
 
-  return {
-    ...res,
-    albumArtUrl: res.albumArtUrl ? "/api/v1/fun/currently_listening/media_proxy_album_art" : null,
-  };
+  // if this endpoint is disabled, return null
+  if (!settingsData || settingsData?.value.value !== true) {
+    return {
+      contentProvider: null,
+      contentId: null,
+      state: "idle",
+      artistName: null,
+      albumArtistName: null,
+      trackTitle: null,
+      albumName: null,
+      albumArtUrl: null,
+      playbackDuration: null,
+      playbackPosition: null,
+      playbackShuffle: null,
+      playbackRepeat: null,
+      shareUrl: null,
+    };
+  } else {
+    const res = await getCurrentlyListening()
+
+    return {
+      ...res,
+      albumArtUrl: res.albumArtUrl ? `/api/v1/fun/currently_listening/media_proxy_album_art?t=${new Date().getTime()}` : null,
+    };
+  }
 });

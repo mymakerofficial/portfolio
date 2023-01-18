@@ -3,6 +3,7 @@ import axios from "axios";
 
 interface CurrentlyPlayingResponse {
   contentProvider: string | null;
+  contentId: string | null,
   state: string | null;
   gameName: string | null;
   developers: string[] | null;
@@ -13,14 +14,6 @@ interface CurrentlyPlayingResponse {
   steamUrl: string | null;
 }
 
-if (!process.env.SUPABASE_URL) {
-  throw new Error('Missing SUPABASE_URL environment variable');
-}
-
-if (!process.env.SUPABASE_KEY) {
-  throw new Error('Missing SUPABASE_KEY environment variable');
-}
-
 const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
 
 const defaultParams = {
@@ -28,35 +21,7 @@ const defaultParams = {
   format: "json",
 };
 
-export default defineEventHandler(async (): Promise<CurrentlyPlayingResponse> => {
-  if (!supabase) {
-    throw new Error('Could not create Supabase client')
-  }
-
-  const { data: settingsData, error } = await supabase
-    .from('page_settings')
-    .select('value')
-    .eq('key', 'enable-realtime-data-api')
-    .single()
-
-  if (!settingsData || error) {
-    throw new Error('Error fetching projects');
-  }
-
-  if (settingsData.value.value !== true) {
-    return {
-      contentProvider: null,
-      state: "offline",
-      gameName: null,
-      developers: null,
-      publishers: null,
-      shortDescription: null,
-      headerImageUrl: null,
-      websiteUrl: null,
-      steamUrl: null,
-    };
-  }
-
+export const getCurrentlyPlaying = async (): Promise<CurrentlyPlayingResponse> => {
   // load the player summary
   const playerSummaryResponse = await axios.get(
     `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002`,
@@ -68,7 +33,7 @@ export default defineEventHandler(async (): Promise<CurrentlyPlayingResponse> =>
     }
   );
 
-  let playerData = playerSummaryResponse.data.response.players[0];
+  const playerData = playerSummaryResponse.data.response.players[0];
 
   let state: string;
   let gameid: string;
@@ -104,6 +69,7 @@ export default defineEventHandler(async (): Promise<CurrentlyPlayingResponse> =>
 
   return {
     contentProvider: "steam",
+    contentId: gameid,
     state: state,
     gameName: gameData.name,
     developers: gameData.developers,
@@ -113,4 +79,31 @@ export default defineEventHandler(async (): Promise<CurrentlyPlayingResponse> =>
     websiteUrl: gameData.website,
     steamUrl: success ? `https://store.steampowered.com/app/${gameid}` : null,
   };
+}
+
+export default defineEventHandler(async (): Promise<CurrentlyPlayingResponse> => {
+  // load settings from supabase
+  const { data: settingsData } = await supabase
+    .from('page_settings')
+    .select('value')
+    .eq('key', 'enable-realtime-data-api')
+    .single()
+
+  // if this endpoint is disabled, return null
+  if (!settingsData || settingsData?.value.value !== true) {
+    return {
+      contentProvider: null,
+      contentId: null,
+      state: "offline",
+      gameName: null,
+      developers: null,
+      publishers: null,
+      shortDescription: null,
+      headerImageUrl: null,
+      websiteUrl: null,
+      steamUrl: null,
+    };
+  } else {
+    return await getCurrentlyPlaying();
+  }
 });
