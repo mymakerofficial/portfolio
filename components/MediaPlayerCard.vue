@@ -55,9 +55,13 @@ export default defineNuxtComponent({
 
   computed: {
     playbackPosition() {
-      const playbackPosition = this.listening?.playbackPosition || 0;
-      const timeDifference = (this.currentTime.getTime() - this.startTime.getTime()) / 1000;
-      return playbackPosition + timeDifference;
+      if (this.listening?.state === "playing") {
+        const playbackPosition = this.listening?.playbackPosition || 0;
+        const timeDifference = (this.currentTime.getTime() - this.startTime.getTime()) / 1000;
+        return playbackPosition + timeDifference;
+      } else {
+        return this.listening?.playbackPosition || 0;
+      }
     },
   },
 
@@ -72,7 +76,7 @@ export default defineNuxtComponent({
     },
     listening: {
       handler(newValue, oldValue) {
-        if (newValue?.contentId === oldValue?.contentId && newValue?.playbackRepeat !== "one") {
+        if (newValue?.contentId === oldValue?.contentId && newValue?.playbackRepeat !== "one" && newValue?.state !== "paused") {
           console.log("Content ID is the same, trying again in 10 seconds");
           setTimeout(() => {
             this.refresh();
