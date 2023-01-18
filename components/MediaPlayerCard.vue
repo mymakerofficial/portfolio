@@ -2,8 +2,9 @@
   <a :href="listening?.shareUrl" target="_blank">
     <Card class="p-8 shadow-green-500/10 bg-green-50">
       <div v-if="listening" class="flex flex-col lg:flex-row gap-4">
-        <div v-if="listening.albumArtUrl">
-          <img :alt="listening.albumName" :src="listening.albumArtUrl" class="w-28 h-28" />
+        <div v-if="listening.albumArtUrl" class="w-28 h-28 overflow-hidden">
+          <img :alt="listening.albumName" :src="listening.albumArtUrl" class="absolute w-full h-full z-10" />
+          <div class="absolute w-full h-full bg-green-900/20 animate-pulse" />
         </div>
         <div v-if="listening.state === 'idle' || !listening.state">
           <h1 class="text-md text-neutral-700 font-bold">Not listening to anything at the moment</h1>

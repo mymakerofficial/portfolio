@@ -2,8 +2,9 @@
   <NuxtLink :to="project.htmlUrl">
     <Card class="p-12 bg-white shadow-neutral-500/10">
       <div class="flex flex-col gap-8">
-        <div v-if="project.thumbnailUrl">
-          <img :src="project.thumbnailUrl" :alt="project.name" class="w-full rounded-md" />
+        <div v-if="project.thumbnailUrl" class="w-full aspect-video rounded-md overflow-hidden">
+          <img :src="project.thumbnailUrl" :alt="project.name" class="absolute w-full h-full z-10" />
+          <div class="w-full h-full bg-neutral-900/20 animate-pulse" />
         </div>
         <div v-else>
           <span class="px-2 py-1 bg-neutral-100 text-neutral-700 text-xs font-bold rounded-lg">{{ displayYear }}</span>

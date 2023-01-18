@@ -7,8 +7,9 @@
             <h1 class="text-md text-slate-700 font-bold">{{ playing.state === 'idle' ? "Last played" : "Currently playing" }}</h1>
           </div>
           <div class="flex flex-col lg:flex-row gap-4">
-            <div v-if="playing.headerImageUrl">
-              <img :alt="playing.gameName" :src="playing.headerImageUrl" class="w-48 aspect-[92/43]" />
+            <div v-if="playing.headerImageUrl" class="w-48 aspect-[92/43] overflow-hidden">
+              <img :alt="playing.gameName" :src="playing.headerImageUrl" class="absolute w-full h-full z-10" />
+              <div class="absolute w-full h-full bg-slate-700/20 animate-pulse" />
             </div>
             <div class="flex flex-col gap-2 justify-between">
               <div class="flex flex-col gap-2">
