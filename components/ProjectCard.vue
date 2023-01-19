@@ -3,7 +3,7 @@
     <Card class="p-8 md:p-12 bg-white dark:bg-gray-900 shadow-transparent">
       <div class="flex flex-col gap-8">
         <div v-if="project.thumbnailUrl" class="w-full aspect-video rounded-md overflow-hidden">
-          <img :src="project.thumbnailUrl" :alt="project.name" class="absolute w-full h-full z-10" />
+          <img :src="project.thumbnailUrl" :alt="project.displayName" class="absolute w-full h-full z-10" />
           <div class="w-full h-full bg-gray-600/20 dark:bg-gray-100/20 animate-pulse" />
         </div>
         <div v-else>
