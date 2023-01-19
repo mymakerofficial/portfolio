@@ -4,7 +4,7 @@
       <div class="flex flex-col gap-8">
         <div v-if="project.thumbnailUrl" class="w-full aspect-video rounded-md overflow-hidden">
           <img :src="project.thumbnailUrl" :alt="project.name" class="absolute w-full h-full z-10" />
-          <div class="w-full h-full bg-gray-900/20 animate-pulse" />
+          <div class="w-full h-full bg-gray-900/20 dark:bg-gray-100/20 animate-pulse" />
         </div>
         <div v-else>
           <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400 text-xs font-bold rounded-lg">{{ displayYear }}</span>

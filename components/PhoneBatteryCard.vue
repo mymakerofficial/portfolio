@@ -8,8 +8,8 @@
       </div>
     </div>
     <div v-else class="p-8 flex flex-col gap-4">
-      <div class="w-28 h-5 bg-blue-900/20 animate-pulse rounded-md" />
-      <div class="w-16 h-11 bg-blue-900/20 animate-pulse rounded-md" />
+      <div class="w-28 h-5 bg-blue-900/20 dark:bg-blue-100/20 animate-pulse rounded-md" />
+      <div class="w-16 h-11 bg-blue-900/20 dark:bg-blue-100/20 animate-pulse rounded-md" />
     </div>
   </Card>
 </template>
