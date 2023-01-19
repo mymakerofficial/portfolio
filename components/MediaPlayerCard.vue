@@ -6,7 +6,7 @@
           <img :alt="listening.albumName" :src="listening.albumArtUrl" class="absolute w-full h-full z-10" />
           <div class="absolute w-full h-full bg-green-600/20 dark:bg-green-100/20 animate-pulse" />
         </div>
-        <div class="flex-1 flex flex-col gap-2 justify-between">
+        <div class="flex-1 flex flex-col gap-4 justify-between">
           <div class="flex flex-col gap-2 mr-9">
             <h1 class="text-md text-green-700 dark:text-green-100 font-bold">{{listening.trackTitle}}</h1>
             <p class="text-sm text-green-600 dark:text-green-200">{{listening.artistName}}</p>
