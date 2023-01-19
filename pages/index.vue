@@ -5,9 +5,9 @@
         <h1 class="text-xl font-extrabold">My_Maker</h1>
         <div class="text-sm font-medium text-neutral-600">Hai im My_Maker, I like making things</div>
       </div>
-      <div class="flex flex-col xl:grid xl:grid-cols-3 gap-4 md:gap-8">
-        <div class="flex flex-col gap-4 md:gap-8" v-for="(col, index) in grid || []" :key="index">
-          <template v-for="(item, index) in col || []" :key="index">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
+        <div class="flex flex-col gap-4 md:gap-8" v-for="(col, index) in grids[1] || []" :key="index">
+          <template v-for="item in col || []" :key="item.key">
             <ProjectCard v-if="item.type === 0" :project="item.data" />
             <CurrentGameCard v-else-if="item.type === 1"/>
             <MediaPlayerCard v-else-if="item.type === 2" />
@@ -21,6 +21,9 @@
 </template>
 
 <script lang="ts">
+// @ts-ignore
+import { v4 as uuid } from "uuid";
+
 enum CardTypes {
   Project,
   CurrentGame,
@@ -32,6 +35,7 @@ enum CardTypes {
 interface CardObject {
   type: CardTypes;
   data: any | null;
+  key: string;
 }
 
 export default defineNuxtComponent({
@@ -45,6 +49,7 @@ export default defineNuxtComponent({
         list.push({
           type: CardTypes.Project,
           data: project,
+          key: uuid(),
         });
       });
     }
@@ -52,34 +57,50 @@ export default defineNuxtComponent({
     list.push({
       type: CardTypes.CurrentGame,
       data: null,
+      key: uuid(),
     });
 
     list.push({
       type: CardTypes.MediaPlayer,
       data: null,
+      key: uuid(),
     });
 
     list.push({
       type: CardTypes.PhoneBattery,
       data: null,
+      key: uuid(),
     });
 
     list.push({
       type: CardTypes.Clock,
       data: null,
+      key: uuid(),
     });
 
-    const shuffledList: CardObject[] = list.sort(() => 0.5 - Math.random());
+    const processedList: CardObject[] = list.sort((a, b) => {
+      let val = 0.5 - Math.random();
+      if (b.data?.featured) val += 0.1;
+      if (b.type !== CardTypes.Project) val += 0.3;
+      return val;
+    });
 
-    const grid: CardObject[][] = [[], [], []];
-    for (let i = 0; i < shuffledList.length; i++) {
-      grid[i%3].push(shuffledList[i]);
+    const grids: CardObject[][][] = [];
+    for (let c = 1; c <= 3; c++) {
+      const grid: CardObject[][] = [];
+      for (let i = 0; i < c; i++) {
+        grid.push([]);
+      }
+      for (let i = 0; i < processedList.length; i++) {
+        grid[i % c].push(processedList[i]);
+      }
+      grids.push(grid);
     }
 
     return {
       list,
-      shuffledList,
-      grid,
+      processedList,
+      grids,
     }
   },
 });
