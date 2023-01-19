@@ -104,6 +104,11 @@ export default defineEventHandler(async (): Promise<CurrentlyPlayingResponse> =>
       steamUrl: null,
     };
   } else {
-    return await getCurrentlyPlaying();
+    const res = await getCurrentlyPlaying();
+
+    return {
+      ...res,
+      headerImageUrl: res.headerImageUrl ? `/api/v1/fun/currently_playing/media_proxy_header_image?t=${new Date().getTime()}` : null
+    };
   }
 });
