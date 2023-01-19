@@ -29,7 +29,7 @@ enum CardTypes {
   CurrentGame,
   MediaPlayer,
   PhoneBattery,
-  Clock
+  Clock,
 }
 
 interface CardObject {
@@ -54,34 +54,25 @@ export default defineNuxtComponent({
       });
     }
 
-    list.push({
-      type: CardTypes.CurrentGame,
-      data: null,
-      key: uuid(),
-    });
-
-    list.push({
-      type: CardTypes.MediaPlayer,
-      data: null,
-      key: uuid(),
-    });
-
-    list.push({
-      type: CardTypes.PhoneBattery,
-      data: null,
-      key: uuid(),
-    });
-
-    list.push({
-      type: CardTypes.Clock,
-      data: null,
-      key: uuid(),
-    });
+    // add fun cards
+    for (let i = 1; i < 5; i++) {
+      list.push({
+        type: i as CardTypes,
+        data: null,
+        key: uuid(),
+      });
+    }
 
     const processedList: CardObject[] = list.sort((a, b) => {
       let val = 0.5 - Math.random();
-      if (b.data?.featured) val += 0.1;
-      if (b.type !== CardTypes.Project) val += 0.3;
+      if (b.data?.featured) val += 0.4;
+      if (a.data?.featured) val -= 0.4;
+
+      if (b.type !== CardTypes.Project) val += 0.2;
+      if (a.type !== CardTypes.Project) val -= 0.2;
+
+      if (b.type === CardTypes.MediaPlayer) val += 0.3;
+      if (a.type === CardTypes.MediaPlayer) val -= 0.3;
       return val;
     });
 
