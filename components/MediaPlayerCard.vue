@@ -1,15 +1,12 @@
 <template>
-  <a :href="listening?.shareUrl" target="_blank">
+  <a :href="listening?.shareUrl" target="_blank" v-if="!hide">
     <Card class="p-8 shadow-green-500/10 bg-green-50">
       <div v-if="listening" class="flex flex-col lg:flex-row gap-4">
         <div v-if="listening.albumArtUrl" class="w-28 h-28 overflow-hidden">
           <img :alt="listening.albumName" :src="listening.albumArtUrl" class="absolute w-full h-full z-10" />
           <div class="absolute w-full h-full bg-green-900/20 animate-pulse" />
         </div>
-        <div v-if="listening.state === 'idle' || !listening.state">
-          <h1 class="text-md text-neutral-700 font-bold">Not listening to anything at the moment</h1>
-        </div>
-        <div v-else class="flex-1 flex flex-col gap-2 justify-between">
+        <div class="flex-1 flex flex-col gap-2 justify-between">
           <div class="flex flex-col gap-2 mr-9">
             <h1 class="text-md text-green-900 font-bold">{{listening.trackTitle}}</h1>
             <p class="text-sm text-green-900">{{listening.artistName}}</p>
@@ -63,6 +60,12 @@ export default defineNuxtComponent({
         return this.listening?.playbackPosition || 0;
       }
     },
+    hide() {
+      if (!this.listening) {
+        return false;
+      }
+      return this.listening.state !== "playing" && this.listening.state !== "paused";
+    }
   },
 
   watch: {
