@@ -1,6 +1,6 @@
 <template>
   <NuxtLink :to="project.htmlUrl">
-    <Card class="p-8 md:p-12 bg-white shadow-neutral-500/10">
+    <Card class="p-8 md:p-12 bg-white shadow-transparent border-2 border-neutral-50">
       <div class="flex flex-col gap-8">
         <div v-if="project.thumbnailUrl" class="w-full aspect-video rounded-md overflow-hidden">
           <img :src="project.thumbnailUrl" :alt="project.name" class="absolute w-full h-full z-10" />

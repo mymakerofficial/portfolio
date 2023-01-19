@@ -4,10 +4,10 @@
       <div v-if="playing">
         <div class="flex flex-col gap-4">
           <div>
-            <h1 class="text-md text-slate-700 font-bold">{{ playing.state === 'idle' ? "Last played" : "Currently playing" }}</h1>
+            <h1 class="text-md font-medium text-slate-900">{{ playing.state === 'idle' ? "Last played" : "Currently playing" }}</h1>
           </div>
           <div class="flex flex-col lg:flex-row gap-4">
-            <div v-if="playing.headerImageUrl" class="w-48 aspect-[92/43] overflow-hidden">
+            <div v-if="playing.headerImageUrl" class="w-48 aspect-[92/43] overflow-hidden rounded-md">
               <img :alt="playing.gameName" :src="playing.headerImageUrl" class="absolute w-full h-full z-10" />
               <div class="absolute w-full h-full bg-slate-700/20 animate-pulse" />
             </div>
@@ -24,13 +24,13 @@
       <div v-else>
         <div class="flex flex-col gap-4">
           <div>
-            <div class="w-28 h-4 bg-slate-700/20 animate-pulse rounded-md" />
+            <div class="w-28 h-6 bg-slate-700/20 animate-pulse rounded-md" />
           </div>
           <div class="flex flex-col lg:flex-row gap-4">
-            <div class="w-48 aspect-[92/43] bg-slate-700/20 animate-pulse" />
+            <div class="w-48 aspect-[92/43] rounded-md bg-slate-700/20 animate-pulse" />
             <div class="flex-1 flex flex-col gap-2 justify-between">
               <div class="flex flex-col gap-4">
-                <div class="w-28 h-4 bg-slate-700/20 animate-pulse rounded-md" />
+                <div class="w-28 h-5 bg-slate-700/20 animate-pulse rounded-md" />
                 <div class="w-16 h-4 bg-slate-700/20 animate-pulse rounded-md" />
                 <div class="w-20 h-4 bg-slate-700/20 animate-pulse rounded-md" />
               </div>
