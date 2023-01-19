@@ -24,20 +24,6 @@ export default defineNuxtComponent({
     }
   },
 
-  computed: {
-    color() {
-      if(!this.battery?.batteryLevel) return "blue";
-
-      if (this.battery?.batteryLevel > 75) {
-        return "green";
-      } else if (this.battery?.batteryLevel > 25) {
-        return "blue";
-      } else {
-        return "red";
-      }
-    }
-  },
-
   methods: {
     async fetchData() {
       this.battery = (await useFetch<PhoneBatteryResponse>("/api/v1/fun/phone_battery")).data as unknown as PhoneBatteryResponse;
