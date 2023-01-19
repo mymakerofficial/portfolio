@@ -25,5 +25,23 @@ export default <Partial<Config>>{
     'text-red-900',
     'text-blue-900',
     'text-green-900',
-  ]
+  ],
+  theme: {
+    extend: {
+      colors: {
+        gray: {
+          50: "#f6f8fa",
+          100: "#eceef2",
+          200: "#d4d6de",
+          300: "#b4b7c1",
+          400: "#8d93a3",
+          500: "#636979",
+          600: "#3e4351",
+          700: "#252833",
+          800: "#151820",
+          900: "#0a0c11",
+        }
+      }
+    }
+  }
 };
