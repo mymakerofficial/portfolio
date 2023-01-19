@@ -1,10 +1,10 @@
 <template>
-  <Card :class="`shadow-${color}-500/10 bg-${color}-50 overflow-hidden`">
+  <Card class="shadow-blue-500/10 dark:shadow-blue-500/10 bg-blue-50 dark:bg-blue-500/20 overflow-hidden">
     <div v-if="battery">
-      <div :class="`absolute h-full bg-${color}-200/50`" :style="{ width: `${ battery.batteryLevel }%` }" />
+      <div class="absolute h-full bg-blue-200/30 dark:bg-blue-300/10" :style="{ width: `${ battery.batteryLevel }%` }" />
       <div class="p-8 flex flex-col gap-4">
-        <h2 :class="`text-md font-medium text-${color}-900`">Phone Battery</h2>
-        <h1  :class="`text-4xl font-bold text-${color}-900`">{{ battery.batteryLevel !== null ? `${battery.batteryLevel}%` : "N/A" }}</h1>
+        <h2 class="text-md font-medium text-blue-900 dark:text-blue-200">Phone Battery</h2>
+        <h1 class="text-4xl font-bold text-blue-900 dark:text-blue-200">{{ battery.batteryLevel !== null ? `${battery.batteryLevel}%` : "N/A" }}</h1>
       </div>
     </div>
     <div v-else class="p-8 flex flex-col gap-4">

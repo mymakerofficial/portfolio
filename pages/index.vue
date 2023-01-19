@@ -3,7 +3,7 @@
     <div class="flex flex-col gap-12 my-12">
       <div class="flex flex-col gap-2">
         <h1 class="text-xl font-extrabold">My_Maker</h1>
-        <div class="text-sm font-medium text-neutral-600">Hai im My_Maker, I like making things</div>
+        <div class="text-sm font-medium text-neutral-600 dark:text-neutral-200">Hai im My_Maker, I like making things</div>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
         <div class="flex flex-col gap-4 md:gap-8" v-for="(col, index) in grids[1] || []" :key="index">

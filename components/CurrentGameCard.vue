@@ -1,10 +1,10 @@
 <template>
   <a :href="playing?.steamUrl" target="_blank">
-    <Card class="p-8 shadow-slate-500/10 bg-slate-50">
+    <Card class="p-8 shadow-slate-500/10 dark:shadow-slate-500/10 bg-slate-50 dark:bg-slate-500/20 overflow-hidden">
       <div v-if="playing">
         <div class="flex flex-col gap-4">
           <div>
-            <h1 class="text-md font-medium text-slate-900">{{ playing.state === 'idle' ? "Last played" : "Currently playing" }}</h1>
+            <h1 class="text-md font-medium text-slate-900 dark:text-slate-100">{{ playing.state === 'idle' ? "Last played" : "Currently playing" }}</h1>
           </div>
           <div class="flex flex-col lg:flex-row gap-4">
             <div v-if="playing.headerImageUrl" class="w-48 aspect-[92/43] overflow-hidden rounded-md">
@@ -13,9 +13,9 @@
             </div>
             <div class="flex flex-col gap-2 justify-between">
               <div class="flex flex-col gap-2">
-                <h1 class="text-md text-slate-700 font-bold">{{ playing.gameName }}</h1>
-                <p v-if="playing.developers !== null" class="text-sm text-slate-600">{{ playing.developers.join(', ') }}</p>
-                <p v-if="playing.publishers !== null" class="text-sm text-slate-600">{{ playing.publishers.join(', ') }}</p>
+                <h1 class="text-md text-slate-900 dark:text-slate-100 font-bold">{{ playing.gameName }}</h1>
+                <p v-if="playing.developers !== null" class="text-sm text-slate-800 dark:text-slate-200">{{ playing.developers.join(', ') }}</p>
+                <p v-if="playing.publishers !== null" class="text-sm text-slate-800 dark:text-slate-200">{{ playing.publishers.join(', ') }}</p>
               </div>
             </div>
           </div>

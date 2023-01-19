@@ -1,9 +1,9 @@
 <template>
-  <Card class="shadow-purple-500/10 bg-purple-50 overflow-hidden">
+  <Card class="shadow-purple-500/10 dark:shadow-fuchsia-500/10 bg-purple-50 dark:bg-fuchsia-500/20 overflow-hidden">
     <div v-if="clockText">
       <div class="p-8 flex flex-col gap-4">
-        <h2 class="text-md font-medium text-purple-900">Time in Germany</h2>
-        <h1  class="text-4xl font-bold text-purple-900">{{ clockText }}</h1>
+        <h2 class="text-md font-medium text-purple-900 dark:text-fuchsia-200">Time in Germany</h2>
+        <h1  class="text-4xl font-bold text-purple-900 dark:text-fuchsia-200">{{ clockText }}</h1>
       </div>
     </div>
     <div v-else class="p-8 flex flex-col gap-4">

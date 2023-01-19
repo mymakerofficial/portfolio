@@ -1,6 +1,6 @@
 <template>
   <a :href="listening?.shareUrl" target="_blank" v-if="!hide">
-    <Card class="p-8 shadow-green-500/10 bg-green-50">
+    <Card class="p-8 shadow-green-500/10 dark:shadow-green-500/10 bg-green-50 dark:bg-green-500/20 overflow-hidden">
       <div v-if="listening" class="flex flex-col lg:flex-row gap-4">
         <div v-if="listening.albumArtUrl" class="w-28 h-28 overflow-hidden">
           <img :alt="listening.albumName" :src="listening.albumArtUrl" class="absolute w-full h-full z-10" />
@@ -8,12 +8,14 @@
         </div>
         <div class="flex-1 flex flex-col gap-2 justify-between">
           <div class="flex flex-col gap-2 mr-9">
-            <h1 class="text-md text-green-900 font-bold">{{listening.trackTitle}}</h1>
-            <p class="text-sm text-green-900">{{listening.artistName}}</p>
-            <p class="text-sm text-green-900">{{listening.albumName}}</p>
+            <h1 class="text-md text-green-900 dark:text-green-100 font-bold">{{listening.trackTitle}}</h1>
+            <p class="text-sm text-green-800 dark:text-green-200">{{listening.artistName}}</p>
+            <p class="text-sm text-green-800 dark:text-green-200">{{listening.albumName}}</p>
           </div>
           <div>
-            <div class="h-1 w-full bg-green-100 rounded-full overflow-hidden"><div class="h-full bg-green-900 transition-[width] duration-1000" :style="{ width: `${(playbackPosition / listening.playbackDuration) * 100}%` }"></div></div>
+            <div class="h-1 w-full bg-green-100 dark:bg-green-800 rounded-full overflow-hidden">
+              <div class="h-full bg-green-900 dark:bg-green-100 transition-[width] duration-1000" :style="{ width: `${(playbackPosition / listening.playbackDuration) * 100}%` }" />
+            </div>
           </div>
         </div>
         <div class="absolute top-0 right-0 z-10" v-if="listening.contentProvider">
