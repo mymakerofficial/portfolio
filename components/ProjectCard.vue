@@ -32,7 +32,7 @@ export default defineNuxtComponent({
 
   computed: {
     displayYear() {
-      return dayjs(this.project.releaseDate).format("YYYY");
+      return dayjs(this.project.date).format("YYYY");
     }
   }
 })
