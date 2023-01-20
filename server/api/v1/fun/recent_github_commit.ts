@@ -1,7 +1,9 @@
 import { Octokit } from "octokit";
 import {createClient} from "@supabase/supabase-js";
 
-const octokit = new Octokit();
+const octokit = new Octokit({
+  auth: process.env.GITHUB_ACCESS_TOKEN,
+});
 
 const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
 
