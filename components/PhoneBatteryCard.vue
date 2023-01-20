@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row">
+  <div class="flex flex-row" v-if="!hide">
     <div class="flex-1 rounded-2xl bg-gray-50 dark:bg-gray-800 shadow-xl shadow-gray-500/10 dark:shadow-gray-600/10 overflow-hidden">
       <div v-if="battery">
         <div class="absolute h-full bg-gray-200/30 dark:bg-gray-400/10" :style="{ width: `${ battery.batteryLevel }%` }" />
@@ -26,6 +26,15 @@ export default defineNuxtComponent({
   data() {
     return {
       battery: null as PhoneBatteryResponse | null,
+    }
+  },
+
+  computed: {
+    hide() {
+      if (!this.battery) {
+        return false;
+      }
+      return this.battery.batteryLevel === null;
     }
   },
 
