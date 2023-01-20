@@ -1,6 +1,14 @@
 <template>
   <Head>
     <Title>{{ project.displayName }}</Title>
+    <Meta name="description" :content="project?.summary" />
+    <Meta name="og:title" :content="project?.displayName" />
+    <Meta name="og:description" :content="project?.summary" />
+    <Meta name="og:image" :content="project?.thumbnailUrl" v-if="project?.thumbnailUrl"/>
+    <Meta name="twitter:card" content="summary" />
+    <Meta name="twitter:title" :content="project?.displayName" />
+    <Meta name="twitter:description" :content="project?.summary" />
+    <Meta name="twitter:image" :content="project?.thumbnailUrl" v-if="project?.thumbnailUrl"/>
   </Head>
 
   <Container class="2xl:w-3/5">
