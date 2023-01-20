@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-3 sm:mx-auto sm:w-3/4 lg:w-2/3 2xl:w-11/12 max-w-7xl">
+  <Container class="2xl:w-11/12">
     <div class="flex flex-col gap-12 my-12">
       <div class="flex flex-col gap-2">
         <h1 class="text-xl font-extrabold">My_Maker</h1>
@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </Container>
 </template>
 
 <script lang="ts">
