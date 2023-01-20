@@ -2,20 +2,67 @@
   <Head>
     <Title>{{ project.displayName }}</Title>
   </Head>
+
   <Container class="2xl:w-3/5">
     <div class="flex flex-col gap-8 my-12">
-      <div>
-        <img v-if="project?.thumbnailUrl" :src="project.thumbnailUrl" alt="thumbnail" class="rounded-xl">
+      <div v-if="project.thumbnailUrl" class="w-full aspect-video rounded-xl overflow-hidden">
+        <img :src="project.thumbnailUrl" :alt="project.displayName" class="absolute w-full h-full z-10" />
+        <div class="w-full h-full bg-gray-600/20 dark:bg-gray-100/20 animate-pulse" />
       </div>
-      <div class="p-4 flex flex-row gap-4 justify-between">
+      <div class="p-4 flex flex-col md:flex-row gap-4 justify-between">
         <div class="flex flex-col gap-4">
           <h1 class="text-4xl font-extrabold text-gray-800 dark:text-gray-100">{{ project?.displayName || 'loading..' }}</h1>
           <p class="text-sm font-medium text-gray-600 dark:text-gray-300">{{ project?.summary || 'loading..' }}</p>
         </div>
         <div v-if="project?.websiteUrl">
-          <Button>open</Button>
+          <a :href="project.websiteUrl" target="_blank">
+            <Button>Visit Website</Button>
+          </a>
         </div>
       </div>
+
+      <DetailsPanel>
+        <DetailsPanelSection title="Timeline">
+          <TimelineWrapper>
+            <TimelineItem title="started" :text="startedHumanReadable" v-if="project?.startedDate !== null" />
+            <TimelineDash v-if="project?.startedDate !== null && project?.releaseDate !== null" />
+            <TimelineItem title="published" :text="releasedHumanReadable" v-if="project?.releaseDate !== null" />
+            <TimelineDash v-if="project?.releaseDate !== null && project?.lastCommitDateTime !== null" />
+            <TimelineItem title="last changed" :text="lastChangedHumanReadable" v-if="project?.lastCommitDateTime !== null" />
+          </TimelineWrapper>
+        </DetailsPanelSection>
+        <DetailsPanelSection title="Collaborators" v-if="project?.collaborators?.length > 0">
+          <div class="flex flex-wrap gap-4 items-center">
+            <div v-for="collaborator in project?.collaborators" :key="collaborator.slug">
+              <a :href="collaborator.websiteUrl" target="_blank" class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ collaborator.displayName }}</a>
+            </div>
+          </div>
+        </DetailsPanelSection>
+        <DetailsPanelSection title="Tech Stack" v-if="project?.technologies?.length > 0">
+          <div class="flex flex-col gap-4">
+            <div v-for="type in project?.technologies" :key="type.slug" class="flex flex-col md:flex-row gap-4">
+              <div>
+                <span class="text-md md:text-sm font-medium text-gray-500">{{ type.displayName }}</span>
+              </div>
+              <div class="flex flex-wrap gap-2 md:gap-4">
+                <div v-for="tech in type.technologies" :key="tech.slug">
+                  <span class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ tech.displayName }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </DetailsPanelSection>
+        <DetailsPanelSection title="GitHub Repo" v-if="project?.githubRepo">
+          <a :href="project.githubRepoUrl" target="_blank" class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ project.githubRepo }}</a>
+        </DetailsPanelSection>
+        <DetailsPanelSection title="Tags" v-if="project?.tags?.length > 0">
+          <div class="flex flex-wrap gap-4 items-center">
+            <div v-for="tag in project?.tags" :key="tag.slug">
+              <span class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ tag.displayName }}</span>
+            </div>
+          </div>
+        </DetailsPanelSection>
+      </DetailsPanel>
     </div>
   </Container>
 </template>
@@ -34,22 +81,14 @@ export default defineNuxtComponent({
 
   computed: {
     startedHumanReadable() {
-      return dayjs(this.project?.startedAt).format('MMMM D, YYYY');
+      return dayjs(this.project?.startedDate).format('MMMM D, YYYY');
+    },
+    releasedHumanReadable() {
+      return dayjs(this.project?.releaseDate).format('MMMM D, YYYY');
+    },
+    lastChangedHumanReadable() {
+      return dayjs(this.project?.lastCommitDateTime).format('MMMM D, YYYY');
     },
   }
 });
-
-/*
-const startedHumanReadable = computed(() => {
-  if (!project.value) return 'loading..';
-  if (!project.value?.startedDate) return null;
-  return dayjs(project.value.startedDate).format('D MMMM, YYYY');
-});
-
-const releasedHumanReadable = computed(() => {
-  if (!project.value) return 'loading..';
-  if (!project.value?.releaseDate) return null;
-  return dayjs(project.value.releaseDate).format('D MMMM, YYYY');
-});
- */
 </script>
