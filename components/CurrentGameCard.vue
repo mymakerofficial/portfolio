@@ -1,5 +1,5 @@
 <template>
-  <a :href="playing?.steamUrl" target="_blank">
+  <a :href="playing?.steamUrl" target="_blank" v-if="!hide">
     <Card class="p-8 shadow-gray-500/10 dark:shadow-gray-600/10 bg-gray-50 dark:bg-gray-800 overflow-hidden">
       <div v-if="playing">
         <div class="flex flex-col gap-4">
@@ -51,6 +51,16 @@ export default defineNuxtComponent({
       playing: null as CurrentlyPlayingResponse | null,
     }
   },
+
+  computed: {
+    hide() {
+      if (!this.playing) {
+        return false;
+      }
+      return this.playing.state !== "idle" && this.playing.state !== "playing";
+    }
+  },
+
 
   methods: {
     async fetchData() {
