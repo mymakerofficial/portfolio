@@ -35,7 +35,7 @@
             <TimelineItem title="started" :text="startedHumanReadable" v-if="project?.startedDate !== null" />
             <TimelineDash v-if="project?.startedDate !== null && project?.releaseDate !== null" />
             <TimelineItem title="published" :text="releasedHumanReadable" v-if="project?.releaseDate !== null" />
-            <TimelineDash v-if="project?.releaseDate !== null && project?.lastCommitDateTime !== null" />
+            <TimelineDash v-if="project?.startedDate !== null && project?.lastCommitDateTime !== null" />
             <TimelineItem title="last changed" :text="lastChangedHumanReadable" v-if="project?.lastCommitDateTime !== null" />
           </TimelineWrapper>
         </DetailsPanelSection>
