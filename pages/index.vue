@@ -13,6 +13,7 @@
             <MediaPlayerCard v-else-if="item.type === 2" />
             <PhoneBatteryCard v-else-if="item.type === 3" />
             <ClockCard v-else-if="item.type === 4" />
+            <GitHubCommitCard v-else-if="item.type === 5" />
           </template>
         </div>
       </div>
@@ -30,6 +31,7 @@ enum CardTypes {
   MediaPlayer,
   PhoneBattery,
   Clock,
+  GitHubCommit,
 }
 
 interface CardObject {
@@ -55,7 +57,7 @@ export default defineNuxtComponent({
     }
 
     // add fun cards
-    for (let i = 1; i < 5; i++) {
+    for (let i = 1; i < 6; i++) {
       list.push({
         type: i as CardTypes,
         data: null,
