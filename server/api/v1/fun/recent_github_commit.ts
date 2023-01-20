@@ -58,8 +58,8 @@ export const getRecentGithubCommit = async (): Promise<RecentGithubCommitRespons
     },
     commit: {
       ref: event.payload.ref,
-      message: event.payload.commits[0].message,
-      htmlUrl: `https://github.com/${event.repo.name}/commit/${event.payload.commits[0].sha}`
+      message: event.payload.commits[event.payload.commits.length - 1].message,
+      htmlUrl: `https://github.com/${event.repo.name}/commit/${event.payload.commits[event.payload.commits.length - 1].sha}`
     },
     createdAt: event.created_at
   };
