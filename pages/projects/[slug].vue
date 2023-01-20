@@ -5,7 +5,7 @@
     <Meta name="og:title" :content="project?.displayName" />
     <Meta name="og:description" :content="project?.summary" />
     <Meta name="og:image" :content="project?.thumbnailUrl" v-if="project?.thumbnailUrl"/>
-    <Meta name="twitter:card" content="summary" />
+    <Meta name="twitter:card" content="summary_large_image" />
     <Meta name="twitter:title" :content="project?.displayName" />
     <Meta name="twitter:description" :content="project?.summary" />
     <Meta name="twitter:image" :content="project?.thumbnailUrl" v-if="project?.thumbnailUrl"/>
