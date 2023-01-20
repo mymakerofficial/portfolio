@@ -1,15 +1,5 @@
-import axios, {AxiosResponse} from "axios";
+import axios from "axios";
 import {createClient} from "@supabase/supabase-js";
-
-export interface Entity {
-  id: string;
-  provider: string;
-}
-
-export interface EntityData {
-  response: AxiosResponse<any, any>;
-  entity: Entity;
-}
 
 export interface CurrentlyListeningResponse {
   contentProvider: string | null;
