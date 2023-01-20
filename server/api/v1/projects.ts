@@ -26,8 +26,6 @@ export default defineEventHandler(async (): Promise<CompactProjectInfo[]> => {
     throw new Error('Error fetching projects');
   }
 
-  console.log(typesData);
-
   return projectsData.map((project) => {
     const type = typesData.find((type) => type.slug === project.type) || null;
     return {
