@@ -1,14 +1,14 @@
 <template>
-  <Card class="shadow-purple-500/10 dark:shadow-purple-500/10 bg-purple-50 dark:bg-purple-800 overflow-hidden">
+  <Card class="shadow-gray-500/10 dark:shadow-gray-600/10 bg-gray-50 dark:bg-gray-800 overflow-hidden">
     <div v-if="clockText">
       <div class="p-8 flex flex-col gap-4">
-        <h2 class="text-md font-medium text-purple-600 dark:text-purple-200">Time in Germany</h2>
-        <h1  class="text-4xl font-bold text-purple-600 dark:text-purple-200">{{ clockText }}</h1>
+        <h2 class="text-md font-medium text-gray-600 dark:text-gray-100">Time in Germany</h2>
+        <h1  class="text-4xl font-bold text-gray-600 dark:text-gray-100">{{ clockText }}</h1>
       </div>
     </div>
     <div v-else class="p-8 flex flex-col gap-4">
-      <div class="w-28 h-5 bg-purple-600/20 dark:bg-purple-100/20 animate-pulse rounded-md" />
-      <div class="w-48 h-11 bg-purple-600/20 dark:bg-purple-100/20 animate-pulse rounded-md" />
+      <div class="w-28 h-5 bg-gray-600/20 dark:bg-gray-100/20 animate-pulse rounded-md" />
+      <div class="w-48 h-11 bg-gray-600/20 dark:bg-gray-100/20 animate-pulse rounded-md" />
     </div>
   </Card>
 </template>

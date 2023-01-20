@@ -1,6 +1,6 @@
 <template>
   <a :href="data?.repo?.htmlUrl" target="_blank" v-if="!hide">
-    <Card class="p-8 shadow-gray-500/10 dark:shadow-gray-500/10 bg-gray-50 dark:bg-gray-500/20 overflow-hidden">
+    <Card class="p-8 shadow-gray-500/10 dark:shadow-gray-600/10 bg-gray-50 dark:bg-gray-800 overflow-hidden">
       <div v-if="data">
         <div class="flex flex-col gap-4">
           <div class="mr-9">
