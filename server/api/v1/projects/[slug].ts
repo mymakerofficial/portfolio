@@ -18,6 +18,8 @@ export default defineEventHandler(async (event) => {
       'url, ' +
       'releaseDate: released_at_date, ' +
       'startedDate: started_at_date, ' +
+      'detailsDisclosureHeading: details_disclosure_heading, ' +
+      'detailsDisclosureText: details_disclosure_text, ' +
       'tags ( slug, displayName: display_name ), ' +
       'collaborators: people ( slug, displayName: display_name, websiteUrl: website_url ), ' +
       'technologies ( slug, displayName: display_name, shortDisplayName: short_display_name, type: technology_type_id ( slug, displayName: display_name, shortDisplayName: short_display_name ) ), ' +
@@ -93,6 +95,10 @@ export default defineEventHandler(async (event) => {
     releaseDate: projectData.releaseDate,
     startedDate: projectData.startedDate,
     lastCommitDateTime: lastCommitDate,
+    disclosure: {
+      heading: projectData.detailsDisclosureHeading,
+      text: projectData.detailsDisclosureText
+    },
     tags: projectData.tags,
     collaborators: projectData.collaborators,
     technologies: technologiesOut,

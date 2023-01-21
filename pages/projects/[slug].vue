@@ -30,6 +30,9 @@
       </div>
 
       <DetailsPanel>
+        <DetailsPanelSection :title="project?.disclosure?.heading || 'Info'" v-if="project?.disclosure?.text">
+          <p class="text-sm font-medium text-gray-800 dark:text-gray-200 lg:w-2/3">{{ project.disclosure.text }}</p>
+        </DetailsPanelSection>
         <DetailsPanelSection title="Timeline">
           <TimelineWrapper>
             <TimelineItem title="started" :text="startedHumanReadable" v-if="project?.startedDate !== null" />
