@@ -16,7 +16,7 @@ const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABA
 export default defineEventHandler(async (): Promise<CompactProjectInfo[]> => {
   const { data: projectsData } = await supabase
     .from('projects')
-    .select('slug, displayName: display_name, summary, type, releaseDate: released_at_date, staredDate: started_at_date, featured, thumbnailId: thumbnail_id')
+    .select('slug, displayName: display_name, summary, type, releaseDate: released_at_date, staredDate: started_at_date, featured, thumbnailPath: thumbnail_path')
 
   const { data: typesData } = await supabase
     .from('project_types')
@@ -35,7 +35,7 @@ export default defineEventHandler(async (): Promise<CompactProjectInfo[]> => {
       type: type?.shortDisplayName || type?.displayName || 'Project',
       date: (project.releaseDate || project.staredDate) as string,
       featured: project.featured as boolean,
-      thumbnailUrl: (project.thumbnailId ? `/api/v1/projects/${project.slug}/thumbnail` : null) as string | null,
+      thumbnailUrl: (project.thumbnailPath ? `/api/v1/projects/${project.slug}/thumbnail` : null) as string | null,
       htmlUrl: `/projects/${project.slug}`,
       url: `/api/v1/projects/${project.slug}`,
     }

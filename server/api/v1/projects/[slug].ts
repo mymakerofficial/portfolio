@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
       'technologies ( slug, displayName: display_name, shortDisplayName: short_display_name, type: technology_type_id ( slug, displayName: display_name, shortDisplayName: short_display_name ) ), ' +
       'githubRepo: github_repo, ' +
       'keepGithubRepoSecret: keep_github_repo_secret, ' +
-      'thumbnailId: thumbnail_id'
+      'thumbnailPath: thumbnail_path'
     )
     .eq('slug', event.context.params.slug)
     .single() as any;
@@ -104,6 +104,6 @@ export default defineEventHandler(async (event) => {
     technologies: technologiesOut,
     githubRepo: projectData.keepGithubRepoSecret ? null : projectData.githubRepo,
     githubRepoUrl: projectData.keepGithubRepoSecret ? null : `https://github.com/${projectData.githubRepo}`,
-    thumbnailUrl: projectData.thumbnailId ? `/api/v1/projects/${projectData.slug}/thumbnail` : null,
+    thumbnailUrl: projectData.thumbnailPath ? `/api/v1/projects/${projectData.slug}/thumbnail` : null,
   };
 });
