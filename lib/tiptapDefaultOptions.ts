@@ -21,6 +21,9 @@ import { Link } from "@tiptap/extension-link";
 
 import { Image } from "@tiptap/extension-image";
 
+// @ts-ignore
+import { Video } from "~/lib/tiptapExtensionVideo.ts"
+
 import { lowlight } from "lowlight/lib/core";
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 import css from "highlight.js/lib/languages/css";
@@ -59,7 +62,8 @@ export default {
     }),
     Image.configure({
       inline: true,
-    })
+    }),
+    Video,
   ],
   editorProps: {
     attributes: {

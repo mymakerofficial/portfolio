@@ -5,7 +5,7 @@
         <h1 class="text-xl font-bold text-gray-800 dark:text-gray-100">TipTap Editor</h1>
       </div>
       <div class="p-12 rounded-xl flex flex-col gap-8">
-        <div class="flex flex-wrap gap-y-4 gap-x-6">
+        <div class="sticky top-0 z-20 py-4 bg-white dark:bg-gray-900 flex flex-wrap gap-y-4 gap-x-6">
           <div
               v-for="(section, index) in editorButtons"
               :key="index"
@@ -24,8 +24,12 @@
         </div>
         <EditorContent :editor="editor" />
       </div>
-      <div class="bg-gray-50 dark:bg-gray-800 p-12 rounded-xl">
-        <input v-model="editorJSONString" readonly @focus="$event.target.select()" class="w-full bg-transparent text-inherit"/>
+      <div class="bg-gray-50 dark:bg-gray-800 p-12 rounded-xl flex flex-col gap-4">
+        <label>output</label>
+        <input v-model="editorJSONString" readonly @focus="$event.target.select()" class="w-full bg-gray-100 dark:bg-gray-700 text-inherit"/>
+        <label>input</label>
+        <input ref="inputJSON" @focus="$event.target.select()" class="w-full bg-gray-100 dark:bg-gray-700 bg-transparent text-inherit"/>
+        <button class="inline-block" @click="setEditor">set</button>
       </div>
     </div>
   </Container>
@@ -164,6 +168,12 @@ export default defineNuxtComponent({
             () => false,
             () => editor.isActive("image")
         ),
+        new EditorButton(
+            "add video",
+            () => this.addVideo(),
+            () => false,
+            () => editor.isActive("video")
+        ),
       ],
     ]
 
@@ -196,23 +206,38 @@ export default defineNuxtComponent({
 
       // update link
       this.editor
-          .chain()
-          .focus()
-          .extendMarkRange("link")
-          .setLink({ href: url })
-          .run();
+        .chain()
+        .focus()
+        .extendMarkRange("link")
+        .setLink({ href: url })
+        .run();
     },
     addImage() {
       const url = window.prompt('URL')
 
       if (url) {
         this.editor
-            .chain()
-            .focus()
-            .setImage({ src: url })
-            .run()
+          .chain()
+          .focus()
+          .setImage({ src: url })
+          .run()
       }
-    }
+    },
+    addVideo() {
+      const url = window.prompt('URL')
+
+      if (url) {
+        this.editor
+          .chain()
+          .focus()
+          .insertContent(`<video src="${url}"></video>`)
+          .run();
+      }
+    },
+    setEditor() {
+      // @ts-ignore
+      this.editor.commands.setContent(JSON.parse(this.$refs.inputJSON.value));
+    },
   },
 })
 </script>

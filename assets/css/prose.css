@@ -80,7 +80,7 @@
     @apply list-decimal;
 }
 
-.prose img {
+.prose img, .prose video {
     @apply my-4;
     @apply rounded-md;
     @apply max-h-96;
