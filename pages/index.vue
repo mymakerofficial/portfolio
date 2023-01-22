@@ -26,7 +26,7 @@
 import { v4 as uuid } from "uuid";
 
 enum CardTypes {
-  Project,
+  Project, // first entry must be project
   CurrentGame,
   MediaPlayer,
   PhoneBattery,
@@ -42,13 +42,15 @@ interface CardObject {
 
 export default defineNuxtComponent({
   async asyncData () {
+    // fetch projects from api
     const { data: projects } = await useFetch('/api/v1/projects');
 
-    let list: CardObject[] = [];
+    let projectsList: CardObject[] = [];
 
+    // add projects
     if (projects.value !== null) {
       projects.value.forEach((project: any) => {
-        list.push({
+        projectsList.push({
           type: CardTypes.Project,
           data: project,
           key: uuid(),
@@ -56,43 +58,65 @@ export default defineNuxtComponent({
       });
     }
 
-    // add fun cards
-    for (let i = 1; i < 6; i++) {
-      list.push({
-        type: i as CardTypes,
-        data: null,
-        key: uuid(),
-      });
+    // sort by date
+    let sortedProjectsList: CardObject[] = projectsList.sort((a, b) => {
+      return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
+    });
+
+    // sort featured projects to the top
+    const featuredProjects = sortedProjectsList.filter((item) => item.data.featured);
+    const nonFeaturedProjects = sortedProjectsList.filter((item) => !item.data.featured);
+    sortedProjectsList = [...featuredProjects, ...nonFeaturedProjects];
+
+    // figure out how many fun cards there are
+    let funCardsCount = Object.keys(CardTypes).length / 2;
+
+    // generate random order for fun cards
+    let funCardsOrder: number[] = [];
+    for (let i = 1; i < funCardsCount; i++) {
+      funCardsOrder.push(i);
     }
+    funCardsOrder.sort((a) => {
+      let val = Math.random() - 0.5
 
-    const processedList: CardObject[] = list.sort((a, b) => {
-      let val = 0.5 - Math.random();
-      if (b.data?.featured) val += 0.4;
-      if (a.data?.featured) val -= 0.4;
+      // make media player, clock, and github card commit more likely to be on top
+      if (a === CardTypes.MediaPlayer || a === CardTypes.Clock || a === CardTypes.GitHubCommit) {
+        val -= 0.1;
+      }
 
-      if (b.type !== CardTypes.Project) val += 0.2;
-      if (a.type !== CardTypes.Project) val -= 0.2;
-
-      if (b.type === CardTypes.MediaPlayer) val += 0.3;
-      if (a.type === CardTypes.MediaPlayer) val -= 0.3;
       return val;
     });
 
+    // add fun cards to the list
+    let list: CardObject[] = sortedProjectsList;
+    let spliceIndex = Math.floor(Math.random() + 0.5); // add first card at either first or second position
+    for (let i = 0; i < funCardsOrder.length; i++) {
+      list.splice(spliceIndex, 0, {
+        type: funCardsOrder[i] as CardTypes,
+        data: null,
+        key: uuid(),
+      });
+
+      spliceIndex += 3 + Math.floor(Math.random() + 0.5); // add next card either 3 or 4 position later
+    }
+
+    // generate grid
     const grids: CardObject[][][] = [];
     for (let c = 1; c <= 3; c++) {
       const grid: CardObject[][] = [];
       for (let i = 0; i < c; i++) {
         grid.push([]);
       }
-      for (let i = 0; i < processedList.length; i++) {
-        grid[i % c].push(processedList[i]);
+      for (let i = 0; i < list.length; i++) {
+        grid[i % c].push(list[i]);
       }
       grids.push(grid);
     }
 
     return {
+      projectsList,
+      sortedProjectsList,
       list,
-      processedList,
       grids,
     }
   },
