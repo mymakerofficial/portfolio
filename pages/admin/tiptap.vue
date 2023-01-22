@@ -157,6 +157,14 @@ export default defineNuxtComponent({
             () => editor.isActive("orderedList")
         ),
       ],
+      [
+        new EditorButton(
+            "add image",
+            () => this.addImage(),
+            () => false,
+            () => editor.isActive("image")
+        ),
+      ],
     ]
 
     return {
@@ -194,6 +202,17 @@ export default defineNuxtComponent({
           .setLink({ href: url })
           .run();
     },
+    addImage() {
+      const url = window.prompt('URL')
+
+      if (url) {
+        this.editor
+            .chain()
+            .focus()
+            .setImage({ src: url })
+            .run()
+      }
+    }
   },
 })
 </script>

@@ -19,6 +19,8 @@ import { HardBreak } from "@tiptap/extension-hard-break";
 
 import { Link } from "@tiptap/extension-link";
 
+import { Image } from "@tiptap/extension-image";
+
 import { lowlight } from "lowlight/lib/core";
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 import css from "highlight.js/lib/languages/css";
@@ -55,6 +57,9 @@ export default {
       linkOnPaste: true,
       openOnClick: false,
     }),
+    Image.configure({
+      inline: true,
+    })
   ],
   editorProps: {
     attributes: {

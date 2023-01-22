@@ -5,6 +5,9 @@
 .prose p {
     @apply text-gray-600;
     @apply dark:text-gray-200;
+}
+
+.prose p:not(:has(img)) {
     @apply lg:w-3/4;
 }
 
@@ -75,4 +78,10 @@
 
 .prose ol {
     @apply list-decimal;
+}
+
+.prose img {
+    @apply my-4;
+    @apply rounded-md;
+    @apply max-h-96;
 }
