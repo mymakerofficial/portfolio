@@ -1,5 +1,6 @@
 import {createClient} from '@supabase/supabase-js'
 import {Octokit} from "octokit";
+import { JSONContent } from "@tiptap/core"
 
 const octokit = new Octokit({
   auth: process.env.GITHUB_ACCESS_TOKEN,
@@ -14,6 +15,7 @@ export default defineEventHandler(async (event) => {
       'slug, ' +
       'displayName: display_name, ' +
       'summary, ' +
+      'bodyProse: body_text_prosemirror, ' +
       'type, ' +
       'url, ' +
       'releaseDate: released_at_date, ' +
@@ -90,11 +92,15 @@ export default defineEventHandler(async (event) => {
     slug: projectData.slug,
     displayName: projectData.displayName,
     summary: projectData.summary,
+    bodyProse: projectData.bodyProse as JSONContent,
     type: projectType,
+    thumbnailUrl: projectData.thumbnailPath ? `/api/v1/projects/${projectData.slug}/thumbnail` : null,
     websiteUrl: projectData.url,
     releaseDate: projectData.releaseDate,
     startedDate: projectData.startedDate,
     lastCommitDateTime: lastCommitDate,
+    githubRepo: projectData.keepGithubRepoSecret ? null : projectData.githubRepo,
+    githubRepoUrl: projectData.keepGithubRepoSecret ? null : `https://github.com/${projectData.githubRepo}`,
     disclosure: {
       heading: projectData.detailsDisclosureHeading,
       text: projectData.detailsDisclosureText
@@ -102,8 +108,5 @@ export default defineEventHandler(async (event) => {
     tags: projectData.tags,
     collaborators: projectData.collaborators,
     technologies: technologiesOut,
-    githubRepo: projectData.keepGithubRepoSecret ? null : projectData.githubRepo,
-    githubRepoUrl: projectData.keepGithubRepoSecret ? null : `https://github.com/${projectData.githubRepo}`,
-    thumbnailUrl: projectData.thumbnailPath ? `/api/v1/projects/${projectData.slug}/thumbnail` : null,
   };
 });
