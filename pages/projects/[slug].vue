@@ -12,26 +12,30 @@
   </Head>
 
   <Container class="2xl:w-3/5">
-    <div class="flex flex-col gap-8 my-12">
-      <div v-if="project.thumbnailUrl" class="w-full aspect-video rounded-xl overflow-hidden">
-        <img :src="project.thumbnailUrl" :alt="project.displayName" class="absolute w-full h-full z-10" />
-        <div class="w-full h-full bg-gray-600/20 dark:bg-gray-100/20 animate-pulse" />
-      </div>
-      <div class="p-4 flex flex-col md:flex-row gap-4 justify-between">
-        <div class="flex flex-col gap-4">
-          <h1 class="text-4xl font-extrabold text-gray-800 dark:text-gray-100">{{ project?.displayName || 'loading..' }}</h1>
-          <p class="text-sm font-medium text-gray-600 dark:text-gray-300">{{ project?.summary || 'loading..' }}</p>
+    <div class="flex flex-col gap-16 my-12">
+      <div class="flex flex-col gap-8">
+        <div v-if="project.thumbnailUrl" class="w-full aspect-video rounded-xl overflow-hidden">
+          <img :src="project.thumbnailUrl" :alt="project.displayName" class="absolute w-full h-full z-10" />
+          <div class="w-full h-full bg-gray-600/20 dark:bg-gray-100/20 animate-pulse" />
         </div>
-        <div v-if="project?.websiteUrl">
-          <a :href="project.websiteUrl" target="_blank">
-            <Button>Visit Website</Button>
-          </a>
+        <div class="px-8 md:px-12 flex flex-col md:flex-row gap-4 justify-between">
+          <div class="flex flex-col gap-4">
+            <h1 class="text-4xl font-extrabold text-gray-800 dark:text-gray-100">{{ project?.displayName || 'loading..' }}</h1>
+            <p class="text-sm font-medium text-gray-600 dark:text-gray-300">{{ project?.summary || 'loading..' }}</p>
+          </div>
+          <div v-if="project?.websiteUrl">
+            <a :href="project.websiteUrl" target="_blank">
+              <Button>Visit Website</Button>
+            </a>
+          </div>
         </div>
       </div>
-
+      <div class="px-8 md:px-12">
+        <article v-html="bodyHtml" :class="bodyClass" />
+      </div>
       <DetailsPanel>
         <DetailsPanelSection :title="project?.disclosure?.heading || 'Info'" v-if="project?.disclosure?.text">
-          <p class="text-sm font-medium text-gray-800 dark:text-gray-200 lg:w-2/3">{{ project.disclosure.text }}</p>
+          <p class="text-sm font-medium text-gray-800 dark:text-gray-200 lg:w-3/4">{{ project.disclosure.text }}</p>
         </DetailsPanelSection>
         <DetailsPanelSection title="Timeline">
           <TimelineWrapper>
@@ -80,6 +84,8 @@
 
 <script lang="ts">
 import dayjs from "dayjs";
+import { generateHTML } from '@tiptap/html'
+import tiptapDefaultOptions from "~/lib/tiptapDefaultOptions";
 
 export default defineNuxtComponent({
   async asyncData() {
@@ -91,15 +97,22 @@ export default defineNuxtComponent({
   },
 
   computed: {
-    startedHumanReadable() {
+    startedHumanReadable(): string | null {
       return dayjs(this.project?.startedDate).format('MMMM D, YYYY');
     },
-    releasedHumanReadable() {
+    releasedHumanReadable(): string | null {
       return dayjs(this.project?.releaseDate).format('MMMM D, YYYY');
     },
-    lastChangedHumanReadable() {
+    lastChangedHumanReadable(): string | null {
       return dayjs(this.project?.lastCommitDateTime).format('MMMM D, YYYY');
     },
-  }
+    bodyHtml(): string | null {
+      if (!this.project?.bodyProse) return null;
+      return generateHTML(this.project.bodyProse, tiptapDefaultOptions.extensions);
+    },
+    bodyClass(): string | null {
+      return tiptapDefaultOptions.editorProps.attributes.class
+    }
+  },
 });
 </script>
