@@ -118,7 +118,7 @@ export default cachedEventHandler(
   },
   {
     name: "project",
-    maxAge: 60 * 60, // 1 hour
+    maxAge: Number(process.env.CACHE_MAX_AGE_PROJECTS) || 3600,
     // @ts-ignore
     getKeys: (event): string => {
       return event.context.params.slug;

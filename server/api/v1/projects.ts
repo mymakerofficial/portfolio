@@ -49,6 +49,6 @@ export default cachedEventHandler(
   },
   {
     name: 'projects',
-    maxAge: 60 * 60, // 1 hour
+    maxAge: Number(process.env.CACHE_MAX_AGE_PROJECTS) || 3600,
   }
 );

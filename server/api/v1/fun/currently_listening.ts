@@ -67,7 +67,7 @@ export const getCurrentlyListeningCached = customCachedFunction(
   },
   {
     name: 'currently-listening',
-    maxAge: 60 * 5, // 5 minutes
+    maxAge: Number(process.env.CACHE_MAX_AGE_FUN) || 600,
     invalidate: (data: CurrentlyListeningResponse, generatedAt: Date) => {
       if (data.playbackDuration && data.playbackPosition) {
         const timeDiff = Date.now() - new Date(generatedAt).getTime();

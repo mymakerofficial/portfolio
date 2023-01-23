@@ -20,7 +20,7 @@ export const getPageSettingCached = cachedFunction(
   {
     swr: true,
     name: 'page-settings',
-    maxAge: 60 * 10, // 10 minutes
+    maxAge: Number(process.env.CACHE_MAX_AGE_SETTINGS) || 600,
     // @ts-ignore
     getKeys: (key: string) => key,
   }

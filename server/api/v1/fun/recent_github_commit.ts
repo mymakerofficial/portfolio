@@ -90,6 +90,6 @@ export default cachedEventHandler(
   },
   {
     name: 'recent-github-commit',
-    maxAge: 60 * 10, // 10 minutes
+    maxAge: Number(process.env.CACHE_MAX_AGE_FUN) || 600,
   }
 );
