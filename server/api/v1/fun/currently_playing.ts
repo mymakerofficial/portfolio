@@ -91,7 +91,7 @@ export default defineEventHandler(async (): Promise<CurrentlyPlayingResponse> =>
   const settingsData = await getPageSettingCached('enable-currently-playing') as { value: boolean };
 
   // if this endpoint is disabled, return null
-  if (!(!settingsData || settingsData?.value !== true)) {
+  if (!settingsData || settingsData?.value !== true) {
     return {
       contentProvider: null,
       contentId: null,
