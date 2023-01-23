@@ -1,41 +1,39 @@
 import axios from "axios";
-import {createClient} from "@supabase/supabase-js";
+import {getPageSettingCached} from "~/lib/checkPageSettings";
 
 export interface PhoneBatteryResponse {
   batteryLevel: number | null;
   charging: boolean | null;
 }
 
-const headers = {
-  "Authorization": `Bearer ${process.env.HOME_ASSISTANT_ACCESS_TOKEN}`,
-}
+export default cachedEventHandler(
+  async (): Promise<PhoneBatteryResponse> => {
+    const settingsData = await getPageSettingCached('enable-phone-battery') as { value: boolean };
 
-const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
+    // if this endpoint is disabled, return null
+    if (!settingsData || settingsData?.value !== true) {
+      return {
+        batteryLevel: null,
+        charging: null,
+      }
+    } else {
+      const levelResponse = await axios.get(
+        `${process.env.HOME_ASSISTANT_URL}/api/states/${process.env.HOME_ASSISTANT_PHONE_BATTERY_LEVEL_ENTITY_ID}`,
+        {
+          headers: {
+            "Authorization": `Bearer ${process.env.HOME_ASSISTANT_ACCESS_TOKEN}`,
+          }
+        }
+      );
 
-export const getPhoneBattery = async (): Promise<PhoneBatteryResponse> => {
-  const levelResponse = await axios.get(`${process.env.HOME_ASSISTANT_URL}/api/states/${process.env.HOME_ASSISTANT_PHONE_BATTERY_LEVEL_ENTITY_ID}`, { headers });
-
-  return {
-    batteryLevel: levelResponse.data.state,
-    charging: false,
-  }
-}
-
-export default defineEventHandler(async (): Promise<PhoneBatteryResponse> => {
-  // load settings from supabase
-  const { data: settingsData } = await supabase
-    .from('page_settings')
-    .select('value')
-    .eq('key', 'enable-phone-battery')
-    .single()
-
-  // if this endpoint is disabled, return null
-  if (!settingsData || settingsData?.value.value !== true) {
-    return {
-      batteryLevel: null,
-      charging: null,
+      return {
+        batteryLevel: levelResponse.data.state,
+        charging: false,
+      }
     }
-  } else {
-    return getPhoneBattery();
+  },
+  {
+    name: 'phone-battery',
+    maxAge: 60 * 10, // 10 minutes
   }
-});
+);
