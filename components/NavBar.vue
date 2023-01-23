@@ -1,13 +1,11 @@
 <template>
   <div class="z-50 fixed bottom-12 left-1/2 -translate-x-1/2 shadow-xl shadow-gray-500/10 dark:shadow-gray-600/10 rounded-full" ref="container">
     <div class="w-full h-full absolute bg-gradient-to-br from-gray-50 via-gray-200 to-gray-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 rounded-full" />
-    <nav class="m-0.5 h-16 p-2 m-px bg-gray-50 dark:bg-gray-800 rounded-full overflow-hidden" ref="navbar">
+    <nav class="m-[2px] h-16 p-2 m-px bg-gray-50 dark:bg-gray-800 rounded-full overflow-hidden" ref="navbar">
       <div :data-active="hoverActive" class="absolute bottom-0 w-48 h-full scale-150 opacity-0 data-[active=true]:opacity-100 transition-opacity ease-in-out duration-250" ref="spotlight" style="background: radial-gradient(ellipse at bottom, rgb(99 105 121 / 0.3), transparent 50%, transparent)"/>
       <div :data-active="highlightTransforms.width !== 0" class="absolute bottom-2 h-12 rounded-full bg-gray-100/60 dark:bg-gray-700/80 opacity-0 data-[active=true]:opacity-100 transition-opacity ease-in-out duration-250" ref="highlight"/>
       <div class="flex flex-row h-full" ref="buttonsContainer">
-        <button class="h-full px-12 flex items-center font-medium">home</button>
-        <button class="h-full px-12 flex items-center font-medium">projects</button>
-        <button class="h-full px-12 flex items-center font-medium">games</button>
+        <slot />
       </div>
     </nav>
   </div>
@@ -22,10 +20,16 @@ interface Transforms {
 }
 
 export default defineNuxtComponent({
+  props: {
+    activeIndex: {
+      type: Number,
+      default: 0,
+    },
+  },
+
   data() {
     return {
       hoverActive: false,
-      activeIndex: 0,
       spotlightTransforms: { x: 0 } as Transforms,
       highlightTransforms: { x: 0, width: 0 } as Transforms,
       spotlight: null as HTMLElement | null,

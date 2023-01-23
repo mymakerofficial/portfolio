@@ -1,11 +1,19 @@
 <template>
   <div>
-    <NavBar />
+    <NavBarWrapper :options="navBarOptions" />
     <NuxtPage />
   </div>
 </template>
 
 <script setup lang="ts">
+import {NavBarOption} from "~/components/NavBarWrapper.vue";
+
+const navBarOptions: NavBarOption[] = [
+  { href: '/', label: 'home' },
+  { href: '/projects', label: 'projects' },
+  { href: '/games', label: 'games' },
+]
+
 useHead({
   bodyAttrs: {
     class: 'dark:bg-gray-900 dark:text-gray-100',
