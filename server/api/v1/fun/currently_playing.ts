@@ -1,5 +1,5 @@
-import { createClient } from '@supabase/supabase-js'
 import axios from "axios";
+import {getPageSettingCached} from "~/lib/checkPageSettings";
 
 export interface CurrentlyPlayingResponse {
   contentProvider: string | null;
@@ -13,8 +13,6 @@ export interface CurrentlyPlayingResponse {
   websiteUrl: string | null;
   steamUrl: string | null;
 }
-
-const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
 
 const defaultParams = {
   key: process.env.STEAM_API_KEY,
@@ -81,16 +79,19 @@ export const getCurrentlyPlaying = async (): Promise<CurrentlyPlayingResponse> =
   };
 }
 
+export const getCurrentlyPlayingCached = cachedFunction(
+  getCurrentlyPlaying,
+  {
+    name: "currently-playing",
+    maxAge: 60 * 10, // 10 minutes
+  }
+)
+
 export default defineEventHandler(async (): Promise<CurrentlyPlayingResponse> => {
-  // load settings from supabase
-  const { data: settingsData } = await supabase
-    .from('page_settings')
-    .select('value')
-    .eq('key', 'enable-currently-playing')
-    .single()
+  const settingsData = await getPageSettingCached('enable-currently-playing') as { value: boolean };
 
   // if this endpoint is disabled, return null
-  if (!settingsData || settingsData?.value.value !== true) {
+  if (!(!settingsData || settingsData?.value !== true)) {
     return {
       contentProvider: null,
       contentId: null,
@@ -104,11 +105,11 @@ export default defineEventHandler(async (): Promise<CurrentlyPlayingResponse> =>
       steamUrl: null,
     };
   } else {
-    const res = await getCurrentlyPlaying();
+    const res = await getCurrentlyPlayingCached() as CurrentlyPlayingResponse;
 
     return {
       ...res,
-      headerImageUrl: res.headerImageUrl ? `/api/v1/fun/currently_playing/media_proxy_header_image?t=${new Date().getTime()}` : null
+      headerImageUrl: res.headerImageUrl ? `/api/v1/fun/currently_playing/media_proxy_header_image?i=${res.contentId}` : null
     };
   }
 });

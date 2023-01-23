@@ -1,8 +1,8 @@
 import {h3SendMediaFromUrl} from "~/lib/h3mediaProxy";
-import {getCurrentlyPlaying} from "~/server/api/v1/fun/currently_playing";
+import {CurrentlyPlayingResponse, getCurrentlyPlayingCached} from "~/server/api/v1/fun/currently_playing";
 
 export default defineEventHandler(async (event) => {
-  const playingData = await getCurrentlyPlaying();
+  const playingData = await getCurrentlyPlayingCached() as CurrentlyPlayingResponse;
 
   if (!playingData.headerImageUrl) {
     throw new Error('No header image available');
