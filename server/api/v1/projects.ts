@@ -11,33 +11,44 @@ export interface CompactProjectInfo {
   url: string;
 }
 
-const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
+const supabase = createClient(
+  process.env.SUPABASE_URL || '',
+  process.env.SUPABASE_KEY || ''
+)
 
-export default defineEventHandler(async (): Promise<CompactProjectInfo[]> => {
-  const { data: projectsData } = await supabase
-    .from('projects')
-    .select('slug, displayName: display_name, summary, type, releaseDate: released_at_date, staredDate: started_at_date, featured, thumbnailPath: thumbnail_path')
+export default cachedEventHandler(
+  async (): Promise<CompactProjectInfo[]> => {
+    console.log('Fetching projects')
 
-  const { data: typesData } = await supabase
-    .from('project_types')
-    .select('slug, displayName: display_name, shortDisplayName: short_display_name')
+    const { data: projectsData } = await supabase
+      .from('projects')
+      .select('slug, displayName: display_name, summary, type, releaseDate: released_at_date, staredDate: started_at_date, featured, thumbnailPath: thumbnail_path')
 
-  if (!projectsData || !typesData) {
-    throw new Error('Error fetching projects');
-  }
+    const { data: typesData } = await supabase
+      .from('project_types')
+      .select('slug, displayName: display_name, shortDisplayName: short_display_name')
 
-  return projectsData.map((project) => {
-    const type = typesData.find((type) => type.slug === project.type) || null;
-    return {
-      slug: project.slug as string,
-      displayName: project.displayName as string,
-      summary: project.summary as string,
-      type: type?.shortDisplayName || type?.displayName || 'Project',
-      date: (project.releaseDate || project.staredDate) as string,
-      featured: project.featured as boolean,
-      thumbnailUrl: (project.thumbnailPath ? `/api/v1/projects/${project.slug}/thumbnail` : null) as string | null,
-      htmlUrl: `/projects/${project.slug}`,
-      url: `/api/v1/projects/${project.slug}`,
+    if (!projectsData || !typesData) {
+      throw new Error('Error fetching projects');
     }
-  });
-});
+
+    return projectsData.map((project) => {
+      const type = typesData.find((type) => type.slug === project.type) || null;
+      return {
+        slug: project.slug as string,
+        displayName: project.displayName as string,
+        summary: project.summary as string,
+        type: type?.shortDisplayName || type?.displayName || 'Project',
+        date: (project.releaseDate || project.staredDate) as string,
+        featured: project.featured as boolean,
+        thumbnailUrl: (project.thumbnailPath ? `/api/v1/projects/${project.slug}/thumbnail` : null) as string | null,
+        htmlUrl: `/projects/${project.slug}`,
+        url: `/api/v1/projects/${project.slug}`,
+      }
+    });
+  },
+  {
+    name: 'projects',
+    maxAge: 60 * 60, // 1 hour
+  }
+);
