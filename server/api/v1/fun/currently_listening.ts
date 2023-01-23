@@ -1,5 +1,6 @@
 import axios from "axios";
-import {createClient} from "@supabase/supabase-js";
+import {getPageSettingCached} from "~/lib/checkPageSettings";
+import {customCachedFunction} from "~/lib/customCache";
 
 export interface CurrentlyListeningResponse {
   contentProvider: string | null;
@@ -17,14 +18,15 @@ export interface CurrentlyListeningResponse {
   shareUrl: string | null,
 }
 
-const supabase = createClient(process.env.SUPABASE_URL || '', process.env.SUPABASE_KEY || '')
-
-const headers = {
-  "Authorization": `Bearer ${process.env.HOME_ASSISTANT_ACCESS_TOKEN}`,
-}
-
 export const getCurrentlyListening = async (): Promise<CurrentlyListeningResponse> => {
-  const response = await axios.get(`${process.env.HOME_ASSISTANT_URL}/api/states/${process.env.HOME_ASSISTANT_SPOTIFY_ENTITY_ID}`, { headers });
+  const response = await axios.get(
+    `${process.env.HOME_ASSISTANT_URL}/api/states/${process.env.HOME_ASSISTANT_SPOTIFY_ENTITY_ID}`,
+    {
+      headers: {
+        "Authorization": `Bearer ${process.env.HOME_ASSISTANT_ACCESS_TOKEN}`,
+      }
+    }
+  );
 
   if (!response?.data || response?.status !== 200) {
     throw new Error('Error fetching data');
@@ -43,7 +45,6 @@ export const getCurrentlyListening = async (): Promise<CurrentlyListeningRespons
   }
 
   return {
-    //responses: responses.map((response) => { return { ...response, response: response.response.data } }),
     contentProvider: !data.state || data.state !== "idle" ? provider : null,
     contentId: data.attributes.media_content_id ?? null,
     state: data.state ?? null,
@@ -60,16 +61,30 @@ export const getCurrentlyListening = async (): Promise<CurrentlyListeningRespons
   };
 }
 
+export const getCurrentlyListeningCached = customCachedFunction(
+  async () => {
+    return await getCurrentlyListening();
+  },
+  {
+    name: 'currently-listening',
+    maxAge: 60 * 5, // 5 minutes
+    invalidate: (data: CurrentlyListeningResponse, generatedAt: Date) => {
+      if (data.playbackDuration && data.playbackPosition) {
+        const timeDiff = Date.now() - new Date(generatedAt).getTime();
+        const timeRemainingInSong = ((data.playbackDuration - data.playbackPosition) * 1000);
+        return timeDiff > timeRemainingInSong;
+      } else {
+        return false;
+      }
+    }
+  }
+);
+
 export default defineEventHandler(async (): Promise<CurrentlyListeningResponse> => {
-  // load settings from supabase
-  const { data: settingsData } = await supabase
-    .from('page_settings')
-    .select('value')
-    .eq('key', 'enable-currently-listening')
-    .single()
+  const settingsData = await getPageSettingCached('enable-currently-listening') as { value: boolean };
 
   // if this endpoint is disabled, return null
-  if (!settingsData || settingsData?.value.value !== true) {
+  if (!settingsData || settingsData?.value !== true) {
     return {
       contentProvider: null,
       contentId: null,
@@ -86,11 +101,11 @@ export default defineEventHandler(async (): Promise<CurrentlyListeningResponse> 
       shareUrl: null,
     };
   } else {
-    const res = await getCurrentlyListening()
+    const res = await getCurrentlyListeningCached() as CurrentlyListeningResponse;
 
     return {
       ...res,
-      albumArtUrl: res.albumArtUrl ? `/api/v1/fun/currently_listening/media_proxy_album_art?t=${new Date().getTime()}` : null,
+      albumArtUrl: res.albumArtUrl ? `/api/v1/fun/currently_listening/media_proxy_album_art?i=${res.contentId}` : null,
     };
   }
 });
