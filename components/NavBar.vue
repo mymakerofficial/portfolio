@@ -1,10 +1,10 @@
 <template>
   <div class="z-50 fixed bottom-12 left-1/2 -translate-x-1/2 shadow-xl shadow-gray-500/10 dark:shadow-gray-600/10 rounded-full overflow-hidden" ref="container">
     <div class="w-full h-full absolute bg-gradient-to-br from-gray-50 via-gray-200 to-gray-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 rounded-full" />
-    <div :data-active="hoverActive" class="absolute bottom-0 w-48 h-full opacity-0 data-[active=true]:opacity-100 transition-opacity ease-in-out duration-250" ref="ringLight" style="background: radial-gradient(ellipse at bottom, rgb(236 238 242 / 0.3), transparent 50%, transparent)"/>
+    <div :data-active="hoverActive" class="absolute bottom-0 w-48 h-full opacity-0 data-[active=true]:opacity-100 transition-opacity ease-in-out duration-250 motion-reduce:hidden" ref="ringLight" style="background: radial-gradient(ellipse at bottom, rgb(236 238 242 / 0.3), transparent 50%, transparent)"/>
     <nav class="m-[2px] h-16 p-2 m-px bg-gray-50 dark:bg-gray-800 rounded-full overflow-hidden" ref="navbar">
-      <div :data-active="hoverActive" class="absolute bottom-0 w-48 h-full scale-150 opacity-0 data-[active=true]:opacity-100 transition-opacity ease-in-out duration-250" ref="spotlight" style="background: radial-gradient(ellipse at bottom, rgb(99 105 121 / 0.3), transparent 50%, transparent)"/>
-      <div :data-active="highlightTransforms.width !== 0" class="absolute bottom-2 h-12 rounded-full bg-gray-100/60 dark:bg-gray-700/80 opacity-0 data-[active=true]:opacity-100 transition-opacity ease-in-out duration-250" ref="highlight"/>
+      <div :data-active="hoverActive" class="absolute bottom-0 w-48 h-full scale-150 opacity-0 data-[active=true]:opacity-100 transition-opacity ease-in-out duration-250 motion-reduce:hidden" ref="spotlight" style="background: radial-gradient(ellipse at bottom, rgb(99 105 121 / 0.3), transparent 50%, transparent)"/>
+      <div :data-active="highlightTransforms.width !== 0" class="absolute bottom-2 h-12 rounded-full bg-gray-100/60 dark:bg-gray-700/80 opacity-0 data-[active=true]:opacity-100 transition-opacity ease-in-out duration-250 motion-reduce:hidden" ref="highlight"/>
       <div class="flex flex-row h-full" ref="buttonsContainer">
         <slot />
       </div>
@@ -158,12 +158,27 @@ export default defineNuxtComponent({
         ease: "power3.out"
       });
     },
+    updateActiveDataAttribute() {
+      const { buttonElements } = this;
+
+      if (!buttonElements) return;
+
+      for (let i = 0; i < buttonElements.length; i++) {
+        const button = buttonElements[i] as HTMLElement;
+        if (i === this.activeIndex) {
+          button.setAttribute("data-active", "true");
+        } else {
+          button.setAttribute("data-active", "false");
+        }
+      }
+    },
   },
 
   watch: {
     activeIndex: {
       handler() {
         this.resetTransforms();
+        this.updateActiveDataAttribute();
       },
       immediate: true,
     },
@@ -194,6 +209,7 @@ export default defineNuxtComponent({
     this.buttonElements = buttonsContainer.children;
 
     this.resetTransforms();
+    this.updateActiveDataAttribute();
 
     container.addEventListener("mouseenter", this.handleEnter);
 
