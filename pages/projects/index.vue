@@ -1,4 +1,8 @@
 <template>
+  <Head>
+    <Title>Projects</Title>
+  </Head>
+
   <Container class="2xl:w-1/2">
     <div class="mt-12 mb-40 md:mt-44 md:mb-48 flex flex-col gap-12">
       <ProjectsList :groups="groups"/>

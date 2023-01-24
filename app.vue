@@ -20,8 +20,9 @@ useHead({
   htmlAttrs: {
     lang: 'en',
   },
-  titleTemplate: '%s - My_Maker',
-  title: 'Home',
+  titleTemplate: (titleChunk) => {
+    return titleChunk ? `${titleChunk} by My_Maker` : 'My_Maker';
+  },
   meta: [
     {
       name: 'description',
