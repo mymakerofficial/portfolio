@@ -2,9 +2,9 @@
   <div class="rounded-full overflow-hidden" ref="container">
     <div :data-show="hasRing" class="w-full h-full absolute bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 data-[show=false]:hidden" />
     <div :data-active="hoverActive && hasRinglight" class="absolute bottom-0 w-48 h-full scale-[200%] opacity-0 data-[active=true]:opacity-100 transition-opacity ease-in-out duration-250 motion-reduce:hidden" ref="ringLight" style="background: radial-gradient(ellipse at bottom, rgb(236 238 242 / 0.3), transparent 50%, transparent)"/>
-    <div :data-background="hasBackground" :data-transparent="!hasRing && !hasRinglight && !hasBackground" :class="`m-[2px] p-${padding} data-[transparent=false]:data-[background=false]:bg-white data-[transparent=false]:data-[background=false]:dark:bg-gray-900 data-[background=true]:bg-gray-50 data-[background=true]:dark:bg-gray-800 overflow-hidden rounded-full`" ref="innerContainer">
+    <div :data-background="hasBackground" :data-transparent="!hasRing && !hasRinglight && !hasBackground" class="m-[2px] p-2 data-[transparent=false]:data-[background=false]:bg-white data-[transparent=false]:data-[background=false]:dark:bg-gray-900 data-[background=true]:bg-gray-50 data-[background=true]:dark:bg-gray-800 overflow-hidden rounded-full" ref="innerContainer">
       <div :data-active="hoverActive && hasSpotlight" class="absolute bottom-0 w-48 h-full scale-150 opacity-0 data-[active=true]:opacity-100 transition-opacity ease-in-out duration-250 motion-reduce:hidden" ref="spotlight" style="background: radial-gradient(ellipse at bottom, rgb(99 105 121 / 0.3), transparent 50%, transparent)"/>
-      <div :data-active="highlightTransforms.width !== 0" :class="`absolute bottom-${padding} h-full rounded-full bg-gray-200/60 dark:bg-gray-700/80 opacity-0 data-[active=true]:opacity-100 transition-opacity ease-in-out duration-250 motion-reduce:hidden`" ref="highlight"/>
+      <div :data-active="highlightTransforms.width !== 0" class="absolute bottom-2 h-full rounded-full bg-gray-200/60 dark:bg-gray-700/80 opacity-0 data-[active=true]:opacity-100 transition-opacity ease-in-out duration-250 motion-reduce:hidden" ref="highlight"/>
       <div class="flex flex-row" ref="buttonsContainer">
         <slot />
       </div>
@@ -26,10 +26,6 @@ export default defineNuxtComponent({
     activeIndex: {
       type: Number,
       default: 0,
-    },
-    padding: {
-      type: String,
-      default: "2",
     },
     hasBackground: {
       type: Boolean,
