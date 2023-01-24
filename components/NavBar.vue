@@ -66,17 +66,21 @@ export default defineNuxtComponent({
       // Reset the spotlight and highlight
       if (this.buttonElements) {
         if (this.activeIndex >= 0) {
+          // If there is an active index, reset the spotlight and highlight to that button
           this.highlightTransforms = this.getHighlightTransforms(
               this.buttonElements[this.activeIndex] as HTMLElement
           ) as Transforms;
         } else {
+          // Otherwise, hide the highlight
           this.highlightTransforms = { x: 0, width: 0 } as Transforms;
         }
 
         if (!this.hoverActive && this.activeIndex >= 0) {
-          this.spotlightTransforms = this.getSpotlightTransforms(
-              this.buttonElements[this.activeIndex].getBoundingClientRect().x as number
-          ) as Transforms;
+          // calculate the spotlight return position
+          const buttonRect = (this.buttonElements[this.activeIndex] as HTMLElement).getBoundingClientRect();
+          const x = buttonRect.x + buttonRect.width / 2;
+          // set the spotlight return position
+          this.spotlightTransforms = this.getSpotlightTransforms(x) as Transforms;
         }
       }
     },
