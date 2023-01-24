@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-4 md:gap-16">
+  <div class="flex flex-col gap-16">
     <ProjectsListGroup v-for="group in groups" :key="group.group.slug" :group="group" class="flex flex-col gap-4 md:gap-8" />
   </div>
 </template>
