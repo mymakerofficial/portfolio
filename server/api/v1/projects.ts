@@ -45,6 +45,10 @@ export default cachedEventHandler(
         htmlUrl: `/projects/${project.slug}`,
         url: `/api/v1/projects/${project.slug}`,
       }
+    }).sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return dateB.getTime() - dateA.getTime();
     });
   },
   {
