@@ -54,6 +54,7 @@ export default cachedEventHandler(
     const query = new URLSearchParams(event.req.url?.split('?')[1])
     const groupByProperty = query.get("group_by_property") || undefined;
     const groupByValue = query.get("group_by_value") || undefined;
+    const includeOther = query.get("include_other") === 'true';
 
     // fetch projects from supabase
     const {data: projectsData, error: projectsError} = await supabase
@@ -103,7 +104,7 @@ export default cachedEventHandler(
         groups = groupByDate(projectsData, groupByValue);
         break;
       case 'technology-type': // group by technology type
-        groups = groupByTechnologyType(projectsData, groupByValue);
+        groups = groupByTechnologyType(projectsData, groupByValue, includeOther);
         break;
       default:
         throw new Error('Invalid group_by_property');
@@ -137,7 +138,8 @@ export default cachedEventHandler(
       const query = new URLSearchParams(event.req.url?.split('?')[1])
       const groupByProperty = query.get("group_by_property") || undefined;
       const groupByValue = query.get("group_by_value") || undefined;
-      return [groupByProperty, groupByValue];
+      const includeOther = query.get("include_other") === 'true';
+      return [groupByProperty, groupByValue, includeOther];
     },
   }
 );
@@ -190,24 +192,32 @@ const groupByDate = (projects: ProjectsRawData[], groupByValue: string | undefin
   return groups;
 }
 
-const groupByTechnologyType = (projects: ProjectsRawData[], groupByValue: string | undefined): ProjectsGroupRaw[] => {
+const groupByTechnologyType = (projects: ProjectsRawData[], groupByValue: string | undefined, includeOther: boolean): ProjectsGroupRaw[] => {
   if (!groupByValue) {
     throw new Error('Missing group_by_value');
   }
 
   let groups: ProjectsGroupRaw[] = [];
 
-  // filter out projects that don't have the specified technology type
-  let filteredProjects = projects
-    .filter((project) => {
-        return project.technologies.some((technology: any) => {
-          return technology.type.slug === groupByValue;
-        });
-      }
-    )
+  // create "other" group
+  let noGroup: ProjectsGroupRaw = {
+    group: {
+      displayName: 'Other',
+      slug: 'other',
+    },
+    projects: [],
+  };
 
   // group by technology
-  filteredProjects.forEach((project) => {
+  projects.forEach((project) => {
+    // add project to "other" group if it doesn't have the specified technology type
+    if (!project.technologies.some((technology: any) => {
+      return technology.type.slug === groupByValue;
+    })) {
+      noGroup.projects.push(project);
+      return;
+    }
+
     project.technologies.forEach((technology) => {
       if (technology.type.slug === groupByValue) {
         // find group
@@ -236,6 +246,11 @@ const groupByTechnologyType = (projects: ProjectsRawData[], groupByValue: string
     const bDate = new Date(b.projects[0].releaseDate || b.projects[0].startedDate || '1970-01-01');
     return b.projects.length - a.projects.length || bDate.getTime() - aDate.getTime() || a.group.displayName.localeCompare(b.group.displayName);
   });
+
+  // add "other" group if it has projects and includeOther is true
+  if (noGroup.projects.length > 0 && includeOther) {
+    groups.push(noGroup);
+  }
 
   return groups;
 }
