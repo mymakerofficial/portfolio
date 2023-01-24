@@ -4,6 +4,7 @@ export interface CompactProjectInfo {
   slug: string;
   displayName: string;
   summary: string;
+  type: string;
   date: string;
   featured: boolean;
   thumbnailUrl: string | null;
@@ -22,7 +23,7 @@ export default cachedEventHandler(
 
     const { data: projectsData } = await supabase
       .from('projects')
-      .select('slug, displayName: display_name, summary, type, releaseDate: released_at_date, staredDate: started_at_date, featured, thumbnailPath: thumbnail_path')
+      .select('slug, displayName: display_name, summary, type, releaseDate: released_at_date, startedDate: started_at_date, featured, thumbnailPath: thumbnail_path')
 
     const { data: typesData } = await supabase
       .from('project_types')
@@ -39,7 +40,7 @@ export default cachedEventHandler(
         displayName: project.displayName as string,
         summary: project.summary as string,
         type: type?.shortDisplayName || type?.displayName || 'Project',
-        date: (project.releaseDate || project.staredDate) as string,
+        date: (project.releaseDate || project.startedDate) as string,
         featured: project.featured as boolean,
         thumbnailUrl: (project.thumbnailPath ? `/api/v1/projects/${project.slug}/thumbnail` : null) as string | null,
         htmlUrl: `/projects/${project.slug}`,
