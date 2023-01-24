@@ -6,16 +6,10 @@
           <img :src="project.thumbnailUrl" :alt="project.displayName" class="absolute w-full h-full z-10" />
           <div class="w-full h-full bg-gray-600/20 dark:bg-gray-100/20 animate-pulse" />
         </div>
-        <div v-else class="flex flex-row gap-2 items-center">
-          <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400 text-xs font-bold rounded-lg">{{ project.type }}</span>
-          <span class="text-gray-700 dark:text-gray-400 text-xs font-medium">{{ displayYear }}</span>
-        </div>
+        <ProjectCardBadges v-else :type="project.type" :date="project.date" />
         <div class="flex flex-row gap-4 items-center">
           <h1 class="text-xl text-gray-900 dark:text-gray-100 font-bold">{{project.displayName}}</h1>
-          <div v-if="project.thumbnailUrl && project.featured" class="flex flex-row gap-2 items-center">
-            <span class="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-400 text-xs font-bold rounded-lg">{{ project.type }}</span>
-            <span class="text-gray-700 dark:text-gray-400 text-xs font-medium">{{ displayYear }}</span>
-          </div>
+          <ProjectCardBadges v-if="project.thumbnailUrl && project.featured" :type="project.type" :date="project.date" />
         </div>
         <p class="text-sm text-gray-700 dark:text-gray-400">{{project.summary}}</p>
       </div>
@@ -24,8 +18,6 @@
 </template>
 
 <script lang="ts">
-import dayjs from "dayjs";
-
 export default defineNuxtComponent({
   props: {
     project: {
@@ -33,11 +25,5 @@ export default defineNuxtComponent({
       required: true,
     },
   },
-
-  computed: {
-    displayYear() {
-      return dayjs(this.project.date).format("YYYY");
-    }
-  }
 })
 </script>
