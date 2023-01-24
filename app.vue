@@ -11,7 +11,6 @@ import {NavBarOption} from "~/components/NavBarWrapper.vue";
 const navBarOptions: NavBarOption[] = [
   { href: '/', label: 'home' },
   { href: '/projects', label: 'projects' },
-  { href: '/games', label: 'games' },
 ]
 
 useHead({
