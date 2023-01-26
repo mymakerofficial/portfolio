@@ -7,8 +7,9 @@
             <h1 class="text-2xl font-bold text-gray-600 dark:text-gray-100 truncate">{{ data.commit.message }}</h1>
           </div>
           <div class="flex flex-wrap gap-2 items-baseline text-sm text-gray-600 dark:text-gray-200">
+            <NuxtLink :href="data.actor.htmlUrl" target="_blank" class="text-md font-medium truncate">{{ data.actor.displayLogin }}</NuxtLink>
             <span class="truncate">committed to</span>
-            <span class="text-md font-medium truncate">{{ data.repo.name }}</span>
+            <NuxtLink :href="data.repo.htmlUrl" target="_blank" class="text-md font-medium truncate">{{ data.repo.name }}</NuxtLink>
             <span class="truncate">{{ relativeTime }}</span>
           </div>
         </div>
