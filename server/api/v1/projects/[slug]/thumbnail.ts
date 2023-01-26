@@ -15,5 +15,9 @@ export default defineEventHandler(async (event) => {
     throw new Error('Error fetching project');
   }
 
-  return h3SendMediaFromUrl(event, `${process.env.SUPABASE_URL}/storage/v1/object/public/${process.env.SUPABASE_MEDIA_BUCKET_NAME}/${projectData.thumbnailPath}`);
+  if (process.env.STORAGE_PROVIDER === 'supabase') {
+    return h3SendMediaFromUrl(event, `${process.env.SUPABASE_URL}/storage/v1/object/public/${process.env.SUPABASE_MEDIA_BUCKET_NAME}/${projectData.thumbnailPath}`);
+  } else if (process.env.STORAGE_PROVIDER === 'firestore') {
+    return h3SendMediaFromUrl(event, `${process.env.STORAGE_URL}/${encodeURIComponent(projectData.thumbnailPath.replace(/^\//, ''))}?alt=media`);
+  }
 });
