@@ -1,11 +1,12 @@
 import {createClient} from "@supabase/supabase-js";
+import {customCachedFunction} from "~/lib/customCache";
 
 const supabase = createClient(
   process.env.SUPABASE_URL || '',
   process.env.SUPABASE_KEY || ''
 )
 
-export const getPageSettingCached = cachedFunction(
+export const getPageSettingCached = customCachedFunction(
   async (key: string): Promise<object | null> => {
     console.log('Fetching page setting', key)
 
@@ -18,10 +19,8 @@ export const getPageSettingCached = cachedFunction(
     return data?.value || null;
   },
   {
-    swr: true,
     name: 'page-settings',
     maxAge: Number(process.env.CACHE_MAX_AGE_SETTINGS) || 600,
-    // @ts-ignore
     getKeys: (key: string) => key,
   }
 );
