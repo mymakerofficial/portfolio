@@ -16,6 +16,7 @@ export interface CurrentlyListeningResponse {
   playbackShuffle: boolean | null,
   playbackRepeat: string | null,
   shareUrl: string | null,
+  generatedAt: string,
 }
 
 export const getCurrentlyListening = async (): Promise<CurrentlyListeningResponse> => {
@@ -58,6 +59,7 @@ export const getCurrentlyListening = async (): Promise<CurrentlyListeningRespons
     playbackShuffle: data.attributes.shuffle ?? null,
     playbackRepeat: data.attributes.repeat ?? null,
     shareUrl: getShareUrl(),
+    generatedAt: new Date().toISOString(),
   };
 }
 
@@ -99,6 +101,7 @@ export default defineEventHandler(async (): Promise<CurrentlyListeningResponse> 
       playbackShuffle: null,
       playbackRepeat: null,
       shareUrl: null,
+      generatedAt: new Date().toISOString(),
     };
   } else {
     const res = await getCurrentlyListeningCached() as CurrentlyListeningResponse;

@@ -14,7 +14,7 @@
           </div>
           <div>
             <div class="h-1 w-full bg-green-100 dark:bg-green-700 rounded-full overflow-hidden">
-              <div class="h-full bg-green-900 dark:bg-green-100 transition-[width] duration-1000" :style="{ width: `${(playbackPosition / listening.playbackDuration) * 100}%` }" />
+              <div class="h-full bg-green-900 dark:bg-green-100 transition-[width] duration-1000 ease-linear" :style="{ width: `${(playbackPosition / listening.playbackDuration) * 100}%` }" />
             </div>
           </div>
         </div>
@@ -24,7 +24,7 @@
       </div>
       <div v-else class="flex flex-col lg:flex-row gap-4">
         <div class="w-28 h-28 bg-green-600/20 dark:bg-green-100/20 animate-pulse" />
-        <div class="flex-1 flex flex-col gap-2 justify-between">
+        <div class="flex-1 flex flex-col gap-4 justify-between">
           <div class="flex flex-col gap-4">
             <div class="w-28 h-4 bg-green-600/20 dark:bg-green-100/20 animate-pulse rounded-md" />
             <div class="w-16 h-4 bg-green-600/20 dark:bg-green-100/20 animate-pulse rounded-md" />
@@ -55,7 +55,8 @@ export default defineNuxtComponent({
   computed: {
     playbackPosition() {
       if (this.listening?.state === "playing") {
-        const playbackPosition = this.listening?.playbackPosition || 0;
+        // get playback position and compensate for caching
+        const playbackPosition = (this.listening?.playbackPosition || 0) + (this.startTime.getTime() - new Date(this.listening.generatedAt).getTime()) / 1000;
         const timeDifference = (this.currentTime.getTime() - this.startTime.getTime()) / 1000;
         return playbackPosition + timeDifference;
       } else {
