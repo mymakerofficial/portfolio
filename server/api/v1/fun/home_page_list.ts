@@ -53,7 +53,7 @@ export default defineCachedEventHandler(
     returnList = returnList.concat(availableCards);
 
     // add current time to a random position
-    returnList.splice(Math.floor(Math.random() * (returnList.length - 1)), 0, "current-time");
+    returnList.splice(Math.floor(Math.random() * (returnList.length - 1) + 1), 0, "current-time");
 
     return returnList;
   },
