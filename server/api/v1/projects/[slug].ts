@@ -22,7 +22,7 @@ export default cachedEventHandler(
         'displayName: display_name, ' +
         'summary, ' +
         'bodyProse: body_text_prosemirror, ' +
-        'type, ' +
+        'type ( displayName: display_name, shortDisplayName: short_display_name ), ' +
         'url, ' +
         'releaseDate: released_at_date, ' +
         'startedDate: started_at_date, ' +
@@ -40,16 +40,6 @@ export default cachedEventHandler(
 
     if (!projectData || error) {
       throw new Error(error.message || 'Error fetching project');
-    }
-
-    const { data: projectType } = await supabase
-      .from('project_types')
-      .select('slug, displayName: display_name, shortDisplayName: short_display_name')
-      .eq('slug', projectData.type)
-      .single();
-
-    if (!projectType) {
-      throw new Error('Error fetching project types');
     }
 
     let technologiesOut: any[] = []
@@ -99,7 +89,7 @@ export default cachedEventHandler(
       displayName: projectData.displayName,
       summary: projectData.summary,
       bodyProse: projectData.bodyProse as JSONContent,
-      type: projectType,
+      type: projectData.type?.shortDisplayName || projectData.type?.displayName || 'Project',
       thumbnailUrl: projectData.thumbnailPath ? `/api/v1/projects/${projectData.slug}/thumbnail` : null,
       websiteUrl: projectData.url,
       releaseDate: projectData.releaseDate,
