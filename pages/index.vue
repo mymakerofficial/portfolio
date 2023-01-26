@@ -5,12 +5,12 @@
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
         <div class="flex flex-col gap-4 lg:gap-8" v-for="(col, index) in grids[1] || []" :key="index">
           <template v-for="item in col || []" :key="item.key">
-            <ProjectCard v-if="item.type === 0" :project="item.data" />
-            <CurrentGameCard v-else-if="item.type === 1"/>
-            <MediaPlayerCard v-else-if="item.type === 2" />
-            <PhoneBatteryCard v-else-if="item.type === 3" />
-            <ClockCard v-else-if="item.type === 4" />
-            <GitHubCommitCard v-else-if="item.type === 5" />
+            <ProjectCard v-if="item.type === CardTypes.Project" :project="item.data" />
+            <MediaPlayerCard v-else-if="item.type === CardTypes.MediaPlayer" />
+            <GitHubCommitCard v-else-if="item.type === CardTypes.GitHubCommit" />
+            <PhoneBatteryCard v-else-if="item.type === CardTypes.PhoneBattery" />
+            <ClockCard v-else-if="item.type === CardTypes.Clock" />
+            <CurrentGameCard v-else-if="item.type === CardTypes.CurrentGame"/>
           </template>
         </div>
       </div>
@@ -18,17 +18,17 @@
   </Container>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 // @ts-ignore
 import { v4 as uuid } from "uuid";
 
 enum CardTypes {
-  Project, // first entry must be project
-  CurrentGame,
-  MediaPlayer,
-  PhoneBattery,
-  Clock,
-  GitHubCommit,
+  Project = "project",
+  MediaPlayer = "currently-listening",
+  GitHubCommit = "recent-github-commit",
+  PhoneBattery = "phone-battery",
+  Clock = "current-time",
+  CurrentGame = "currently-playing",
 }
 
 interface CardObject {
@@ -37,85 +37,58 @@ interface CardObject {
   key: string;
 }
 
-export default defineNuxtComponent({
-  async asyncData () {
-    // fetch projects from api
-    const { data: projects } = await useFetch('/api/v1/projects');
+// fetch projects from api
+const { data: projects } = await useFetch('/api/v1/projects');
 
-    let projectsList: CardObject[] = [];
+// fetch fun cards order from api
+const { data: funCards } = await useFetch('/api/v1/fun/home_page_list');
 
-    // add projects
-    if (projects.value !== null) {
-      projects.value.forEach((project: any) => {
-        projectsList.push({
-          type: CardTypes.Project,
-          data: project,
-          key: uuid(),
-        });
-      });
-    }
+let projectsList: CardObject[] = [];
 
-    // sort by date
-    let sortedProjectsList: CardObject[] = projectsList.sort((a, b) => {
-      return new Date(b.data.date).getTime() - new Date(a.data.date).getTime();
+// add projects
+if (projects.value !== null) {
+  projects.value.forEach((project: any) => {
+    projectsList.push({
+      type: CardTypes.Project,
+      data: project,
+      key: uuid(),
+    });
+  });
+}
+
+// sort featured projects to the top
+const featuredProjects = projectsList.filter((item) => item.data.featured);
+const nonFeaturedProjects = projectsList.filter((item) => !item.data.featured);
+const sortedProjectsList = [...featuredProjects, ...nonFeaturedProjects];
+
+// make the list
+let list: CardObject[] = sortedProjectsList;
+
+// add fun cards to the list
+if (funCards.value) {
+  let spliceIndex = 0;
+
+  funCards.value.forEach((type: any) => {
+    list.splice(spliceIndex, 0, {
+      type: type as CardTypes,
+      data: null,
+      key: uuid(),
     });
 
-    // sort featured projects to the top
-    const featuredProjects = sortedProjectsList.filter((item) => item.data.featured);
-    const nonFeaturedProjects = sortedProjectsList.filter((item) => !item.data.featured);
-    sortedProjectsList = [...featuredProjects, ...nonFeaturedProjects];
+    spliceIndex += 3;
+  });
+}
 
-    // figure out how many fun cards there are
-    let funCardsCount = Object.keys(CardTypes).length / 2;
-
-    // generate random order for fun cards
-    let funCardsOrder: number[] = [];
-    for (let i = 1; i < funCardsCount; i++) {
-      funCardsOrder.push(i);
-    }
-    funCardsOrder.sort((a) => {
-      let val = Math.random() - 0.5
-
-      // make media player, clock, and github card commit more likely to be on top
-      if (a === CardTypes.MediaPlayer || a === CardTypes.Clock || a === CardTypes.GitHubCommit) {
-        val -= 0.1;
-      }
-
-      return val;
-    });
-
-    // add fun cards to the list
-    let list: CardObject[] = sortedProjectsList;
-    let spliceIndex = Math.floor(Math.random() + 0.5); // add first card at either first or second position
-    for (let i = 0; i < funCardsOrder.length; i++) {
-      list.splice(spliceIndex, 0, {
-        type: funCardsOrder[i] as CardTypes,
-        data: null,
-        key: uuid(),
-      });
-
-      spliceIndex += 3 + Math.floor(Math.random() + 0.5); // add next card either 3 or 4 position later
-    }
-
-    // generate grid
-    const grids: CardObject[][][] = [];
-    for (let c = 1; c <= 3; c++) {
-      const grid: CardObject[][] = [];
-      for (let i = 0; i < c; i++) {
-        grid.push([]);
-      }
-      for (let i = 0; i < list.length; i++) {
-        grid[i % c].push(list[i]);
-      }
-      grids.push(grid);
-    }
-
-    return {
-      projectsList,
-      sortedProjectsList,
-      list,
-      grids,
-    }
-  },
-});
+// generate grid
+const grids: CardObject[][][] = [];
+for (let c = 1; c <= 3; c++) {
+  const grid: CardObject[][] = [];
+  for (let i = 0; i < c; i++) {
+    grid.push([]);
+  }
+  for (let i = 0; i < list.length; i++) {
+    grid[i % c].push(list[i]);
+  }
+  grids.push(grid);
+}
 </script>
