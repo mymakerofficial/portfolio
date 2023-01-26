@@ -1,12 +1,9 @@
 <template>
   <Container class="2xl:w-11/12">
-    <div class="flex flex-col gap-12 my-12">
-      <div class="flex flex-col gap-2">
-        <h1 class="text-xl font-extrabold">My_Maker</h1>
-        <div class="text-sm font-medium text-gray-600 dark:text-gray-200">Hai im My_Maker, I like making things</div>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
-        <div class="flex flex-col gap-4 md:gap-8" v-for="(col, index) in grids[1] || []" :key="index">
+    <div class="flex flex-col gap-12 md:gap-32 mt-12 mb-40 md:mt-32 md:mb-48">
+      <HomePageHero />
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
+        <div class="flex flex-col gap-4 lg:gap-8" v-for="(col, index) in grids[1] || []" :key="index">
           <template v-for="item in col || []" :key="item.key">
             <ProjectCard v-if="item.type === 0" :project="item.data" />
             <CurrentGameCard v-else-if="item.type === 1"/>
