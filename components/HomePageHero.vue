@@ -8,27 +8,12 @@
       </div>
     </div>
   </div>
-
+  <div class="flex justify-center absolute top-0 left-0 w-full -z-50" ref="halo">
+    <div class="w-10/12 h-44 md:h-72 -translate-x-1/2 md:translate-x-0 -translate-y-1/2 md:-translate-y-32 -rotate-12 scale-125 opacity-0 dark:opacity-[0.13]" style="background: radial-gradient(at center, rgba(236, 238, 242, 0.3), transparent 70%, transparent);" />
+  </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiHandWaveOutline, mdiWeb, mdiControllerClassicOutline, mdiDice5Outline, mdiLightbulbOutline, mdiSchoolOutline } from '@mdi/js';
-
-export default defineNuxtComponent({
-  components: {
-    SvgIcon
-  },
-
-  data() {
-    return {
-      mdiHandWaveOutline,
-      mdiWeb,
-      mdiControllerClassicOutline,
-      mdiDice5Outline,
-      mdiLightbulbOutline,
-      mdiSchoolOutline,
-    }
-  }
-})
 </script>
