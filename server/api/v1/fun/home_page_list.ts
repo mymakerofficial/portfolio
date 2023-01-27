@@ -36,10 +36,10 @@ const getHomePageList = async () => {
     // remove from the list of available cards
     availableCards.splice(availableCards.indexOf("recent-github-commit"), 1);
 
-    // is the commit is less than 24 hours old
+    // is the commit is less than x hours old
     if (
       recentGithubCommitData &&
-      new Date(recentGithubCommitData.createdAt as string).getTime() > (Date.now() - (1000 * 60 * 60 * 24)) // 24 hours
+      new Date(recentGithubCommitData.createdAt as string).getTime() > (Date.now() - (1000 * 60 * 60 * 4)) // 4 hours
     ) {
       // add on top
       returnList.unshift("recent-github-commit");
