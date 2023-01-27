@@ -19,10 +19,11 @@
         </div>
       </div>
       <div v-else class="flex flex-col gap-4">
-        <div class="w-36 h-9 bg-gray-600/20 dark:bg-gray-100/20 animate-pulse rounded-md" />
+        <div class="w-3/5 h-9 bg-gray-600/20 dark:bg-gray-100/20 animate-pulse rounded-md" />
         <div class="flex flex-wrap gap-2 items-center">
+          <div class="w-24 h-4 bg-gray-600/20 dark:bg-gray-100/20 animate-pulse rounded-md" />
           <div class="w-20 h-4 bg-gray-600/20 dark:bg-gray-100/20 animate-pulse rounded-md" />
-          <div class="w-52 h-4 bg-gray-600/20 dark:bg-gray-100/20 animate-pulse rounded-md" />
+          <div class="w-36 h-4 bg-gray-600/20 dark:bg-gray-100/20 animate-pulse rounded-md" />
           <div class="w-20 h-4 bg-gray-600/20 dark:bg-gray-100/20 animate-pulse rounded-md" />
         </div>
       </div>
