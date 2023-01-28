@@ -11,20 +11,19 @@
     <Meta name="twitter:image" :content="project?.thumbnailUrl" v-if="project?.thumbnailUrl"/>
   </Head>
 
-  <Container class="2xl:w-3/5">
+  <Container class="2xl:w-3/5 mb-40 md:mb-48">
     <div class="flex flex-col gap-16 my-12">
       <div class="flex flex-col gap-8">
-        <div v-if="project.thumbnailUrl" class="w-full aspect-video rounded-xl overflow-hidden">
-          <img :src="project.thumbnailUrl" :alt="project.displayName" class="absolute w-full h-full z-10" />
+        <div v-if="project?.thumbnailUrl" class="w-full aspect-video rounded-xl overflow-hidden">
+          <img :src="project?.thumbnailUrl" :alt="project?.displayName" class="absolute w-full h-full z-10" />
           <div class="w-full h-full bg-gray-600/20 dark:bg-gray-100/20 animate-pulse" />
         </div>
-        <div class="px-8 md:px-12 flex flex-col md:flex-row gap-4 justify-between">
-          <div class="flex flex-col gap-4">
-            <h1 class="text-4xl font-extrabold text-gray-800 dark:text-gray-100">{{ project?.displayName || 'loading..' }}</h1>
-            <p class="text-sm font-medium text-gray-600 dark:text-gray-300">{{ project?.summary || 'loading..' }}</p>
+        <div class="px-8 md:px-12 flex flex-col lg:flex-row gap-8 justify-between lg:items-center">
+          <div>
+            <h1 class="text-2xl md:text-4xl xl:text-6xl font-extrabold text-gray-800 dark:text-gray-100">{{ project?.displayName }}</h1>
           </div>
-          <div v-if="project?.websiteUrl">
-            <a :href="project.websiteUrl" target="_blank">
+          <div class="lg:basis-1/3 lg:flex lg:justify-end" v-if="project?.websiteUrl">
+            <a :href="project?.websiteUrl" target="_blank">
               <Button>Visit Website</Button>
             </a>
           </div>
@@ -88,11 +87,11 @@ import { generateHTML } from '@tiptap/html'
 import tiptapDefaultOptions from "~/lib/tiptapDefaultOptions";
 
 export default defineNuxtComponent({
-  async asyncData() {
+  async setup() {
     const { data: project } = await useFetch(`/api/v1/projects/${useRoute().params.slug}`);
 
     return {
-      project: ref(project),
+      project,
     }
   },
 
