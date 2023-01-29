@@ -1,3 +1,4 @@
+// @ts-ignore
 import {createClient} from '@supabase/supabase-js'
 
 export interface CompactProjectInfo {
@@ -21,17 +22,19 @@ export default cachedEventHandler(
   async (): Promise<CompactProjectInfo[]> => {
     console.log('Fetching projects')
 
-    const { data: projectsData } = await supabase
+    const { data: projectsData, error: projectsError } = await supabase
       .from('projects')
-      .select('slug, displayName: display_name, summary, type ( displayName: display_name, shortDisplayName: short_display_name ), releaseDate: released_at_date, startedDate: started_at_date, featured, thumbnailPath: thumbnail_path')
+      .select('slug, displayName: display_name, summary, type: type_id ( displayName: display_name, shortDisplayName: short_display_name ), releaseDate: released_at_date, startedDate: started_at_date, featured, thumbnailPath: thumbnail_path')
 
-    // @ts-ignore
-    return projectsData.map((project) => {
+    if (projectsError) {
+      throw new Error('Error fetching projects');
+    }
+
+    return projectsData.map((project: any) => {
       return {
         slug: project.slug as string,
         displayName: project.displayName as string,
         summary: project.summary as string,
-        // @ts-ignore
         type: project.type?.shortDisplayName || project.type?.displayName || 'Project',
         date: (project.releaseDate || project.startedDate) as string,
         featured: project.featured as boolean,
@@ -39,7 +42,7 @@ export default cachedEventHandler(
         htmlUrl: `/projects/${project.slug}`,
         url: `/api/v1/projects/${project.slug}`,
       }
-    }).sort((a, b) => {
+    }).sort((a: any, b: any) => {
       const dateA = new Date(a.date);
       const dateB = new Date(b.date);
       return dateB.getTime() - dateA.getTime();

@@ -1,11 +1,15 @@
 import {CompactProjectInfo} from "~/server/api/v1/projects";
+// @ts-ignore
 import {createClient, PostgrestError} from "@supabase/supabase-js";
 
 interface ProjectsRawData {
   slug: string;
   displayName: string;
   summary: string;
-  type: string;
+  type: {
+    displayName: string;
+    shortDisplayName: string;
+  };
   url: string;
   releaseDate: string;
   startedDate: string;
@@ -49,7 +53,7 @@ const supabase = createClient(
 )
 
 export default cachedEventHandler(
-  async (event): Promise<ProjectsGroup[]> => {
+  async (event: any): Promise<ProjectsGroup[]> => {
     // get query
     const query = new URLSearchParams(event.req.url?.split('?')[1])
     const groupByProperty = query.get("group_by_property") || undefined;
@@ -63,7 +67,7 @@ export default cachedEventHandler(
         'slug, ' +
         'displayName: display_name, ' +
         'summary, ' +
-        'type, ' +
+        'type: type_id ( displayName: display_name, shortDisplayName: short_display_name ), ' +
         'url, ' +
         'releaseDate: released_at_date, ' +
         'startedDate: started_at_date, ' +
@@ -78,15 +82,6 @@ export default cachedEventHandler(
 
     if (projectsError) {
       throw new Error('Error fetching projects');
-    }
-
-    // fetch project types from supabase
-    const { data: typesData, error: typesError } = await supabase
-      .from('project_types')
-      .select('slug, displayName: display_name, shortDisplayName: short_display_name')
-
-    if (typesError) {
-      throw new Error('Error fetching project types');
     }
 
     // sort projects by release date or started date
@@ -114,12 +109,11 @@ export default cachedEventHandler(
       return {
         group: group.group,
         projects: group.projects.map((project) => {
-          const type = typesData.find((type) => type.slug === project.type) || null;
           return {
             slug: project.slug as string,
             displayName: project.displayName as string,
             summary: project.summary as string,
-            type: type?.shortDisplayName || type?.displayName || 'Project',
+            type: project.type?.shortDisplayName || project.type?.displayName || 'Project',
             date: (project.releaseDate || project.startedDate) as string,
             featured: project.featured as boolean,
             thumbnailUrl: (project.thumbnailPath ? `/api/v1/projects/${project.slug}/thumbnail` : null) as string | null,
