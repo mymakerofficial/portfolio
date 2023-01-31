@@ -47,7 +47,7 @@ let projectsList: CardObject[] = [];
 
 // add projects
 if (projects.value !== null) {
-  projects.value.forEach((project: any) => {
+  projects.value.data.forEach((project: any) => {
     projectsList.push({
       type: CardTypes.Project,
       data: project,

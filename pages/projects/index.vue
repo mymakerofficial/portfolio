@@ -5,12 +5,30 @@
 
   <Container class="2xl:w-1/2">
     <div class="mt-12 mb-40 md:mt-44 md:mb-48 flex flex-col gap-12">
-      <ProjectsList :groups="groups"/>
+      <input type="text" class="w-full h-16 px-6 bg-gray-100 dark:bg-gray-800 rounded-xl" placeholder="Search projects" v-model="query" />
+      <ProjectsGroupedList v-if="groups.resultType === 'grouped' && groups.data.length > 1" :groups="groups.data"/>
+      <div class="flex flex-col gap-8" v-else-if="groups.resultType === 'grouped'">
+        <h1 class="px-4 text-xl font-bold tracking-widest text-gray-200 dark:text-gray-700">Projects made with {{ groups.data[0].group.displayName }}</h1>
+        <ProjectsList :projects="groups.data[0].projects" />
+      </div>
+      <ProjectsList v-else-if="groups.data.length > 0" :projects="groups.data"/>
+      <div v-else>
+        <h1 class="px-4 text-xl font-bold tracking-widest text-gray-200 dark:text-gray-700">No results found...</h1>
+      </div>
     </div>
   </Container>
 </template>
 
 <script lang="ts">
+const fetchData = async (query: string, groupBy: string) => {
+  const { data, error } = await useFetch(`/api/v1/projects?q=${query}&group_by=${groupBy}`);
+  if (error.value) {
+    console.error(error.value);
+  } else {
+    return data.value;
+  }
+}
+
 export default defineNuxtComponent({
   async setup () {
     let groupByProperty = 'date';
@@ -41,7 +59,7 @@ export default defineNuxtComponent({
     }
 
     // fetch projects from api
-    const { data: groups } = await useFetch(`/api/v1/grouped_projects?group_by_property=${groupByProperty}&group_by_value=${groupByValue}&include_other=${includeOther}`);
+    const groups = await fetchData("", `${groupByProperty}:${groupByValue}`);
 
     return {
       groups: ref(groups),
@@ -51,15 +69,17 @@ export default defineNuxtComponent({
     }
   },
 
-  methods: {
-    async fetchGroups() {
-      const { data, error } = await useFetch(`/api/v1/grouped_projects?group_by_property=${this.groupByProperty}&group_by_value=${this.groupByValue}&include_other=${this.includeOther}`);
-      if (error.value) {
-        console.error(error.value);
-      } else {
-        this.groups = data.value;
-      }
-    },
+  data () {
+    return {
+      query: "",
+    }
+  },
+
+  watch: {
+    query: async function (newQuery) {
+      // TODO: debounce
+      this.groups = await fetchData(newQuery, `auto`);
+    }
   },
 });
 </script>
