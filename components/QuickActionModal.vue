@@ -9,7 +9,7 @@
         <div class="w-full h-[2px] bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800" v-if="data" />
         <div class="py-2 max-h-96 overflow-y-auto" v-if="data">
           <ProjectsGroupedList v-if="data.resultType === 'grouped'" :groups="data.data" :compact="true" :brighter="true" :show-summary="false" />
-          <ProjectsList v-else :projects="data.data"/>
+          <ProjectsList v-else :projects="data.data" :compact="true" :brighter="true" :show-summary="false" />
         </div>
         <div class="w-full h-[2px] bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800" />
         <div class="px-4 py-2 flex flex-row gap-4 justify-between items-center">
