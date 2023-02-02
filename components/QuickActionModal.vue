@@ -117,4 +117,9 @@ bus.on((e) => {
     emit("update:active", true);
   }
 })
+
+// close modal on route change
+useRouter().afterEach(() => {
+  emit("update:active", false);
+});
 </script>
