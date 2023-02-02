@@ -22,7 +22,7 @@ export default cachedEventHandler(
         'displayName: display_name, ' +
         'summary, ' +
         'bodyProse: body_text_prosemirror, ' +
-        'type ( displayName: display_name, shortDisplayName: short_display_name ), ' +
+        'type: type_id ( displayName: display_name, shortDisplayName: short_display_name ), ' +
         'url, ' +
         'releaseDate: released_at_date, ' +
         'startedDate: started_at_date, ' +
