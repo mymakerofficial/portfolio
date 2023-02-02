@@ -1,5 +1,5 @@
 <template>
-  <NavBar :active-index="activeIndex">
+  <NavBar :active-index="activeIndex" :active="active">
     <NavBarButton v-for="option in options" :key="option.label" :href="option.href">
       <SvgIcon type="mdi" :path="option.iconPath" v-if="option.iconPath" />{{ option.label }}
     </NavBarButton>
@@ -25,7 +25,11 @@ export default defineNuxtComponent({
     options: {
       type: Array as PropType<NavBarOption[]>,
       required: true,
-    }
+    },
+    active: {
+      type: Boolean,
+      required: true,
+    },
   },
 
   computed: {

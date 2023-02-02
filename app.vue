@@ -1,17 +1,39 @@
 <template>
   <div>
-    <NavBarWrapper :options="navBarOptions" />
+    <ClientOnly>
+      <QuickActionModal v-model:active="quickActionModalActive" />
+    </ClientOnly>
+    <NavBarWrapper :options="navBarOptions" :active="navBarActive" />
     <NuxtPage />
   </div>
 </template>
 
 <script setup lang="ts">
 import {NavBarOption} from "~/components/NavBarWrapper.vue";
+import {useMagicKeys, whenever} from "@vueuse/core";
 
 const navBarOptions: NavBarOption[] = [
   { href: '/', label: 'home' },
   { href: '/projects', label: 'projects' },
 ]
+
+let quickActionModalActive = ref(false);
+
+const { ctrl_k } = useMagicKeys({
+  passive: false,
+  onEventFired(e) {
+    if (e.ctrlKey && e.key === 'k')
+      e.preventDefault()
+  },
+})
+
+whenever(ctrl_k, () => {
+  quickActionModalActive.value = !quickActionModalActive.value;
+})
+
+let navBarActive = computed(() => {
+  return navBarOptions.some(option => option.href === useRoute().path) && !quickActionModalActive.value;
+})
 
 useHead({
   bodyAttrs: {
