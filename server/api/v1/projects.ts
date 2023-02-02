@@ -1,5 +1,4 @@
 import {supabase} from "~/lib/supabase";
-// @ts-ignore
 import {PostgrestError} from '@supabase/supabase-js'
 import Fuse from 'fuse.js';
 
@@ -113,35 +112,13 @@ const getProjectsRawData = async (): Promise<ProjectsRawData[]> => {
   return projectsData;
 };
 
-const getTechnologiesRawData = async (): Promise<ProjectsTechnologyRaw[]> => {
-  // fetch technologies from supabase
-  const {data: technologiesData, error: technologiesError} = await supabase
-    .from('technologies')
-    .select('' +
-      'slug, ' +
-      'displayName: display_name, ' +
-      'shortDisplayName: short_display_name, ' +
-      'type: technology_type_id ( slug, displayName: display_name, shortDisplayName: short_display_name ), ' +
-      'parent: parent_technology_id ( slug, displayName: display_name, shortDisplayName: short_display_name )'
-    ) as any as {
-    data: ProjectsTechnologyRaw[]
-    error: PostgrestError;
+export const getProjectsRawDataCached = cachedFunction(
+  getProjectsRawData,
+  {
+    name: 'projects-raw-data',
+    maxAge: Number(process.env.CACHE_MAX_AGE_PROJECTS) || 3600,
   }
-
-  if (technologiesError) {
-    throw new Error('Error fetching technologies');
-  }
-
-  return technologiesData;
-}
-
-const averageScore = (items: Fuse.FuseResult<ProjectsRawData>[]) => {
-  let sum = 0;
-  for (let i = 0; i < items.length; i++) {
-    sum += items[i].score || 0;
-  }
-  return sum / items.length;
-}
+);
 
 const fuzzySearchProjects = (projects: ProjectsRawData[], query: string): ProjectsRawData[] => {
   const fuse = new Fuse(projects, {
@@ -168,16 +145,6 @@ const fuzzySearchProjects = (projects: ProjectsRawData[], query: string): Projec
   })
 
   let searchRes = fuse.search(query)
-
-  /*
-  // calculate average score
-  const avScore = averageScore(searchRes);
-
-  // remove all results that have a lower score than the average
-  searchRes = searchRes.filter((p) => {
-    return (p.score || 0) <= avScore;
-  })
-   */
 
   return searchRes.map((p) => {
     return p.item;
@@ -374,7 +341,6 @@ const isTechnologyDescendantOf = (technologiesBySlug: TechnologiesBySlug, techno
   return false;
 }
 
-// TODO: cache this
 export default defineEventHandler(
   async (event): Promise<any> => {
     console.log('Fetching projects')
@@ -386,7 +352,11 @@ export default defineEventHandler(
     let groupByValue = groupBy?.split(':')[1] || undefined; // what to group by
     let includeOther = query.get("include_other") === 'true'; // include "other" group
 
-    let projectsData = await getProjectsRawData();
+    let projectsData = await getProjectsRawDataCached();
+
+    if (!projectsData) {
+      throw new Error('Failed to fetch projects');
+    }
 
     let technologies = null;
 
