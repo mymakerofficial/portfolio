@@ -34,7 +34,6 @@ import {
   onClickOutside,
   promiseTimeout,
   useEventBus,
-  useFocus,
   useMagicKeys,
   watchDebounced,
   whenever
@@ -61,7 +60,6 @@ let shinyGradientTop = ref();
 let shinyGradientBottom = ref();
 let data = ref<object | null>(null);
 let query = ref("");
-let { focused: inputFocused } = useFocus(input);
 let disabled = ref(true);
 let activeDelayed = ref(false);
 
