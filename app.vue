@@ -32,7 +32,7 @@ whenever(ctrl_k, () => {
 })
 
 let navBarActive = computed(() => {
-  return navBarOptions.some(option => option.href === useRoute().path) && !quickActionModalActive.value;
+  return !quickActionModalActive.value;
 })
 
 useHead({
