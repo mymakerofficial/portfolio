@@ -1,6 +1,6 @@
 <template>
   <Head>
-    <Title>{{ project.displayName }}</Title>
+    <Title>{{ project?.displayName }}</Title>
     <Meta name="description" :content="project?.summary" />
     <Meta name="og:title" :content="project?.displayName" />
     <Meta name="og:description" :content="project?.summary" />
