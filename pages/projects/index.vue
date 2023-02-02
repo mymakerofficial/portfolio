@@ -37,35 +37,30 @@ const debouncedSearch = useDebounceFn(async (query: string, groupBy: string) => 
 
 export default defineNuxtComponent({
   async setup () {
-    let groupByProperty = 'date';
-    let groupByValue = 'year';
-    let includeOther = false;
+    let query = '';
+    let groupBy = 'date:year';
+
+    if (useRoute().query.q) {
+      query = useRoute().query.q as string;
+      groupBy = 'auto';
+    }
 
     if (useRoute().query.group_by) {
-      const groupBy = useRoute().query.group_by as string;
+      const groupByQuery = useRoute().query.group_by as string;
 
-      if (groupBy === 'date') {
-        groupByProperty = 'date';
-        groupByValue = 'year';
-      } else if (groupBy === 'language') {
-        groupByProperty = 'technology-type';
-        groupByValue = 'programming-language';
-        includeOther = true;
-      } else if (groupBy === 'framework') {
-        groupByProperty = 'technology-type';
-        groupByValue = 'frontend-framework';
-      }
-    } else if (useRoute().query.group_by_property && useRoute().query.group_by_value) {
-      groupByProperty = useRoute().query.group_by_property as string;
-      groupByValue = useRoute().query.group_by_value as string;
-
-      if (useRoute().query.include_other) {
-        includeOther = useRoute().query.include_other === "true";
+      if (groupByQuery === 'date') {
+        groupBy = 'date:year';
+      } else if (groupByQuery === 'language') {
+        groupBy = 'technology-type:programming-language';
+      } else if (groupByQuery === 'framework') {
+        groupBy = 'technology-type:frontend-framework';
+      } else {
+        groupBy = groupByQuery;
       }
     }
 
     // fetch projects from api
-    const data = await fetchData("", `${groupByProperty}:${groupByValue}`);
+    const data = await fetchData(query, groupBy);
 
     return {
       data: ref(data),

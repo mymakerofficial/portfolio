@@ -48,7 +48,7 @@
         <DetailsPanelSection title="Collaborators" v-if="project?.collaborators?.length > 0">
           <div class="flex flex-wrap gap-4 items-center">
             <div v-for="collaborator in project?.collaborators" :key="collaborator.slug">
-              <a :href="collaborator.websiteUrl" target="_blank" class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ collaborator.displayName }}</a>
+              <NuxtLink :href="collaborator.websiteUrl || `/projects?q=%3D${collaborator.displayName}`" :target="collaborator.websiteUrl ? '_blank' : null" class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ collaborator.displayName }}</NuxtLink>
             </div>
           </div>
         </DetailsPanelSection>
@@ -56,11 +56,11 @@
           <div class="flex flex-col gap-4">
             <div v-for="type in project?.technologies" :key="type.slug" class="flex flex-col md:flex-row gap-4">
               <div>
-                <span class="text-md md:text-sm font-medium text-gray-500">{{ type.displayName }}</span>
+                <NuxtLink :href="`/projects?group_by=technology-type:${type.slug}`" class="text-md md:text-sm font-medium text-gray-500">{{ type.displayName }}</NuxtLink>
               </div>
               <div class="flex flex-wrap gap-2 md:gap-4">
                 <div v-for="tech in type.technologies" :key="tech.slug">
-                  <span class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ tech.displayName }}</span>
+                  <NuxtLink :href="`/projects?q=%3D${tech.slug}`" class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ tech.displayName }}</NuxtLink>
                 </div>
               </div>
             </div>
@@ -72,7 +72,7 @@
         <DetailsPanelSection title="Tags" v-if="project?.tags?.length > 0">
           <div class="flex flex-wrap gap-4 items-center">
             <div v-for="tag in project?.tags" :key="tag.slug">
-              <span class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ tag.displayName }}</span>
+              <NuxtLink :href="`/projects?q=%3D${tag.displayName}`" class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ tag.displayName }}</NuxtLink>
             </div>
           </div>
         </DetailsPanelSection>
