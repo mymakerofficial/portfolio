@@ -11,12 +11,25 @@
           <ProjectsGroupedList v-if="data.resultType === 'grouped'" :groups="data.data" :compact="true" :brighter="true" :show-summary="false" />
           <ProjectsList v-else :projects="data.data"/>
         </div>
+        <div class="w-full h-[2px] bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800" />
+        <div class="px-4 py-2 flex flex-row gap-4 justify-between items-center">
+          <p class="text-sm font-medium text-gray-200 dark:text-gray-600">Search projects or technologies...</p>
+          <div class="flex flex-row gap-2">
+            <SmallKey>esc</SmallKey>
+            <SmallKey><SvgIcon type="mdi" :path="mdiArrowDown" size="14" /></SmallKey>
+            <SmallKey><SvgIcon type="mdi" :path="mdiArrowUp" size="14" /></SmallKey>
+            <SmallKey><SvgIcon type="mdi" :path="mdiArrowLeftBottom" size="14" /></SmallKey>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import SvgIcon from '@jamescoyle/vue-icon';
+import { mdiArrowLeftBottom, mdiArrowDown, mdiArrowUp } from '@mdi/js';
+
 import {
   onClickOutside,
   promiseTimeout,
