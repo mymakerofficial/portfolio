@@ -4,11 +4,11 @@
       <div class="w-full h-full absolute bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800" />
       <div class="m-[2px] p-2 bg-gray-50 dark:bg-gray-800 rounded-2xl flex flex-col gap-2">
         <div>
-          <input ref="input" type="text" class="w-full h-16 px-6 text-gray-700 outline-none dark:text-gray-200 bg-transparent rounded-xl placeholder-gray-200 dark:placeholder-gray-600 font-medium text-xl" placeholder="what are you looking for?" v-model="query"/>
+          <input ref="input" type="text" class="w-full h-16 px-4 text-gray-700 outline-none dark:text-gray-200 bg-transparent rounded-xl placeholder-gray-200 dark:placeholder-gray-600 font-medium text-xl" placeholder="what are you looking for?" v-model="query"/>
         </div>
         <div class="w-full h-[2px] bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800" v-if="data" />
-        <div class="max-h-96 overflow-y-auto" v-if="data">
-          <ProjectsGroupedList v-if="data.resultType === 'grouped'" :groups="data.data"/>
+        <div class="py-2 max-h-96 overflow-y-auto" v-if="data">
+          <ProjectsGroupedList v-if="data.resultType === 'grouped'" :groups="data.data" :compact="true" :brighter="true" :show-summary="false" />
           <ProjectsList v-else :projects="data.data"/>
         </div>
       </div>
