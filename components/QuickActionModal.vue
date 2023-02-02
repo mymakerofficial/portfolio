@@ -17,7 +17,15 @@
 </template>
 
 <script setup lang="ts">
-import {onClickOutside, promiseTimeout, useFocus, useMagicKeys, watchDebounced, whenever} from "@vueuse/core";
+import {
+  onClickOutside,
+  promiseTimeout,
+  useEventBus,
+  useFocus,
+  useMagicKeys,
+  watchDebounced,
+  whenever
+} from "@vueuse/core";
 
 const props = defineProps({
   active: {
@@ -30,6 +38,8 @@ const props = defineProps({
 const emit = defineEmits([
   "update:active"
 ]);
+
+const bus = useEventBus<string>('quick-action-modal');
 
 let input = ref<HTMLInputElement>();
 let modal = ref<HTMLDivElement>();
@@ -85,6 +95,13 @@ whenever(() => !props.active, async () => {
 
   if (!props.active) {
     disabled.value = true;
+  }
+})
+
+// open the modal when the bus emits the open event
+bus.on((e) => {
+  if (e === 'open') {
+    emit("update:active", true);
   }
 })
 </script>
