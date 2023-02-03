@@ -77,7 +77,16 @@ export enum ProjectsSearchResultType {
   GROUPED = 'grouped',
 }
 
+export interface ProjectsResponse {
+  resultType: ProjectsSearchResultType;
+  groupByProperty: string | null;
+  groupByValue: string | null;
+  data: CompactProjectInfo[] | ProjectsGroup[];
+}
+
 const getProjectsRawData = async (): Promise<ProjectsRawData[]> => {
+  console.log('Fetching projects')
+
   // fetch projects from supabase
   const {data: projectsData, error: projectsError} = await supabase
     .from('projects')
@@ -342,15 +351,15 @@ const isTechnologyDescendantOf = (technologiesBySlug: TechnologiesBySlug, techno
 }
 
 export default defineEventHandler(
-  async (event): Promise<any> => {
-    console.log('Fetching projects')
-
+  async (event): Promise<ProjectsResponse> => {
     const query = new URLSearchParams(event.req.url?.split('?')[1])
     const searchQuery = query.get("q") || undefined; // search query
     let groupBy = query.get("group_by") || undefined; // group by technology or date
     let groupByProperty = groupBy?.split(':')[0] || undefined; // what to group by
     let groupByValue = groupBy?.split(':')[1] || undefined; // what to group by
     let includeOther = query.get("include_other") === 'true'; // include "other" group
+    let featuredFirst = query.get("featured_first") === 'true';
+    const limit = Number(query.get("limit") || Infinity);
 
     let projectsData = await getProjectsRawDataCached();
 
@@ -418,16 +427,35 @@ export default defineEventHandler(
           throw new Error('Invalid group_by_property');
       }
 
+      let data = convertGroupRawToCompact(groups);
+
       return {
         resultType: ProjectsSearchResultType.GROUPED,
         groupByProperty,
         groupByValue,
-        data: convertGroupRawToCompact(groups)
+        data,
       };
     } else {
+      let data = convertProjectsRawToCompact(projectsData);
+
+      if (featuredFirst) {
+        data = data.sort((a, b) => {
+          if (a.featured === b.featured) {
+            return 0;
+          }
+          return a.featured ? -1 : 1;
+        });
+      }
+
+      if (limit !== Infinity) {
+        data = data.slice(0, limit);
+      }
+
       return {
         resultType: ProjectsSearchResultType.LIST,
-        data: convertProjectsRawToCompact(projectsData)
+        groupByProperty: null,
+        groupByValue: null,
+        data,
       };
     }
   }

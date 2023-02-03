@@ -17,14 +17,12 @@ export default defineNuxtComponent({
             translateX: `80%`,
             scaleX: `100%`,
           })
-          .to(el, 1, {
-            duration: 0.2,
+          .to(el, 0.5, {
             translateX: `-50%`,
             scaleX: `200%`,
             ease: "power1.inOut"
           })
           .to(el, 1, {
-            duration: 0.2,
             translateX: '0%',
             scaleX: `100%`,
             ease: "power1.inOut"
@@ -42,24 +40,47 @@ export default defineNuxtComponent({
             translateX: `-100%`,
             scaleX: `100%`,
           })
-          .to(el, {
-            duration: 0.2,
-          })
-          .to(el, 1, {
-            duration: 0.2,
+          .to(el, 0.2, {})
+          .to(el, 0.5, {
             translateX: `30%`,
             scaleX: `30%`,
             ease: "power1.inOut"
           })
           .to(el, 1, {
-            duration: 0.2,
-            translateX: '0%',
-            scaleX: `100%`,
+            translateX: '-20%',
+            scaleX: `80%`,
             ease: "power1.inOut"
           });
 
       timeline.play();
-    }
+    },
+    animate3() {
+      const el = this.$refs.el as HTMLElement;
+
+      const timeline = gsap.timeline();
+
+      timeline
+          .set(el, {
+            translateX: `80%`,
+            scaleX: `100%`,
+          })
+          .to(el, 0.5, {
+            translateX: `-40%`,
+            scaleX: `200%`,
+            ease: "power1.inOut"
+          })
+          .to(el, 0.8, {
+            translateX: `40%`,
+            ease: "power1.inOut"
+          })
+          .to(el, 1, {
+            translateX: '5%',
+            scaleX: `90%`,
+            ease: "power1.inOut"
+          });
+
+      timeline.play();
+    },
   }
 })
 </script>

@@ -6,16 +6,17 @@
         <div>
           <input ref="input" type="text" class="w-full h-16 px-4 text-gray-700 outline-none dark:text-gray-200 bg-transparent rounded-xl placeholder-gray-200 dark:placeholder-gray-600 font-medium text-xl" placeholder="what are you looking for?" v-model="query"/>
         </div>
-        <div class="w-full h-[2px]" v-if="data"><ShinyBackgroundGradient ref="shinyGradientTop" /></div>
-        <div class="py-2 max-h-96 overflow-y-auto" v-if="data">
-          <ProjectsGroupedList v-if="data.resultType === 'grouped'" :groups="data.data" :compact="true" :brighter="true" :show-summary="false" />
-          <ProjectsList v-else :projects="data.data" :compact="true" :brighter="true" :show-summary="false" />
+        <div class="w-full h-[2px]"><ShinyBackgroundGradient ref="shinyGradientTop" /></div>
+        <div class="py-2 max-h-96 overflow-y-auto">
+          <!--<ProjectsGroupedList v-if="projectsResult.resultType === 'grouped'" :groups="projectsResult.data" :compact="true" :brighter="true" :show-summary="false" />
+          <ProjectsList v-else :projects="projectsResult.data" :compact="true" :brighter="true" :show-summary="false" />-->
+          <QuickActionsGroupedList :groups="groups" />
         </div>
         <div class="w-full h-[2px]"><ShinyBackgroundGradient ref="shinyGradientBottom" /></div>
-        <div class="px-4 py-2 flex flex-row gap-4 justify-between items-center">
-          <p class="text-sm font-medium text-gray-200 dark:text-gray-600">Search projects or technologies...</p>
+        <div class="px-4 py-2 flex flex-row gap-4 justify-end items-center">
           <div class="flex flex-row gap-2">
-            <SmallKey>esc</SmallKey>
+            <SmallKey>Ctrl K</SmallKey>
+            <SmallKey>Esc</SmallKey>
             <SmallKey><SvgIcon type="mdi" :path="mdiArrowDown" size="14" /></SmallKey>
             <SmallKey><SvgIcon type="mdi" :path="mdiArrowUp" size="14" /></SmallKey>
             <SmallKey><SvgIcon type="mdi" :path="mdiArrowLeftBottom" size="14" /></SmallKey>
@@ -28,16 +29,10 @@
 
 <script setup lang="ts">
 import SvgIcon from '@jamescoyle/vue-icon';
-import { mdiArrowLeftBottom, mdiArrowDown, mdiArrowUp } from '@mdi/js';
-
-import {
-  onClickOutside,
-  promiseTimeout,
-  useEventBus,
-  useMagicKeys,
-  watchDebounced,
-  whenever
-} from "@vueuse/core";
+import {mdiArrowDown, mdiArrowLeftBottom, mdiArrowUp} from '@mdi/js';
+import {QuickActionGroup} from '~/components/QuickActionsGroupedList.vue';
+import {onClickOutside, promiseTimeout, useEventBus, useMagicKeys, watchDebounced, whenever} from "@vueuse/core";
+import {CompactProjectInfo, ProjectsGroup, ProjectsResponse} from "~/server/api/v1/projects";
 
 const props = defineProps({
   active: {
@@ -58,30 +53,109 @@ let modal = ref<HTMLDivElement>();
 let shinyGradientOuter = ref();
 let shinyGradientTop = ref();
 let shinyGradientBottom = ref();
-let data = ref<object | null>(null);
+let projectsResult = ref<ProjectsResponse | null>(null);
+let groups = ref<QuickActionGroup[]>([]);
 let query = ref("");
 let disabled = ref(true);
 let activeDelayed = ref(false);
 
-const fetchData = async (query: string, groupBy: string | null) => {
-  const { data, error } = await useFetch(`/api/v1/projects?q=${query}&group_by=${groupBy}`);
+const fetchData = async (query: string, groupBy: string | null, limit?: number, featuredFirst?: boolean): Promise<ProjectsResponse> => {
+  const params = new URLSearchParams();
+  if (query) {
+    params.append('q', query);
+  }
+  if (groupBy) {
+    params.append('group_by', groupBy);
+  }
+  if (limit) {
+    params.append('limit', limit.toString());
+  }
+  if (featuredFirst) {
+    params.append('featured_first', featuredFirst.toString());
+  }
+  const { data, error } = await useFetch(`/api/v1/projects?${params.toString()}`);
   if (error.value) {
-    console.error(error.value);
+    throw new Error(error.value.message);
   } else {
-    return data.value;
+    return data.value as ProjectsResponse;
   }
 };
+
+const getProjects = async (query: string): Promise<ProjectsResponse> => {
+  return await fetchData(
+      query,
+      `auto`,
+      query === "" ? 4 : 6,
+      query === ""
+  );
+}
 
 watchDebounced(
     query,
     async (newQuery) => {
-      const res = await fetchData(newQuery, `auto`);
-      if (res) {
-        data.value = res;
-      }
+      await buildResult(newQuery);
     },
     { debounce: 500, maxWait: 1000 },
-)
+);
+
+const buildResult = async (query: string) => {
+  const result: QuickActionGroup[] = [];
+
+  // deal with projects
+  const projects = await getProjects(query);
+  if (projects) {
+    if (projects.resultType === 'grouped') {
+      for (const group of projects.data as ProjectsGroup[]) {
+        result.push({
+          displayName: `Projects using ${group.group.displayName}`,
+          key: `projects-${group.group.slug}`,
+          items: group.projects.map((project) => ({
+            displayName: project.displayName,
+            key: project.slug,
+            action: () => {
+              useRouter().push(project.htmlUrl);
+            }
+          }))
+        });
+      }
+    } else {
+      result.push({
+        displayName: query === "" ? 'Recommended Projects' : 'Projects',
+        key: 'projects',
+        items: (projects.data as CompactProjectInfo[]).map((project) => ({
+          displayName: project.displayName,
+          key: project.slug,
+          action: () => {
+            useRouter().push(project.htmlUrl);
+          }
+        }))
+      });
+    }
+  }
+
+  result.push({
+    displayName: 'Navigation',
+    key: 'navigation',
+    items: [
+      {
+        displayName: 'Home',
+        key: 'home',
+        action: () => {
+          useRouter().push('/');
+        }
+      },
+      {
+        displayName: 'Projects',
+        key: 'projects',
+        action: () => {
+          useRouter().push('/projects');
+        }
+      },
+    ]
+  });
+
+  groups.value = result;
+};
 
 // whenever escape key is pressed, close the modal
 const { escape } = useMagicKeys()
@@ -104,10 +178,13 @@ whenever(() => props.active, async () => {
   activeDelayed.value = true;
   input.value?.focus();
 
-  if (!data.value) {
+  query.value = "";
+  buildResult("");
+
+  if (!projectsResult.value) {
     shinyGradientOuter.value.animate1();
     shinyGradientTop.value?.animate2();
-    shinyGradientBottom.value?.animate2();
+    shinyGradientBottom.value?.animate3();
   }
 })
 
