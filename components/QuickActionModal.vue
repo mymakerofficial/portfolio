@@ -8,15 +8,13 @@
         </div>
         <div class="w-full h-[2px]"><ShinyBackgroundGradient ref="shinyGradientTop" /></div>
         <div class="py-2 max-h-96 overflow-y-auto">
-          <!--<ProjectsGroupedList v-if="projectsResult.resultType === 'grouped'" :groups="projectsResult.data" :compact="true" :brighter="true" :show-summary="false" />
-          <ProjectsList v-else :projects="projectsResult.data" :compact="true" :brighter="true" :show-summary="false" />-->
           <QuickActionsGroupedList :groups="groups" />
         </div>
         <div class="w-full h-[2px]"><ShinyBackgroundGradient ref="shinyGradientBottom" /></div>
         <div class="px-4 py-2 flex flex-row gap-4 justify-end items-center">
           <div class="flex flex-row gap-2">
-            <SmallKey>Ctrl K</SmallKey>
-            <SmallKey>Esc</SmallKey>
+            <SmallKey @click="close()">Ctrl K</SmallKey>
+            <SmallKey @click="close()">Esc</SmallKey>
             <SmallKey><SvgIcon type="mdi" :path="mdiArrowDown" size="14" /></SmallKey>
             <SmallKey><SvgIcon type="mdi" :path="mdiArrowUp" size="14" /></SmallKey>
             <SmallKey><SvgIcon type="mdi" :path="mdiArrowLeftBottom" size="14" /></SmallKey>
@@ -48,14 +46,18 @@ const emit = defineEmits([
 
 const bus = useEventBus<string>('quick-action-modal');
 
+// input
 let input = ref<HTMLInputElement>();
+let query = ref("");
+// other refs
 let modal = ref<HTMLDivElement>();
+// the gradient things
 let shinyGradientOuter = ref();
 let shinyGradientTop = ref();
 let shinyGradientBottom = ref();
-let projectsResult = ref<ProjectsResponse | null>(null);
+// data
 let groups = ref<QuickActionGroup[]>([]);
-let query = ref("");
+// state
 let disabled = ref(true);
 let activeDelayed = ref(false);
 
@@ -157,16 +159,20 @@ const buildResult = async (query: string) => {
   groups.value = result;
 };
 
+const close = () => {
+  emit("update:active", false);
+}
+
 // whenever escape key is pressed, close the modal
 const { escape } = useMagicKeys()
 
 whenever(escape, () => {
-  emit("update:active", false);
+  close();
 })
 
 // close the modal when clicking outside of it
-onClickOutside(modal, (event) => {
-  emit("update:active", false);
+onClickOutside(modal, () => {
+  close();
 })
 
 // whenever the modal becomes active
@@ -178,14 +184,12 @@ whenever(() => props.active, async () => {
   activeDelayed.value = true;
   input.value?.focus();
 
-  query.value = "";
-  buildResult("");
+  shinyGradientOuter.value.animate1();
+  shinyGradientTop.value.animate2();
+  shinyGradientBottom.value.animate3();
 
-  if (!projectsResult.value) {
-    shinyGradientOuter.value.animate1();
-    shinyGradientTop.value?.animate2();
-    shinyGradientBottom.value?.animate3();
-  }
+  query.value = "";
+  await buildResult("");
 })
 
 // whenever the modal becomes inactive
@@ -208,6 +212,6 @@ bus.on((e) => {
 
 // close modal on route change
 useRouter().afterEach(() => {
-  emit("update:active", false);
+  close();
 });
 </script>
