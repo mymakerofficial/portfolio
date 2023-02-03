@@ -11,5 +11,18 @@
 </template>
 
 <script setup lang="ts">
+import {useMagicKeys} from "@vueuse/core";
+
+const props = defineProps({
+  keyCode: String
+});
+
 let pressed = ref(false);
+
+const { current } = useMagicKeys()
+
+watch(
+  () => props.keyCode && current.has(props.keyCode),
+  (v) => pressed.value = Boolean(v),
+)
 </script>

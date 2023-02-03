@@ -15,9 +15,9 @@
           <div class="flex flex-row gap-2">
             <SmallKey @click="close()">Ctrl K</SmallKey>
             <SmallKey @click="close()">Esc</SmallKey>
-            <SmallKey><SvgIcon type="mdi" :path="mdiArrowDown" size="14" /></SmallKey>
-            <SmallKey><SvgIcon type="mdi" :path="mdiArrowUp" size="14" /></SmallKey>
-            <SmallKey><SvgIcon type="mdi" :path="mdiArrowLeftBottom" size="14" /></SmallKey>
+            <SmallKey key-code="arrowdown"><SvgIcon type="mdi" :path="mdiArrowDown" size="14" /></SmallKey>
+            <SmallKey key-code="arrowup"><SvgIcon type="mdi" :path="mdiArrowUp" size="14" /></SmallKey>
+            <SmallKey key-code="enter"><SvgIcon type="mdi" :path="mdiArrowLeftBottom" size="14" /></SmallKey>
           </div>
         </div>
       </div>
