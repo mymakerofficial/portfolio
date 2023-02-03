@@ -7,8 +7,7 @@
 
 <script lang="ts">
 import {PropType} from "@vue/runtime-core";
-import {ProjectsGroup} from "~/server/api/v1/grouped_projects";
-import {QuickActionGroup} from "~/components/QuickActionsGroupedList.vue";
+import {QuickActionGroup} from "~/lib/quickActions";
 
 export default defineNuxtComponent({
   props: {

@@ -28,9 +28,9 @@
 <script setup lang="ts">
 import SvgIcon from '@jamescoyle/vue-icon';
 import {mdiArrowDown, mdiArrowLeftBottom, mdiArrowUp} from '@mdi/js';
-import {QuickActionGroup} from '~/components/QuickActionsGroupedList.vue';
-import {onClickOutside, promiseTimeout, useEventBus, useMagicKeys, watchDebounced, whenever} from "@vueuse/core";
+import {onClickOutside, promiseTimeout, useEventBus, useMagicKeys, watchDebounced, whenever, get, set} from "@vueuse/core";
 import {CompactProjectInfo, ProjectsGroup, ProjectsResponse} from "~/server/api/v1/projects";
+import {QuickActionGroup, QuickActionItem} from "~/lib/quickActions";
 
 const props = defineProps({
   active: {
@@ -75,11 +75,13 @@ const fetchData = async (query: string, groupBy: string | null, limit?: number, 
   if (featuredFirst) {
     params.append('featured_first', featuredFirst.toString());
   }
+
   const { data, error } = await useFetch(`/api/v1/projects?${params.toString()}`);
+
   if (error.value) {
     throw new Error(error.value.message);
   } else {
-    return data.value as ProjectsResponse;
+    return get(data) as ProjectsResponse;
   }
 };
 
@@ -102,6 +104,14 @@ watchDebounced(
 
 const buildResult = async (query: string) => {
   const result: QuickActionGroup[] = [];
+
+  if (useRoute().meta.quickActions) {
+    result.push({
+      displayName: "Quick Actions",
+      key: "quick-actions",
+      items: useRoute().meta.quickActions as QuickActionItem[]
+    });
+  }
 
   // deal with projects
   const projects = await getProjects(query);
@@ -156,7 +166,7 @@ const buildResult = async (query: string) => {
     ]
   });
 
-  groups.value = result;
+  set(groups, result);
 };
 
 const close = () => {
@@ -177,29 +187,29 @@ onClickOutside(modal, () => {
 
 // whenever the modal becomes active
 whenever(() => props.active, async () => {
-  disabled.value = false;
+  set(disabled, false);
 
   await nextTick();
 
-  activeDelayed.value = true;
-  input.value?.focus();
+  set(activeDelayed, true);
+  get(input)?.focus();
 
-  shinyGradientOuter.value.animate1();
-  shinyGradientTop.value.animate2();
-  shinyGradientBottom.value.animate3();
+  get(shinyGradientOuter).animate1();
+  get(shinyGradientTop).animate2();
+  get(shinyGradientBottom).animate3();
 
-  query.value = "";
+  set(query, "");
   await buildResult("");
 })
 
 // whenever the modal becomes inactive
 whenever(() => !props.active, async () => {
-  activeDelayed.value = false;
+  set(activeDelayed, false);
 
   await promiseTimeout(500);
 
   if (!props.active) {
-    disabled.value = true;
+    set(disabled, true);
   }
 })
 

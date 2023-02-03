@@ -77,37 +77,17 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import dayjs from "dayjs";
-import { generateHTML } from '@tiptap/html'
+import {generateHTML} from "@tiptap/html";
 import tiptapDefaultOptions from "~/lib/tiptapDefaultOptions";
+import {get} from "@vueuse/core";
 
-export default defineNuxtComponent({
-  async setup() {
-    const { data: project } = await useFetch(`/api/v1/projects/${useRoute().params.slug}`);
+const { data: project } = await useAsyncData(() => $fetch(`/api/v1/projects/${useRoute().params.slug}`))
 
-    return {
-      project,
-    }
-  },
-
-  computed: {
-    startedHumanReadable(): string | null {
-      return dayjs(this.project?.startedDate).format('MMMM D, YYYY');
-    },
-    releasedHumanReadable(): string | null {
-      return dayjs(this.project?.releaseDate).format('MMMM D, YYYY');
-    },
-    lastChangedHumanReadable(): string | null {
-      return dayjs(this.project?.lastCommitDateTime).format('MMMM D, YYYY');
-    },
-    bodyHtml(): string | null {
-      if (!this.project?.bodyProse) return null;
-      return generateHTML(this.project.bodyProse, tiptapDefaultOptions.extensions);
-    },
-    bodyClass(): string | null {
-      return tiptapDefaultOptions.editorProps.attributes.class
-    }
-  },
-});
+const startedHumanReadable = dayjs(get(project).startedDate).format('MMMM D, YYYY');
+const releasedHumanReadable = dayjs(get(project).releaseDate).format('MMMM D, YYYY');
+const lastChangedHumanReadable = dayjs(get(project)?.lastCommitDateTime).format('MMMM D, YYYY');
+const bodyHtml = get(project).bodyProse ? generateHTML(get(project).bodyProse, tiptapDefaultOptions.extensions) : "";
+const bodyClass = tiptapDefaultOptions.editorProps.attributes.class;
 </script>

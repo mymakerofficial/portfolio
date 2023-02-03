@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import {PropType} from "@vue/runtime-core";
-import {QuickActionItem} from "~/components/QuickActionsGroupedList.vue";
+import { QuickActionItem } from "~~/lib/quickActions";
 
 export default defineNuxtComponent({
   props: {
