@@ -18,7 +18,7 @@
       </div>
       <div class="absolute w-full h-full">
         <img aria-hidden="true" :src="project?.thumbnailUrl" :alt="project?.displayName" class="absolute w-full h-full blur-3xl" />
-        <img aria-hidden="true" :src="project?.thumbnailUrl" :alt="project?.displayName" class="absolute w-full h-full blur-[200px] hidden xl:block" />
+        <img aria-hidden="true" :src="project?.thumbnailUrl" :alt="project?.displayName" class="absolute w-full h-full blur-[200px] hidden xl:block saturate-200" />
       </div>
     </div>
   </div>
