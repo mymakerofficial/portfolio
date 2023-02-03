@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import SvgIcon from '@jamescoyle/vue-icon';
 import {mdiArrowDown, mdiArrowLeftBottom, mdiArrowUp} from '@mdi/js';
-import {onClickOutside, promiseTimeout, useEventBus, useMagicKeys, watchDebounced, whenever, get, set} from "@vueuse/core";
+import {onClickOutside, promiseTimeout, useEventBus, useMagicKeys, watchDebounced, whenever, get, set, useScrollLock } from "@vueuse/core";
 import {CompactProjectInfo, ProjectsGroup, ProjectsResponse} from "~/server/api/v1/projects";
 import {QuickActionGroup, QuickActionItem} from "~/lib/quickActions";
 
@@ -60,6 +60,8 @@ let groups = ref<QuickActionGroup[]>([]);
 // state
 let disabled = ref(true);
 let activeDelayed = ref(false);
+// scroll lock
+let scrollLock = useScrollLock(ref(document.body));
 
 const fetchData = async (query: string, groupBy: string | null, limit?: number, featuredFirst?: boolean): Promise<ProjectsResponse> => {
   const params = new URLSearchParams();
@@ -211,6 +213,10 @@ whenever(() => !props.active, async () => {
   if (!props.active) {
     set(disabled, true);
   }
+})
+
+watch(() => props.active, (v) => {
+  set(scrollLock, v);
 })
 
 // open the modal when the bus emits the open event
