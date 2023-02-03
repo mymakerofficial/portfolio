@@ -7,8 +7,8 @@
     @apply dark:text-gray-200;
 }
 
-.prose p:not(:has(img)) {
-    @apply lg:w-3/4;
+.prose p:not(:has(img)):not(ul p):not(ol p), .prose h1, .prose  h2, .prose h3, .prose ul, .prose ol {
+    @apply sm:px-8 md:w-4/5 lg:w-auto xl:w-4/5 lg:m-auto;
 }
 
 .prose h1, .prose  h2, .prose h3, .prose strong {
@@ -70,7 +70,6 @@
 
 .prose ul, .prose ol {
     @apply my-4;
-    @apply ml-8;
 }
 
 .prose ul {
@@ -82,7 +81,5 @@
 }
 
 .prose img, .prose video {
-    @apply my-4;
-    @apply rounded-md;
-    @apply max-h-96;
+    @apply my-8 rounded-md w-full;
 }
