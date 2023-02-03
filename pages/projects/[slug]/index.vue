@@ -11,22 +11,18 @@
     <Meta name="twitter:image" :content="project?.thumbnailUrl" v-if="project?.thumbnailUrl"/>
   </Head>
 
+  <ProjectPageHero :project="project" v-if="project?.thumbnailUrl" />
+
   <Container class="2xl:w-3/5 mb-40 md:mb-48">
     <div class="flex flex-col gap-16 my-12">
-      <div class="flex flex-col gap-8">
-        <div v-if="project?.thumbnailUrl" class="w-full aspect-video rounded-xl overflow-hidden">
-          <img :src="project?.thumbnailUrl" :alt="project?.displayName" class="absolute w-full h-full z-10" />
-          <div class="w-full h-full bg-gray-600/20 dark:bg-gray-100/20 animate-pulse" />
+      <div v-if="!project?.thumbnailUrl" class="px-8 md:px-12 md:mt-24 flex flex-wrap lg:flex-row gap-8 justify-between items-center">
+        <div>
+          <h1 class="text-2xl md:text-4xl xl:text-5xl font-extrabold text-gray-800 dark:text-gray-100">{{ project?.displayName }}</h1>
         </div>
-        <div class="px-8 md:px-12 flex flex-col lg:flex-row gap-8 justify-between lg:items-center">
-          <div>
-            <h1 class="text-2xl md:text-4xl xl:text-6xl font-extrabold text-gray-800 dark:text-gray-100">{{ project?.displayName }}</h1>
-          </div>
-          <div class="lg:basis-1/3 lg:flex lg:justify-end" v-if="project?.websiteUrl">
-            <a :href="project?.websiteUrl" target="_blank">
-              <Button>Visit Website</Button>
-            </a>
-          </div>
+        <div class="lg:basis-1/3 lg:flex lg:justify-end" v-if="project?.websiteUrl">
+          <a :href="project?.websiteUrl" target="_blank">
+            <Button>Visit Website</Button>
+          </a>
         </div>
       </div>
       <div class="px-8 md:px-12">
