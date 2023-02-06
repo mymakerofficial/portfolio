@@ -84,6 +84,7 @@ import dayjs from "dayjs";
 import {generateHTML} from "@tiptap/html";
 import tiptapDefaultOptions from "~/lib/tiptapDefaultOptions";
 import {get} from "@vueuse/core";
+import {QuickActionExtendedGroup, QuickActionExtendedItem} from "~/lib/quickActions";
 
 const { data: project } = await useAsyncData(() => $fetch(`/api/v1/projects/${useRoute().params.slug}`))
 
@@ -92,4 +93,50 @@ const releasedHumanReadable = dayjs(get(project).releaseDate).format('MMMM D, YY
 const lastChangedHumanReadable = dayjs(get(project)?.lastCommitDateTime).format('MMMM D, YYYY');
 const bodyHtml = get(project).bodyProse ? generateHTML(get(project).bodyProse, tiptapDefaultOptions.extensions) : "";
 const bodyClass = tiptapDefaultOptions.editorProps.attributes.class;
+
+onMounted(() => {
+  const items: QuickActionExtendedItem[] = [];
+
+  if (get(project).websiteUrl) {
+    items.push({
+      displayName: "Open Website",
+      key: "open-website",
+      keyWords: ["website"],
+      action: () => { window.open(get(project).websiteUrl, '_blank') }
+    });
+  }
+
+  items.push({
+    displayName: 'Copy Share Link',
+    key: 'copy-project-link',
+    keyWords: ['copy', 'link', 'share', 'url'],
+    action: () => {
+      navigator.clipboard.writeText(window.location.href);
+    }
+  });
+
+  if (get(project).githubRepoUrl) {
+    items.push({
+      displayName: "Open GitHub Repo",
+      key: "open-github-repo",
+      keyWords: ["git", "github", "repo"],
+      action: () => { window.open(get(project).githubRepoUrl, '_blank') }
+    });
+  }
+
+  // TODO: Replace with a better way to do this like pinia or something
+  nextTick(() => {
+    // @ts-ignore
+    window.quickActions = [{
+      displayName: get(project).displayName,
+      key: get(project).slug,
+      items,
+    }] as QuickActionExtendedGroup[];
+  })
+})
+
+onUnmounted(() => {
+  // @ts-ignore
+  window.quickActions = [];
+})
 </script>

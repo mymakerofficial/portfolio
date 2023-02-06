@@ -128,10 +128,17 @@ const buildResult = async (query: string) => {
     await loadRecommendedProjects();
   }
 
+  const importantItems: QuickActionExtendedGroup[] = [];
   const items: QuickActionExtendedGroup[] = [];
   const result: QuickActionGroup[] = [];
 
   // register all items
+
+  // @ts-ignore
+  if (window.quickActions) {
+    // @ts-ignore
+    importantItems.push(...window.quickActions)
+  }
 
   items.push({
     displayName: 'Navigation',
@@ -176,7 +183,7 @@ const buildResult = async (query: string) => {
     const projectsResult = await getProjectGroupsForQuery(query);
 
     // make list of items
-    const itemsFlat = items.flatMap((group) => group.items);
+    const itemsFlat = [...importantItems, ...items].flatMap((group) => group.items);
 
     // search in items
     const searchRes = new Fuse(itemsFlat, {
@@ -188,7 +195,7 @@ const buildResult = async (query: string) => {
     }).search(query);
 
     // rebuild groups with search results
-    const filteredList = items.map((group) => ({
+    const filteredList = [...importantItems, ...items].map((group) => ({
       ...group,
       items: group.items.filter((item) => searchRes.map((res) => res.item.key).includes(item.key))
     })).filter((group) => group.items.length > 0);
@@ -204,6 +211,7 @@ const buildResult = async (query: string) => {
 
   // if no results, add projects and all items
   if (result.length === 0) {
+    result.push(...importantItems);
     result.push(get(recommendedProjectsGroup)!);
     result.push(...items);
   }
