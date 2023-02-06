@@ -15,14 +15,16 @@
 
   <div class="lg:w-4/5 2xl:w-3/5 m-auto mb-40 md:mb-48">
     <div class="flex flex-col gap-16 my-12 lg:my-24">
-      <div v-if="!project?.thumbnailUrl" class="px-8 md:px-12 flex flex-wrap lg:flex-row gap-8 justify-between items-center">
-        <div>
-          <h1 class="text-2xl md:text-4xl xl:text-5xl font-extrabold text-gray-800 dark:text-gray-100">{{ project?.displayName }}</h1>
-        </div>
-        <div class="lg:basis-1/3 lg:flex lg:justify-end" v-if="project?.websiteUrl">
-          <a :href="project?.websiteUrl" target="_blank">
-            <Button>Visit Website</Button>
-          </a>
+      <div v-if="!project?.thumbnailUrl" class="px-8 md:px-12">
+        <div class="flex flex-wrap lg:flex-row gap-8 justify-between items-center" :class="{'sm:px-8 md:w-4/5 lg:w-auto xl:w-4/5 lg:m-auto': !!bodyHtml}">
+          <div>
+            <h1 class="text-2xl md:text-4xl xl:text-5xl font-extrabold text-gray-800 dark:text-gray-100">{{ project?.displayName }}</h1>
+          </div>
+          <div class="lg:basis-1/3 lg:flex lg:justify-end" v-if="project?.websiteUrl">
+            <a :href="project?.websiteUrl" target="_blank">
+              <Button>Visit Website</Button>
+            </a>
+          </div>
         </div>
       </div>
       <div class="px-8 md:px-12">
