@@ -72,7 +72,8 @@ let shinyGradientOuter = ref();
 let shinyGradientTop = ref();
 let shinyGradientBottom = ref();
 // data
-let groups = ref<QuickActionGroup[]>([]);
+let groups = ref<QuickActionGroup[]>();
+let recommendedProjectsGroup = ref<QuickActionGroup>();
 // state
 let disabled = ref(true);
 let activeDelayed = ref(false);
@@ -123,58 +124,14 @@ watchDebounced(
 );
 
 const buildResult = async (query: string) => {
-  const items: QuickActionExtendedGroup[] = [];
-  const projectsResult: QuickActionGroup[] = [];
-  const result: QuickActionGroup[] = [];
-
-  // deal with projects
-  const projects = await getProjects(query);
-  if (projects) {
-    if (projects.resultType === 'grouped') {
-      for (const group of projects.data as ProjectsGroup[]) {
-        projectsResult.push({
-          displayName: `Projects using ${group.group.displayName}`,
-          key: `projects-${group.group.slug}`,
-          items: group.projects.map((project) => ({
-            displayName: project.displayName,
-            key: project.slug,
-            action: () => {
-              useRouter().push(project.htmlUrl);
-            }
-          }))
-        });
-      }
-    } else {
-      projectsResult.push({
-        displayName: query === "" ? 'Recommended Projects' : 'Projects',
-        key: 'projects',
-        items: (projects.data as CompactProjectInfo[]).map((project) => ({
-          displayName: project.displayName,
-          key: project.slug,
-          action: () => {
-            useRouter().push(project.htmlUrl);
-          }
-        }))
-      });
-    }
+  if (!get(recommendedProjectsGroup)) {
+    await loadRecommendedProjects();
   }
 
-  // register all items
+  const items: QuickActionExtendedGroup[] = [];
+  const result: QuickActionGroup[] = [];
 
-  items.push({
-    displayName: 'Quick Actions',
-    key: 'quick-actions',
-    items: [
-      {
-        displayName: 'Copy Link to Clipboard',
-        key: 'copy-link',
-        keyWords: ['copy', 'link', 'share', 'url'],
-        action: () => {
-          navigator.clipboard.writeText(window.location.href);
-        }
-      },
-    ]
-  });
+  // register all items
 
   items.push({
     displayName: 'Navigation',
@@ -199,7 +156,25 @@ const buildResult = async (query: string) => {
     ]
   });
 
+  items.push({
+    displayName: 'Quick Actions',
+    key: 'quick-actions',
+    items: [
+      {
+        displayName: 'Copy Link',
+        key: 'copy-link',
+        keyWords: ['copy', 'link', 'share', 'url'],
+        action: () => {
+          navigator.clipboard.writeText(window.location.href);
+        }
+      },
+    ]
+  });
+
   if (query !== "") {
+    // search projects
+    const projectsResult = await getProjectGroupsForQuery(query);
+
     // make list of items
     const itemsFlat = items.flatMap((group) => group.items);
 
@@ -229,12 +204,72 @@ const buildResult = async (query: string) => {
 
   // if no results, add projects and all items
   if (result.length === 0) {
-    result.push(...projectsResult);
+    result.push(get(recommendedProjectsGroup)!);
     result.push(...items);
   }
 
   set(groups, result as QuickActionGroup[]);
 };
+
+const getProjectGroupsForQuery = async (query: string): Promise<QuickActionGroup[]> => {
+  const res: QuickActionGroup[] = [];
+
+  const projects = await getProjects(query);
+
+  if (!projects) {
+    return res;
+  }
+
+  if (projects.resultType === 'grouped') {
+    for (const group of projects.data as ProjectsGroup[]) {
+      res.push({
+        displayName: `Projects using ${group.group.displayName}`,
+        key: `projects-${group.group.slug}`,
+        items: group.projects.map((project) => ({
+          displayName: project.displayName,
+          key: project.slug,
+          action: () => {
+            useRouter().push(project.htmlUrl);
+          }
+        }))
+      });
+    }
+  } else {
+    res.push({
+      displayName: query === "" ? 'Recommended Projects' : 'Projects',
+      key: 'projects',
+      items: (projects.data as CompactProjectInfo[]).map((project) => ({
+        displayName: project.displayName,
+        key: project.slug,
+        action: () => {
+          useRouter().push(project.htmlUrl);
+        }
+      }))
+    });
+  }
+
+  return res;
+}
+
+const loadRecommendedProjects = async () => {
+  const projects = await getProjects("");
+
+  if (!projects) {
+    return;
+  }
+
+  set(recommendedProjectsGroup, {
+    displayName: 'Recommended Projects',
+    key: 'projects',
+    items: (projects.data as CompactProjectInfo[]).map((project) => ({
+      displayName: project.displayName,
+      key: project.slug,
+      action: () => {
+        useRouter().push(project.htmlUrl);
+      }
+    }))
+  });
+}
 
 // handle up event
 whenever(arrowup, () => {
