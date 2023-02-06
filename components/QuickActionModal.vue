@@ -8,7 +8,7 @@
         </div>
         <div class="w-full h-[2px]"><ShinyBackgroundGradient ref="shinyGradientTop" /></div>
         <div class="py-2 max-h-96 overflow-y-auto">
-          <QuickActionsGroupedList :groups="groups" ref="groupedList" @action-triggered="onActionTriggered" />
+          <QuickActionsGroupedList :groups="groups" ref="groupedList" @action-triggered="onActionTriggered" @overflow-top="animateShake(-1)" @overflow-bottom="animateShake(1)" />
         </div>
         <div class="w-full h-[2px]"><ShinyBackgroundGradient ref="shinyGradientBottom" /></div>
         <div class="px-4 py-2 flex flex-row gap-4 justify-end items-center">
@@ -33,6 +33,7 @@ import {onClickOutside, promiseTimeout, useEventBus, useMagicKeys, watchDebounce
 import {CompactProjectInfo, ProjectsGroup, ProjectsResponse} from "~/server/api/v1/projects";
 import {QuickActionExtendedGroup, QuickActionGroup} from "~/lib/quickActions";
 import Fuse from "fuse.js";
+import gsap from "gsap";
 
 const props = defineProps({
   active: {
@@ -245,6 +246,23 @@ const trigger = () => {
 
 const close = () => {
   emit("update:active", false);
+}
+
+const animateShake = (direction: number) => {
+  const el = get(modal) as HTMLElement;
+
+  gsap.timeline()
+      .set(el, {
+        translateY: `0%`,
+      })
+      .to(el, 0.05, {
+        translateY: `${5 * direction}%`,
+        ease: "spring",
+      })
+      .to(el, 0.05, {
+        translateY: `0%`,
+        ease: "Bounce.easeOut",
+      });
 }
 
 // whenever escape key is pressed, close the modal
