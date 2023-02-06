@@ -55,7 +55,7 @@ const activeItemElement = computed((): HTMLElement | null => {
 })
 
 const updateActiveItem = (key: string) => {
-  const index = itemsFlat.value.findIndex(i => i.key === key);
+  const index = get(itemsFlat).findIndex(i => i.combinedKey === key);
   set(activeItemIndex, index);
 }
 

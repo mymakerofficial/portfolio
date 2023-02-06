@@ -43,7 +43,7 @@ whenever(active, () => {
 })
 
 const onMouseOver = () => {
-  emit("updateActiveItem", combinedKey);
+  emit("updateActiveItem", get(combinedKey));
 }
 
 defineExpose({
