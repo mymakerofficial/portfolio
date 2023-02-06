@@ -27,16 +27,19 @@ const groupComponents = ref();
 
 const activeItemIndex = ref(0);
 
-const combinedKeysList = computed((): string[] => {
-  return props.groups.map((group) => {
-    return group.items.map((item) => {
-      return `${group.key}:${item.key}`;
+const itemsFlat = computed((): { combinedKey: string, action: () => void }[] => {
+  return props.groups.flatMap(group => {
+    return group.items.map(item => {
+      return {
+        combinedKey: `${group.key}:${item.key}`,
+        action: item.action
+      }
     })
-  }).flat();
+  })
 })
 
 const activeCombinedKey = computed((): string => {
-  return get(combinedKeysList)[get(activeItemIndex)];
+  return get(itemsFlat)[get(activeItemIndex)].combinedKey;
 })
 
 const activeItemElement = computed((): HTMLElement | null => {
@@ -52,7 +55,7 @@ const activeItemElement = computed((): HTMLElement | null => {
 })
 
 const updateActiveItem = (key: string) => {
-  const index = combinedKeysList.value.findIndex(i => i.key === key);
+  const index = itemsFlat.value.findIndex(i => i.key === key);
   set(activeItemIndex, index);
 }
 
@@ -83,7 +86,7 @@ const up = () => {
 }
 
 const down = () => {
-  if (get(activeItemIndex) < get(combinedKeysList).length - 1) {
+  if (get(activeItemIndex) < get(itemsFlat).length - 1) {
     set(activeItemIndex, get(activeItemIndex) + 1);
   } else {
     emit("overflowBottom");
@@ -91,7 +94,7 @@ const down = () => {
 }
 
 const trigger = () => {
-  const item = get(combinedKeysList)[get(activeItemIndex)];
+  const item = get(itemsFlat)[get(activeItemIndex)];
   item.action();
   emit("actionTriggered", item);
 }
