@@ -287,14 +287,15 @@ const groupByTechnologyType = (projects: ProjectsRawData[], typeSlug: string | u
     });
   });
 
-  /*
-  groups.sort((a, b) => {
-    // sort by projects length or newest project or alphabetically
-    const aDate = new Date(a.projects[0].releaseDate || a.projects[0].startedDate || '1970-01-01');
-    const bDate = new Date(b.projects[0].releaseDate || b.projects[0].startedDate || '1970-01-01');
-    return b.projects.length - a.projects.length || bDate.getTime() - aDate.getTime() || a.group.displayName.localeCompare(b.group.displayName);
+  groups.forEach((group) => {
+    group.projects.sort((a, b) => {
+      return sortProjectsFunction(a, b);
+    });
   });
-   */
+
+  groups.sort((a, b) => {
+    return sortProjectsFunction(a.projects[0], b.projects[0]);
+  });
 
   // add "other" group if it has projects and includeOther is true
   if (noGroup.projects.length > 0 && includeOther) {
@@ -302,6 +303,12 @@ const groupByTechnologyType = (projects: ProjectsRawData[], typeSlug: string | u
   }
 
   return groups;
+}
+
+const sortProjectsFunction = (a: ProjectsRawData, b: ProjectsRawData) => {
+  const aDate = new Date(a.releaseDate || a.startedDate || '1970-01-01');
+  const bDate = new Date(b.releaseDate || b.startedDate || '1970-01-01');
+  return bDate.getTime() - aDate.getTime() || a.displayName.localeCompare(b.displayName);
 }
 
 const convertProjectsRawToCompact = (projects: ProjectsRawData[]): CompactProjectInfo[] => {
@@ -404,11 +411,7 @@ export default defineEventHandler(
       }
     } else {
       // sort projects by date
-      projectsData.sort((a, b) => {
-        const dateA = new Date(a.releaseDate || a.startedDate);
-        const dateB = new Date(b.releaseDate || b.startedDate);
-        return dateB.getTime() - dateA.getTime();
-      })
+      projectsData.sort((a, b) => sortProjectsFunction(a, b));
     }
 
     if (groupByProperty && groupByValue) {
