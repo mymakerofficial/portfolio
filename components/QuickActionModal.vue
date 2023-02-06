@@ -8,7 +8,7 @@
         </div>
         <div class="w-full h-[2px]"><ShinyBackgroundGradient ref="shinyGradientTop" /></div>
         <div class="py-2 max-h-96 overflow-y-auto">
-          <QuickActionsGroupedList :groups="groups" ref="groupedList" @action-triggered="onActionTriggered" @overflow-top="animateShake(-1)" @overflow-bottom="animateShake(1)" />
+          <QuickActionsGroupedList :groups="groups" ref="groupedList" @action-triggered="onActionTriggered" @overflow-top="onOverflowTop" @overflow-bottom="onOverflowBottom" />
         </div>
         <div class="w-full h-[2px]"><ShinyBackgroundGradient ref="shinyGradientBottom" /></div>
         <div class="px-4 py-2 flex flex-row gap-4 justify-end items-center">
@@ -29,7 +29,19 @@
 // @ts-ignore
 import SvgIcon from '@jamescoyle/vue-icon';
 import {mdiArrowDown, mdiArrowLeftBottom, mdiArrowUp} from '@mdi/js';
-import {onClickOutside, promiseTimeout, useEventBus, useMagicKeys, watchDebounced, whenever, get, set, useScrollLock } from "@vueuse/core";
+import {
+  onClickOutside,
+  promiseTimeout,
+  useEventBus,
+  useMagicKeys,
+  watchDebounced,
+  whenever,
+  get,
+  set,
+  useScrollLock,
+  useIntervalFn,
+  useTimeoutFn
+} from "@vueuse/core";
 import {CompactProjectInfo, ProjectsGroup, ProjectsResponse} from "~/server/api/v1/projects";
 import {QuickActionExtendedGroup, QuickActionGroup} from "~/lib/quickActions";
 import Fuse from "fuse.js";
@@ -224,9 +236,54 @@ const buildResult = async (query: string) => {
   set(groups, result as QuickActionGroup[]);
 };
 
-whenever(arrowup, () => up());
-whenever(arrowdown, () => down());
+// handle up event
+whenever(arrowup, () => {
+  up();
+  useTimeoutFn(() => {
+    resumeUpInterval();
+  }, 300)
+});
+whenever(() => !get(arrowup), () => pauseUpInterval());
+
+// handle down event
+whenever(arrowdown, () => {
+  down();
+  useTimeoutFn(() => {
+    resumeDownInterval();
+  }, 300)
+});
+whenever(() => !get(arrowdown), () => pauseDownInterval());
+
+// handle enter event
 whenever(enter, () => trigger());
+
+// register up interval
+const { pause: pauseUpInterval, resume: resumeUpInterval } = useIntervalFn(() => {
+  if (get(arrowup)) {
+    up();
+  } else {
+    pauseUpInterval();
+  }
+}, 100, { immediate: false });
+
+// register down interval
+const { pause: pauseDownInterval, resume: resumeDownInterval } = useIntervalFn(() => {
+  if (get(arrowdown)) {
+    down();
+  } else {
+    pauseDownInterval();
+  }
+}, 100, { immediate: false });
+
+const onOverflowTop = () => {
+  animateShake(-1);
+  pauseUpInterval();
+}
+
+const onOverflowBottom = () => {
+  animateShake(1);
+  pauseDownInterval();
+}
 
 const onActionTriggered = () => {
   close();
