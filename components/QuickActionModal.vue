@@ -8,16 +8,16 @@
         </div>
         <div class="w-full h-[2px]"><ShinyBackgroundGradient ref="shinyGradientTop" /></div>
         <div class="py-2 max-h-96 overflow-y-auto">
-          <QuickActionsGroupedList :groups="groups" />
+          <QuickActionsGroupedList :groups="groups" ref="groupedList" @action-triggered="onActionTriggered" />
         </div>
         <div class="w-full h-[2px]"><ShinyBackgroundGradient ref="shinyGradientBottom" /></div>
         <div class="px-4 py-2 flex flex-row gap-4 justify-end items-center">
           <div class="flex flex-row gap-2">
             <SmallKey @click="close()">Ctrl K</SmallKey>
             <SmallKey @click="close()">Esc</SmallKey>
-            <SmallKey key-code="arrowdown"><SvgIcon type="mdi" :path="mdiArrowDown" size="14" /></SmallKey>
-            <SmallKey key-code="arrowup"><SvgIcon type="mdi" :path="mdiArrowUp" size="14" /></SmallKey>
-            <SmallKey key-code="enter"><SvgIcon type="mdi" :path="mdiArrowLeftBottom" size="14" /></SmallKey>
+            <SmallKey key-code="arrowup" @click="up"><SvgIcon type="mdi" :path="mdiArrowUp" size="14" /></SmallKey>
+            <SmallKey key-code="arrowdown" @click="down"><SvgIcon type="mdi" :path="mdiArrowDown" size="14" /></SmallKey>
+            <SmallKey key-code="enter" @click="trigger"><SvgIcon type="mdi" :path="mdiArrowLeftBottom" size="14" /></SmallKey>
           </div>
         </div>
       </div>
@@ -53,6 +53,7 @@ let input = ref<HTMLInputElement>();
 let query = ref("");
 // other refs
 let modal = ref<HTMLDivElement>();
+let groupedList = ref();
 // the gradient things
 let shinyGradientOuter = ref();
 let shinyGradientTop = ref();
@@ -64,6 +65,8 @@ let disabled = ref(true);
 let activeDelayed = ref(false);
 // scroll lock
 let scrollLock = useScrollLock(ref(document.body));
+// keys
+const { arrowup, arrowdown, enter, escape } = useMagicKeys()
 
 const fetchData = async (query: string, groupBy: string | null, limit?: number, featuredFirst?: boolean): Promise<ProjectsResponse> => {
   const params = new URLSearchParams();
@@ -220,13 +223,31 @@ const buildResult = async (query: string) => {
   set(groups, result as QuickActionGroup[]);
 };
 
+whenever(arrowup, () => up());
+whenever(arrowdown, () => down());
+whenever(enter, () => trigger());
+
+const onActionTriggered = () => {
+  close();
+};
+
+const up = () => {
+  get(groupedList).up();
+};
+
+const down = () => {
+  get(groupedList).down();
+};
+
+const trigger = () => {
+  get(groupedList).trigger();
+};
+
 const close = () => {
   emit("update:active", false);
 }
 
 // whenever escape key is pressed, close the modal
-const { escape } = useMagicKeys()
-
 whenever(escape, () => {
   close();
 })

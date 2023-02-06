@@ -1,21 +1,43 @@
 <template>
-  <button @click="item.action" class="mx-1.5 p-3 hover:bg-gray-100 dark:hover:bg-gray-700 focus:bg-gray-100 dark:focus:bg-gray-700 focus:outline-0 rounded-lg transition-colors ease-in-out duration-200">
+  <div @click="trigger" :data-active="active" @mouseover="onMouseOver" ref="el" class="mx-1.5 p-3 data-[active=true]:bg-gray-100 dark:data-[active=true]:bg-gray-700 focus:outline-0 rounded-lg transition-colors ease-in-out duration-200 cursor-pointer">
     <span class="flex flex-col md:flex-row gap-2 md:items-center">
       <span class="text-sm font-medium text-gray-600 dark:text-gray-200 truncate">{{ item.displayName }}</span>
     </span>
-  </button>
+  </div>
 </template>
 
-<script lang="ts">
-import {PropType} from "@vue/runtime-core";
+<script setup lang="ts">
 import {QuickActionItem} from "~/lib/quickActions";
+import {get, whenever} from "@vueuse/core";
 
-export default defineNuxtComponent({
-  props: {
-    item: {
-      type: Object as PropType<QuickActionItem>,
-      required: true,
-    },
-  },
+const props = defineProps<{
+  item: QuickActionItem;
+  activeItemKey: string;
+}>()
+
+const emit = defineEmits([
+  "actionTriggered", "updateActiveItem"
+]);
+
+const el = ref<HTMLElement>();
+
+const trigger = () => {
+  // activate action
+  props.item.action();
+  // emit event
+  emit("actionTriggered", props.item);
+}
+
+const active = computed(() => {
+  return props.item.key === props.activeItemKey;
 })
+
+whenever(active, () => {
+  // scroll into view
+  get(el)?.scrollIntoView({behavior: "smooth", block: "nearest", inline: "nearest"});
+})
+
+const onMouseOver = () => {
+  emit("updateActiveItem", props.item.key);
+}
 </script>

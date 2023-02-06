@@ -1,19 +1,26 @@
 <template>
   <div class="flex flex-col gap-2">
-    <QuickActionsListItem v-for="item in items" :key="item.key" :item="item" />
+    <QuickActionsListItem v-for="item in items" :key="item.key" :item="item" :active-item-key="activeItemKey" @update-active-item="updateActiveItem" @action-triggered="onActionTriggered" />
   </div>
 </template>
 
-<script lang="ts">
-import {PropType} from "@vue/runtime-core";
+<script setup lang="ts">
 import { QuickActionItem } from "~~/lib/quickActions";
 
-export default defineNuxtComponent({
-  props: {
-    items: {
-      type: Array as PropType<QuickActionItem[]>,
-      required: true,
-    },
-  },
-});
+const props = defineProps<{
+  items: QuickActionItem[];
+  activeItemKey: string;
+}>()
+
+const emit = defineEmits([
+  "actionTriggered", "updateActiveItem"
+]);
+
+const onActionTriggered = (i: QuickActionItem) => {
+  emit("actionTriggered", i);
+}
+
+const updateActiveItem = (key: string) => {
+  emit("updateActiveItem", key);
+}
 </script>
