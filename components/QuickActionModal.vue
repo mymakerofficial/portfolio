@@ -274,6 +274,9 @@ const loadRecommendedProjects = async () => {
 // handle up event
 whenever(arrowup, () => {
   up();
+
+  if (get(groupedList).atTop) return;
+
   useTimeoutFn(() => {
     resumeUpInterval();
   }, 300)
@@ -283,6 +286,9 @@ whenever(() => !get(arrowup), () => pauseUpInterval());
 // handle down event
 whenever(arrowdown, () => {
   down();
+
+  if (get(groupedList).atBottom) return;
+
   useTimeoutFn(() => {
     resumeDownInterval();
   }, 300)

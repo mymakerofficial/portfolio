@@ -77,8 +77,16 @@ whenever(() => get(activeItemIndex) === 0, () => {
   })
 })
 
+const atTop = computed((): boolean => {
+  return get(activeItemIndex) <= 0;
+})
+
+const atBottom = computed((): boolean => {
+  return get(activeItemIndex) >= get(itemsFlat).length - 1;
+})
+
 const up = () => {
-  if (get(activeItemIndex) > 0) {
+  if (!get(atTop)) {
     set(activeItemIndex, get(activeItemIndex) - 1);
   } else {
     emit("overflowTop");
@@ -86,7 +94,7 @@ const up = () => {
 }
 
 const down = () => {
-  if (get(activeItemIndex) < get(itemsFlat).length - 1) {
+  if (!get(atBottom)) {
     set(activeItemIndex, get(activeItemIndex) + 1);
   } else {
     emit("overflowBottom");
@@ -104,7 +112,9 @@ defineExpose({
   down,
   trigger,
   activeItemElement,
-  activeCombinedKey: activeCombinedKey,
+  activeCombinedKey,
   activeItemIndex,
+  atTop,
+  atBottom
 })
 </script>
