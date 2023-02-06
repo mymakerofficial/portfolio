@@ -13,20 +13,20 @@ export default defineNuxtComponent({
       const timeline = gsap.timeline();
 
       timeline
-          .set(el, {
-            translateX: `80%`,
-            scaleX: `100%`,
-          })
-          .to(el, 0.5, {
-            translateX: `-50%`,
-            scaleX: `200%`,
-            ease: "power1.inOut"
-          })
-          .to(el, 1, {
-            translateX: '0%',
-            scaleX: `100%`,
-            ease: "power1.inOut"
-          });
+        .set(el, {
+          translateX: `80%`,
+          scaleX: `100%`,
+        })
+        .to(el, 0.5, {
+          translateX: `-50%`,
+          scaleX: `200%`,
+          ease: "power1.inOut"
+        })
+        .to(el, 1, {
+          translateX: '0%',
+          scaleX: `100%`,
+          ease: "power1.inOut"
+        });
 
       timeline.play();
     },
@@ -36,21 +36,20 @@ export default defineNuxtComponent({
       const timeline = gsap.timeline();
 
       timeline
-          .set(el, {
-            translateX: `-100%`,
-            scaleX: `100%`,
-          })
-          .to(el, 0.2, {})
-          .to(el, 0.5, {
-            translateX: `30%`,
-            scaleX: `30%`,
-            ease: "power1.inOut"
-          })
-          .to(el, 1, {
-            translateX: '-20%',
-            scaleX: `80%`,
-            ease: "power1.inOut"
-          });
+        .set(el, {
+          translateX: `80%`,
+          scaleX: `100%`,
+        })
+        .to(el, 0.5, {
+          translateX: `-40%`,
+          scaleX: `50%`,
+          ease: "power1.inOut"
+        })
+        .to(el, 1.4, {
+          translateX: '-10%',
+          scaleX: `80%`,
+          ease: "power1.inOut"
+        });
 
       timeline.play();
     },
@@ -60,24 +59,24 @@ export default defineNuxtComponent({
       const timeline = gsap.timeline();
 
       timeline
-          .set(el, {
-            translateX: `80%`,
-            scaleX: `100%`,
-          })
-          .to(el, 0.5, {
-            translateX: `-40%`,
-            scaleX: `200%`,
-            ease: "power1.inOut"
-          })
-          .to(el, 0.8, {
-            translateX: `40%`,
-            ease: "power1.inOut"
-          })
-          .to(el, 1, {
-            translateX: '5%',
-            scaleX: `90%`,
-            ease: "power1.inOut"
-          });
+        .set(el, {
+          translateX: `80%`,
+          scaleX: `100%`,
+        })
+        .to(el, 0.5, {
+          translateX: `-40%`,
+          scaleX: `200%`,
+          ease: "power1.inOut"
+        })
+        .to(el, 0.8, {
+          translateX: `40%`,
+          ease: "power1.inOut"
+        })
+        .to(el, 1, {
+          translateX: '5%',
+          scaleX: `90%`,
+          ease: "power1.inOut"
+        });
 
       timeline.play();
     },
