@@ -1,7 +1,10 @@
 <template>
   <Container class="2xl:w-11/12">
-    <div class="flex flex-col gap-12 md:gap-32 mt-12 mb-40 md:mt-32 md:mb-48">
+    <div class="flex flex-col gap-12 md:gap-16 mt-12 mb-40 md:mt-32 md:mb-48">
       <HomePageHero />
+      <div class="flex justify-center">
+        <OpenQuickActionModalButton class="mb-4" />
+      </div>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
         <div class="flex flex-col gap-4 lg:gap-8" v-for="(col, index) in grids[1] || []" :key="index">
           <template v-for="item in col || []" :key="item.key">
