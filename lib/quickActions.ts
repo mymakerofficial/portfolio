@@ -4,8 +4,17 @@ export interface QuickActionGroup {
   items: QuickActionItem[];
 }
 
+export interface QuickActionExtendedGroup extends QuickActionGroup {
+  items: QuickActionExtendedItem[];
+}
+
+
 export interface QuickActionItem {
   displayName: string;
   key: string;
   action: () => void;
+}
+
+export interface QuickActionExtendedItem extends QuickActionItem {
+  keyWords: string[];
 }

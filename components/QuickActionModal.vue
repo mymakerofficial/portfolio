@@ -26,11 +26,13 @@
 </template>
 
 <script setup lang="ts">
+// @ts-ignore
 import SvgIcon from '@jamescoyle/vue-icon';
 import {mdiArrowDown, mdiArrowLeftBottom, mdiArrowUp} from '@mdi/js';
 import {onClickOutside, promiseTimeout, useEventBus, useMagicKeys, watchDebounced, whenever, get, set, useScrollLock } from "@vueuse/core";
 import {CompactProjectInfo, ProjectsGroup, ProjectsResponse} from "~/server/api/v1/projects";
-import {QuickActionGroup, QuickActionItem} from "~/lib/quickActions";
+import {QuickActionExtendedGroup, QuickActionGroup} from "~/lib/quickActions";
+import Fuse from "fuse.js";
 
 const props = defineProps({
   active: {
@@ -105,22 +107,16 @@ watchDebounced(
 );
 
 const buildResult = async (query: string) => {
+  const items: QuickActionExtendedGroup[] = [];
+  const projectsResult: QuickActionGroup[] = [];
   const result: QuickActionGroup[] = [];
-
-  if (useRoute().meta.quickActions) {
-    result.push({
-      displayName: "Quick Actions",
-      key: "quick-actions",
-      items: useRoute().meta.quickActions as QuickActionItem[]
-    });
-  }
 
   // deal with projects
   const projects = await getProjects(query);
   if (projects) {
     if (projects.resultType === 'grouped') {
       for (const group of projects.data as ProjectsGroup[]) {
-        result.push({
+        projectsResult.push({
           displayName: `Projects using ${group.group.displayName}`,
           key: `projects-${group.group.slug}`,
           items: group.projects.map((project) => ({
@@ -133,7 +129,7 @@ const buildResult = async (query: string) => {
         });
       }
     } else {
-      result.push({
+      projectsResult.push({
         displayName: query === "" ? 'Recommended Projects' : 'Projects',
         key: 'projects',
         items: (projects.data as CompactProjectInfo[]).map((project) => ({
@@ -147,13 +143,31 @@ const buildResult = async (query: string) => {
     }
   }
 
-  result.push({
+  // register all items
+
+  items.push({
+    displayName: 'Quick Actions',
+    key: 'quick-actions',
+    items: [
+      {
+        displayName: 'Copy Link to Clipboard',
+        key: 'copy-link',
+        keyWords: ['copy', 'link', 'share', 'url'],
+        action: () => {
+          navigator.clipboard.writeText(window.location.href);
+        }
+      },
+    ]
+  });
+
+  items.push({
     displayName: 'Navigation',
     key: 'navigation',
     items: [
       {
         displayName: 'Home',
         key: 'home',
+        keyWords: ['home', 'dashboard'],
         action: () => {
           useRouter().push('/');
         }
@@ -161,6 +175,7 @@ const buildResult = async (query: string) => {
       {
         displayName: 'Projects',
         key: 'projects',
+        keyWords: ['projects', 'project', 'list'],
         action: () => {
           useRouter().push('/projects');
         }
@@ -168,7 +183,41 @@ const buildResult = async (query: string) => {
     ]
   });
 
-  set(groups, result);
+  if (query !== "") {
+    // make list of items
+    const itemsFlat = items.flatMap((group) => group.items);
+
+    // search in items
+    const searchRes = new Fuse(itemsFlat, {
+      keys: [
+        { name: 'displayName', weight: 2, getFn: (item) => item.displayName },
+        { name: 'keyWords', weight: 0.5, getFn: (item) => item.keyWords },
+      ],
+      threshold: 0.4,
+    }).search(query);
+
+    // rebuild groups with search results
+    const filteredList = items.map((group) => ({
+      ...group,
+      items: group.items.filter((item) => searchRes.map((res) => res.item.key).includes(item.key))
+    })).filter((group) => group.items.length > 0);
+
+    // add groups to result
+    result.push(...filteredList);
+
+    // add projects in second position if any exist
+    if (projectsResult.length > 0 && projectsResult[0].items.length > 0) {
+      result.splice(1, 0, ...projectsResult);
+    }
+  }
+
+  // if no results, add projects and all items
+  if (result.length === 0) {
+    result.push(...projectsResult);
+    result.push(...items);
+  }
+
+  set(groups, result as QuickActionGroup[]);
 };
 
 const close = () => {
