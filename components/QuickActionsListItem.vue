@@ -1,5 +1,5 @@
 <template>
-  <div @click="trigger" :data-active="active" @mouseover="onMouseOver" ref="el" class="mx-1.5 p-3 data-[active=true]:bg-gray-100 dark:data-[active=true]:bg-gray-700 focus:outline-0 rounded-lg transition-colors ease-in-out duration-200 cursor-pointer">
+  <div @click="trigger" :data-active="active" @mouseover="onMouseOver" ref="el" class="mx-1.5 p-3 focus:outline-0 rounded-lg transition-colors ease-in-out duration-200 cursor-pointer">
     <span class="flex flex-col md:flex-row gap-2 md:items-center">
       <span class="text-sm font-medium text-gray-600 dark:text-gray-200 truncate">{{ item.displayName }}</span>
     </span>
@@ -40,4 +40,9 @@ whenever(active, () => {
 const onMouseOver = () => {
   emit("updateActiveItem", props.item.key);
 }
+
+defineExpose({
+  el,
+  item: props.item,
+})
 </script>

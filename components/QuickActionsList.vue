@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-2">
-    <QuickActionsListItem v-for="item in items" :key="item.key" :item="item" :active-item-key="activeItemKey" @update-active-item="updateActiveItem" @action-triggered="onActionTriggered" />
+    <QuickActionsListItem v-for="item in items" :key="item.key" ref="itemComponents" :item="item" :active-item-key="activeItemKey" @update-active-item="updateActiveItem" @action-triggered="onActionTriggered" />
   </div>
 </template>
 
@@ -23,4 +23,10 @@ const onActionTriggered = (i: QuickActionItem) => {
 const updateActiveItem = (key: string) => {
   emit("updateActiveItem", key);
 }
+
+const itemComponents = ref();
+
+defineExpose({
+  itemComponents
+})
 </script>

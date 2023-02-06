@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-2">
     <h1 class="mx-4 text-sm font-medium text-gray-400 dark:text-gray-600">{{ group.displayName }}</h1>
-    <QuickActionsList :items="group.items" @action-triggered="onActionTriggered" :active-item-key="activeItemKey" @update-active-item="updateActiveItem" />
+    <QuickActionsList :items="group.items" ref="listComponent" @action-triggered="onActionTriggered" :active-item-key="activeItemKey" @update-active-item="updateActiveItem" />
   </div>
 </template>
 
@@ -24,4 +24,10 @@ const onActionTriggered = (i: QuickActionItem) => {
 const updateActiveItem = (key: string) => {
   emit("updateActiveItem", key);
 }
+
+const listComponent = ref();
+
+defineExpose({
+  listComponent
+})
 </script>
