@@ -119,7 +119,7 @@ watchDebounced(
     async (newQuery) => {
       await buildResult(newQuery);
     },
-    { debounce: 500, maxWait: 1000 },
+    { debounce: 500, maxWait: 2000 },
 );
 
 const buildResult = async (query: string) => {
