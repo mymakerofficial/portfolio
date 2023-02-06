@@ -12,7 +12,8 @@ import {get, whenever} from "@vueuse/core";
 
 const props = defineProps<{
   item: QuickActionItem;
-  activeItemKey: string;
+  groupKey: string;
+  activeCombinedKey: string;
 }>()
 
 const emit = defineEmits([
@@ -29,7 +30,11 @@ const trigger = () => {
 }
 
 const active = computed(() => {
-  return props.item.key === props.activeItemKey;
+  return props.item.key === props.activeCombinedKey.split(':')[1];
+})
+
+const combinedKey = computed(() => {
+  return `${props.groupKey}:${props.item.key}`;
 })
 
 whenever(active, () => {
@@ -38,11 +43,12 @@ whenever(active, () => {
 })
 
 const onMouseOver = () => {
-  emit("updateActiveItem", props.item.key);
+  emit("updateActiveItem", combinedKey);
 }
 
 defineExpose({
   el,
   item: props.item,
+  combinedKey
 })
 </script>

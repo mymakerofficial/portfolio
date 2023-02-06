@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-2">
-    <QuickActionsListItem v-for="item in items" :key="item.key" ref="itemComponents" :item="item" :active-item-key="activeItemKey" @update-active-item="updateActiveItem" @action-triggered="onActionTriggered" />
+    <QuickActionsListItem v-for="item in items" :key="item.key" ref="itemComponents" :item="item" :group-key="groupKey" :active-combined-key="activeCombinedKey" @update-active-item="updateActiveItem" @action-triggered="onActionTriggered" />
   </div>
 </template>
 
@@ -9,7 +9,8 @@ import { QuickActionItem } from "~~/lib/quickActions";
 
 const props = defineProps<{
   items: QuickActionItem[];
-  activeItemKey: string;
+  groupKey: string;
+  activeCombinedKey: string;
 }>()
 
 const emit = defineEmits([

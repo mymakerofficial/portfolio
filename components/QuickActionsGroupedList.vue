@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-4" ref="el">
     <QuickActionListItemHighlight :active-element="activeItemElement" />
-    <QuickActionsGroup v-for="group in groups" :key="group.key" ref="groupComponents" :group="group" :active-item-key="activeItemKey" @action-triggered="onActionTriggered" @update-active-item="updateActiveItem" />
+    <QuickActionsGroup v-for="group in groups" :key="group.key" ref="groupComponents" :group="group" :active-combined-key="activeCombinedKey" @action-triggered="onActionTriggered" @update-active-item="updateActiveItem" />
   </div>
 </template>
 
@@ -27,12 +27,16 @@ const groupComponents = ref();
 
 const activeItemIndex = ref(0);
 
-const flatItems = computed(() => {
-  return props.groups.flatMap(g => g.items);
+const combinedKeysList = computed((): string[] => {
+  return props.groups.map((group) => {
+    return group.items.map((item) => {
+      return `${group.key}:${item.key}`;
+    })
+  }).flat();
 })
 
-const activeItemKey = computed((): string => {
-  return get(flatItems)[get(activeItemIndex)].key;
+const activeCombinedKey = computed((): string => {
+  return get(combinedKeysList)[get(activeItemIndex)];
 })
 
 const activeItemElement = computed((): HTMLElement | null => {
@@ -40,7 +44,7 @@ const activeItemElement = computed((): HTMLElement | null => {
 
   return get(groupComponents).map((g: any) => {
     return get(g.listComponent.itemComponents).find((i: any) => {
-      return get(i.item).key === get(activeItemKey);
+      return get(i.combinedKey) === get(activeCombinedKey);
     })
   }).find((i: any) => {
     return i !== undefined;
@@ -48,7 +52,7 @@ const activeItemElement = computed((): HTMLElement | null => {
 })
 
 const updateActiveItem = (key: string) => {
-  const index = flatItems.value.findIndex(i => i.key === key);
+  const index = combinedKeysList.value.findIndex(i => i.key === key);
   set(activeItemIndex, index);
 }
 
@@ -79,7 +83,7 @@ const up = () => {
 }
 
 const down = () => {
-  if (get(activeItemIndex) < get(flatItems).length - 1) {
+  if (get(activeItemIndex) < get(combinedKeysList).length - 1) {
     set(activeItemIndex, get(activeItemIndex) + 1);
   } else {
     emit("overflowBottom");
@@ -87,7 +91,7 @@ const down = () => {
 }
 
 const trigger = () => {
-  const item = get(flatItems)[get(activeItemIndex)];
+  const item = get(combinedKeysList)[get(activeItemIndex)];
   item.action();
   emit("actionTriggered", item);
 }
@@ -97,7 +101,7 @@ defineExpose({
   down,
   trigger,
   activeItemElement,
-  activeItemKey,
+  activeCombinedKey: activeCombinedKey,
   activeItemIndex,
 })
 </script>
