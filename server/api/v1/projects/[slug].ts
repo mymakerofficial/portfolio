@@ -90,7 +90,7 @@ export default cachedEventHandler(
       summary: projectData.summary,
       bodyProse: projectData.bodyProse as JSONContent,
       type: projectData.type?.shortDisplayName || projectData.type?.displayName || 'Project',
-      thumbnailUrl: projectData.thumbnailPath ? `/api/v1/projects/${projectData.slug}/thumbnail` : null,
+      thumbnailUrl: projectData.thumbnailPath ? `/cdn/${projectData.thumbnailPath.replace(/^\//, '')}` : null,
       websiteUrl: projectData.url,
       releaseDate: projectData.releaseDate,
       startedDate: projectData.startedDate,
