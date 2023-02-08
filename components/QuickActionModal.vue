@@ -396,6 +396,10 @@ whenever(() => props.active, async () => {
 
   set(query, "");
   await buildResult("");
+
+  useTimeoutFn(() => {
+    get(groupedList).refreshHighlight();
+  }, 100);
 })
 
 // whenever the modal becomes inactive

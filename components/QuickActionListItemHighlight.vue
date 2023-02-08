@@ -38,4 +38,8 @@ const moveHighlight = () => {
     ease: "power2.inOut"
   })
 }
+
+defineExpose({
+  moveHighlight
+})
 </script>

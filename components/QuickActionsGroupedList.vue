@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-4" ref="el">
-    <QuickActionListItemHighlight :active-element="activeItemElement" />
+    <QuickActionListItemHighlight :active-element="activeItemElement" ref="highlight" />
     <QuickActionsGroup v-for="group in groups" :key="group.key" ref="groupComponents" :group="group" :active-combined-key="activeCombinedKey" @action-triggered="onActionTriggered" @update-active-item="updateActiveItem" />
   </div>
 </template>
@@ -24,6 +24,7 @@ const onActionTriggered = (i: QuickActionItem) => {
 const el = ref<HTMLElement>();
 
 const groupComponents = ref();
+const highlight = ref();
 
 const activeItemIndex = ref(0);
 
@@ -107,6 +108,10 @@ const trigger = () => {
   emit("actionTriggered", item);
 }
 
+const refreshHighlight = () => {
+  get(highlight).moveHighlight();
+}
+
 defineExpose({
   up,
   down,
@@ -115,6 +120,7 @@ defineExpose({
   activeCombinedKey,
   activeItemIndex,
   atTop,
-  atBottom
+  atBottom,
+  refreshHighlight
 })
 </script>
