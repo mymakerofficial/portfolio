@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import {PropType} from "@vue/runtime-core";
-import {ProjectsGroup} from "~/server/api/v1/grouped_projects";
+import {ProjectsGroup} from "~/server/api/v1/projects";
 
 export default defineNuxtComponent({
   props: {

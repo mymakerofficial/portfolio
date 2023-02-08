@@ -35,7 +35,6 @@
 import { useWindowSize, get } from "@vueuse/core";
 // @ts-ignore
 import { v4 as uuid } from "uuid";
-import {Ref} from "vue";
 
 enum CardTypes {
   Project = "project",
