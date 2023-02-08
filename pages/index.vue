@@ -5,7 +5,17 @@
       <div class="flex justify-center">
         <OpenQuickActionModalButton class="mb-4" />
       </div>
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
+      <div v-if="!showGrid" class="flex flex-col gap-4 lg:hidden">
+        <template v-for="item in list" :key="item.key">
+          <ProjectCard v-if="item.type === CardTypes.Project" :project="item.data" />
+          <MediaPlayerCard v-else-if="item.type === CardTypes.MediaPlayer" />
+          <GitHubCommitCard v-else-if="item.type === CardTypes.GitHubCommit" />
+          <PhoneBatteryCard v-else-if="item.type === CardTypes.PhoneBattery" />
+          <ClockCard v-else-if="item.type === CardTypes.Clock" />
+          <CurrentGameCard v-else-if="item.type === CardTypes.CurrentGame"/>
+        </template>
+      </div>
+      <div v-if="showGrid" class="hidden lg:grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
         <div class="flex flex-col gap-4 lg:gap-8" v-for="(col, index) in grids[1] || []" :key="index">
           <template v-for="item in col || []" :key="item.key">
             <ProjectCard v-if="item.type === CardTypes.Project" :project="item.data" />
@@ -22,8 +32,10 @@
 </template>
 
 <script setup lang="ts">
+import { useWindowSize, get } from "@vueuse/core";
 // @ts-ignore
 import { v4 as uuid } from "uuid";
+import {Ref} from "vue";
 
 enum CardTypes {
   Project = "project",
@@ -41,17 +53,17 @@ interface CardObject {
 }
 
 // fetch projects from api
-const { data: projects } = await useFetch('/api/v1/projects');
+const { data: projects } = await useFetch('/api/v1/projects?featured_first=true');
 
 // fetch fun cards order from api
 const { data: funCards } = await useFetch('/api/v1/fun/home_page_list');
 
-let projectsList: CardObject[] = [];
+const projectsList = ref<CardObject[]>([]);
 
 // add projects
-if (projects.value !== null) {
-  projects.value.data.forEach((project: any) => {
-    projectsList.push({
+if (get(projects) !== null) {
+  get(projects)!.data.forEach((project: any) => {
+    get(projectsList).push({
       type: CardTypes.Project,
       data: project,
       key: uuid(),
@@ -59,20 +71,15 @@ if (projects.value !== null) {
   });
 }
 
-// sort featured projects to the top
-const featuredProjects = projectsList.filter((item) => item.data.featured);
-const nonFeaturedProjects = projectsList.filter((item) => !item.data.featured);
-const sortedProjectsList = [...featuredProjects, ...nonFeaturedProjects];
-
 // make the list
-let list: CardObject[] = sortedProjectsList;
+const list = ref<CardObject[]>(get(projectsList));
 
 // add fun cards to the list
-if (funCards.value) {
+if (get(funCards) !== null) {
   let spliceIndex = 0;
 
-  funCards.value.forEach((type: any) => {
-    list.splice(spliceIndex, 0, {
+  get(funCards)!.forEach((type: any) => {
+    get(list).splice(spliceIndex, 0, {
       type: type as CardTypes,
       data: null,
       key: uuid(),
@@ -83,15 +90,21 @@ if (funCards.value) {
 }
 
 // generate grid
-const grids: CardObject[][][] = [];
+const grids = ref<CardObject[][][]>([]);
 for (let c = 1; c <= 3; c++) {
   const grid: CardObject[][] = [];
   for (let i = 0; i < c; i++) {
     grid.push([]);
   }
-  for (let i = 0; i < list.length; i++) {
-    grid[i % c].push(list[i]);
+  for (let i = 0; i < get(list).length; i++) {
+    grid[i % c].push(get(list)[i]);
   }
-  grids.push(grid);
+  get(grids).push(grid);
 }
+
+const { width: windowWidth } = useWindowSize()
+
+const showGrid = computed(() => {
+  return get(windowWidth) > 1024
+})
 </script>
