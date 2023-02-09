@@ -1,5 +1,5 @@
 import axios from "axios";
-import {getPageSettingCached} from "~/lib/checkPageSettings";
+import {getFunCardSettingsCached} from "~/lib/checkPageSettings";
 
 export interface PhoneBatteryResponse {
   batteryLevel: number | null;
@@ -8,28 +8,28 @@ export interface PhoneBatteryResponse {
 
 export default cachedEventHandler(
   async (): Promise<PhoneBatteryResponse> => {
-    const settingsData = await getPageSettingCached('enable-phone-battery') as { value: boolean };
+    const funCardSettings = await getFunCardSettingsCached();
 
     // if this endpoint is disabled, return null
-    if (!settingsData || settingsData?.value !== true) {
+    if (!(funCardSettings?.["phone-battery"]?.enabled)) {
       return {
         batteryLevel: null,
         charging: null,
       }
-    } else {
-      const levelResponse = await axios.get(
-        `${process.env.HOME_ASSISTANT_URL}/api/states/${process.env.HOME_ASSISTANT_PHONE_BATTERY_LEVEL_ENTITY_ID}`,
-        {
-          headers: {
-            "Authorization": `Bearer ${process.env.HOME_ASSISTANT_ACCESS_TOKEN}`,
-          }
-        }
-      );
+    }
 
-      return {
-        batteryLevel: levelResponse.data.state,
-        charging: false,
+    const levelResponse = await axios.get(
+      `${process.env.HOME_ASSISTANT_URL}/api/states/${process.env.HOME_ASSISTANT_PHONE_BATTERY_LEVEL_ENTITY_ID}`,
+      {
+        headers: {
+          "Authorization": `Bearer ${process.env.HOME_ASSISTANT_ACCESS_TOKEN}`,
+        }
       }
+    );
+
+    return {
+      batteryLevel: levelResponse.data.state,
+      charging: false,
     }
   },
   {

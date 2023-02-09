@@ -1,26 +1,28 @@
-import {createClient} from "@supabase/supabase-js";
-import {customCachedFunction} from "~/lib/customCache";
+import {supabase} from "~/lib/supabase";
 
-const supabase = createClient(
-  process.env.SUPABASE_URL || '',
-  process.env.SUPABASE_KEY || ''
-)
+export const getFunCardSettingsCached = cachedFunction(
+  async () => {
+    console.log('Fetching fun card settings');
 
-export const getPageSettingCached = customCachedFunction(
-  async (key: string): Promise<object | null> => {
-    console.log('Fetching page setting', key)
+    const { data, error } = await supabase
+      .from('fun_card_settings')
+      .select('key, enabled')
 
-    const { data } = await supabase
-      .from('page_settings')
-      .select('value')
-      .eq('key', key)
-      .single()
+    if (error) {
+      throw new Error("Error fetching fun card settings: " + error.message)
+    }
 
-    return data?.value || null;
+    let returnData: Record<string, { enabled: boolean }> = {};
+    data.forEach((item) => {
+      returnData[item.key] = { enabled: item.enabled };
+    });
+
+    return returnData;
   },
   {
-    name: 'page-settings',
-    maxAge: Number(process.env.CACHE_MAX_AGE_SETTINGS) || 600,
-    getKeys: (key: string) => key,
+    name: 'fun-card-settings',
+    maxAge: Number(process.env.CACHE_MAX_AGE_FUN) || 600,
+    staleMaxAge: -1,
+    swr: true,
   }
-);
+)

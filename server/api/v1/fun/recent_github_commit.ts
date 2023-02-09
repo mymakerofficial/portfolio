@@ -1,5 +1,5 @@
 import { Octokit } from "octokit";
-import {getPageSettingCached} from "~/lib/checkPageSettings";
+import {getFunCardSettingsCached} from "~/lib/checkPageSettings";
 
 const octokit = new Octokit({
   auth: process.env.GITHUB_ACCESS_TOKEN,
@@ -72,10 +72,10 @@ export const getRecentGithubCommitCached = cachedFunction(
 )
 
 export default defineEventHandler(async (): Promise<RecentGithubCommitResponse> => {
-  const settingsData = await getPageSettingCached('enable-recent-github-commit') as { value: boolean };
+  const funCardSettings = await getFunCardSettingsCached();
 
   // if this endpoint is disabled, return null
-  if (!settingsData || settingsData?.value !== true) {
+  if (!(funCardSettings?.["recent-github-commit"]?.enabled)) {
     return {
       eventId: null,
       eventType: null,
@@ -95,7 +95,7 @@ export default defineEventHandler(async (): Promise<RecentGithubCommitResponse> 
       },
       createdAt: null
     }
-  } else {
-    return await getRecentGithubCommitCached() as RecentGithubCommitResponse;
   }
+
+  return await getRecentGithubCommitCached() as RecentGithubCommitResponse;
 });

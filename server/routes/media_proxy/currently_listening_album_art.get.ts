@@ -8,5 +8,5 @@ export default defineEventHandler(async (event) => {
         throw new Error('No album art available');
    }
 
-   return h3SendMediaFromUrl(event, listeningData.albumArtUrl);
+  return h3SendMediaFromUrl(event, listeningData.albumArtUrl);
 });

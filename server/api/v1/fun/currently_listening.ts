@@ -1,5 +1,5 @@
 import axios from "axios";
-import {getPageSettingCached} from "~/lib/checkPageSettings";
+import {getFunCardSettingsCached} from "~/lib/checkPageSettings";
 import {customCachedFunction} from "~/lib/customCache";
 
 export interface CurrentlyListeningResponse {
@@ -48,7 +48,7 @@ export const getCurrentlyListening = async (): Promise<CurrentlyListeningRespons
   return {
     contentProvider: !data.state || data.state !== "idle" ? provider : null,
     contentId: data.attributes.media_content_id ?? null,
-    state: data.state ?? null,
+    state: (data.state ?? null) as "idle" | "playing" | "paused" | null,
     artistName: data.attributes.media_artist ?? null,
     albumArtistName: data.attributes.media_album_artist || data.attributes.media_artist || null,
     trackTitle: data.attributes.media_title ?? null,
@@ -83,10 +83,10 @@ export const getCurrentlyListeningCached = customCachedFunction(
 );
 
 export default defineEventHandler(async (): Promise<CurrentlyListeningResponse> => {
-  const settingsData = await getPageSettingCached('enable-currently-listening') as { value: boolean };
+  const funCardSettings = await getFunCardSettingsCached();
 
   // if this endpoint is disabled, return null
-  if (!settingsData || settingsData?.value !== true) {
+  if (!(funCardSettings?.["currently-listening"]?.enabled)) {
     return {
       contentProvider: null,
       contentId: null,
@@ -103,12 +103,12 @@ export default defineEventHandler(async (): Promise<CurrentlyListeningResponse> 
       shareUrl: null,
       generatedAt: new Date().toISOString(),
     };
-  } else {
-    const res = await getCurrentlyListeningCached() as CurrentlyListeningResponse;
-
-    return {
-      ...res,
-      albumArtUrl: res.albumArtUrl ? `/api/v1/fun/currently_listening/media_proxy_album_art?i=${res.contentId}` : null,
-    };
   }
+
+  const res = await getCurrentlyListeningCached() as CurrentlyListeningResponse;
+
+  return {
+    ...res,
+    albumArtUrl: res.albumArtUrl ? `/media_proxy/currently_listening_album_art?i=${res.contentId}` : null,
+  };
 });

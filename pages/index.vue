@@ -5,7 +5,7 @@
       <div class="flex justify-center">
         <OpenQuickActionModalButton class="mb-4" />
       </div>
-      <div v-if="!showGrid" class="flex flex-col gap-4 lg:hidden">
+      <div v-if="!showGrid || windowWidth === Infinity" class="flex flex-col gap-4 lg:hidden">
         <template v-for="item in list" :key="item.key">
           <ProjectCard v-if="item.type === CardTypes.Project" :project="item.data" />
           <MediaPlayerCard v-else-if="item.type === CardTypes.MediaPlayer" />
@@ -14,7 +14,7 @@
           <ClockCard v-else-if="item.type === CardTypes.Clock" />
         </template>
       </div>
-      <div v-if="showGrid" class="hidden lg:grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
+      <div v-if="showGrid || windowWidth === Infinity" class="hidden lg:grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
         <div class="flex flex-col gap-4 lg:gap-8" v-for="(col, index) in grids[1] || []" :key="index">
           <template v-for="item in col || []" :key="item.key">
             <ProjectCard v-if="item.type === CardTypes.Project" :project="item.data" />

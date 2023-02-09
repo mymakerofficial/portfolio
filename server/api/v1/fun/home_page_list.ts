@@ -1,7 +1,6 @@
 import {getCurrentlyListeningCached} from "~/server/api/v1/fun/currently_listening";
 import {getRecentGithubCommitCached} from "~/server/api/v1/fun/recent_github_commit";
-import {getPageSettingCached} from "~/lib/checkPageSettings";
-import {customCachedFunction} from "~/lib/customCache";
+import {getFunCardSettingsCached} from "~/lib/checkPageSettings";
 
 const getHomePageList = async () => {
   console.log("Generating home page fun card order");
@@ -10,11 +9,10 @@ const getHomePageList = async () => {
 
   let returnList = [];
 
-  for (let i = 0; i < availableCards.length; i++) {
-    // check if the card is enabled
-    const settingsData = await getPageSettingCached(`enable-${availableCards[i]}`) as { value: boolean };
+  const funCardSettings = await getFunCardSettingsCached();
 
-    if (settingsData?.value !== true) {
+  for (let i = 0; i < availableCards.length; i++) {
+    if (!(funCardSettings?.[availableCards[i]]?.enabled)) {
       // if the card is disabled, remove it from the list
       availableCards.splice(i, 1);
     }
@@ -27,6 +25,11 @@ const getHomePageList = async () => {
       // remove from the list of available cards and add it to the return list
       availableCards.splice(availableCards.indexOf("currently-listening"), 1);
       returnList.push("currently-listening");
+    }
+
+    if (currentlyListeningData.state === "idle" || currentlyListeningData.state === null) {
+      // remove from the list of available cards
+      availableCards.splice(availableCards.indexOf("currently-listening"), 1);
     }
   }
 
@@ -58,14 +61,13 @@ const getHomePageList = async () => {
   return returnList;
 }
 
-const getHomePageListCached = customCachedFunction(
-  getHomePageList,
+export default defineCachedEventHandler(
+  async () => {
+    return await getHomePageList();
+  },
   {
     name: "home-page-list",
     maxAge: 60 * 10, // 10 minutes
+    staleMaxAge: -1,
   }
 );
-
-export default defineEventHandler(async () => {
-  return await getHomePageListCached();
-});
