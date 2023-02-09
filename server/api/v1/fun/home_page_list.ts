@@ -6,7 +6,7 @@ import {customCachedFunction} from "~/lib/customCache";
 const getHomePageList = async () => {
   console.log("Generating home page fun card order");
 
-  const availableCards = ["currently-listening", "recent-github-commit", "phone-battery", "currently-playing"]
+  const availableCards = ["currently-listening", "recent-github-commit", "phone-battery"]
 
   let returnList = [];
 

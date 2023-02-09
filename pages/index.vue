@@ -12,7 +12,6 @@
           <GitHubCommitCard v-else-if="item.type === CardTypes.GitHubCommit" />
           <PhoneBatteryCard v-else-if="item.type === CardTypes.PhoneBattery" />
           <ClockCard v-else-if="item.type === CardTypes.Clock" />
-          <CurrentGameCard v-else-if="item.type === CardTypes.CurrentGame"/>
         </template>
       </div>
       <div v-if="showGrid" class="hidden lg:grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
@@ -23,7 +22,6 @@
             <GitHubCommitCard v-else-if="item.type === CardTypes.GitHubCommit" />
             <PhoneBatteryCard v-else-if="item.type === CardTypes.PhoneBattery" />
             <ClockCard v-else-if="item.type === CardTypes.Clock" />
-            <CurrentGameCard v-else-if="item.type === CardTypes.CurrentGame"/>
           </template>
         </div>
       </div>
@@ -42,7 +40,6 @@ enum CardTypes {
   GitHubCommit = "recent-github-commit",
   PhoneBattery = "phone-battery",
   Clock = "current-time",
-  CurrentGame = "currently-playing",
 }
 
 interface CardObject {
