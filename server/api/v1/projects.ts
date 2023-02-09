@@ -18,7 +18,7 @@ interface ProjectsTechnologyRaw {
   }
 }
 
-interface ProjectsRawData {
+export interface ProjectsRawData {
   slug: string;
   displayName: string;
   summary: string;
