@@ -1,45 +1,21 @@
-import {createClient} from '@supabase/supabase-js'
 import {Octokit} from "octokit";
 import { JSONContent } from "@tiptap/core"
+import {getProjectsRawDataCached} from "~/lib/projects";
 
 const octokit = new Octokit({
   auth: process.env.GITHUB_ACCESS_TOKEN,
 });
 
-const supabase = createClient(
-  process.env.SUPABASE_URL || '',
-  process.env.SUPABASE_KEY || ''
-)
-
 export default cachedEventHandler(
   async (event) => {
-    console.log('Fetching project', event.context.params.slug)
+    const projectsRaw = await getProjectsRawDataCached();
 
-    const { data: projectData, error } = await supabase
-      .from('projects')
-      .select('' +
-        'slug, ' +
-        'displayName: display_name, ' +
-        'summary, ' +
-        'bodyProse: body_text_prosemirror, ' +
-        'type: type_id ( displayName: display_name, shortDisplayName: short_display_name ), ' +
-        'url, ' +
-        'releaseDate: released_at_date, ' +
-        'startedDate: started_at_date, ' +
-        'detailsDisclosureHeading: details_disclosure_heading, ' +
-        'detailsDisclosureText: details_disclosure_text, ' +
-        'tags ( slug, displayName: display_name ), ' +
-        'collaborators: people ( slug, displayName: display_name, websiteUrl: website_url ), ' +
-        'technologies ( slug, displayName: display_name, shortDisplayName: short_display_name, type: technology_type_id ( slug, displayName: display_name, shortDisplayName: short_display_name ) ), ' +
-        'githubRepo: github_repo, ' +
-        'keepGithubRepoSecret: keep_github_repo_secret, ' +
-        'thumbnailPath: thumbnail_path'
-      )
-      .eq('slug', event.context.params.slug)
-      .single() as any;
+    console.log('projectsRaw', projectsRaw)
 
-    if (!projectData || error) {
-      throw new Error(error.message || 'Error fetching project');
+    const projectData = projectsRaw?.find((project) => project.slug === event.context.params.slug);
+
+    if (!projectData) {
+      throw new Error('Project not found');
     }
 
     let technologiesOut: any[] = []
@@ -109,6 +85,7 @@ export default cachedEventHandler(
   {
     name: "project",
     maxAge: Number(process.env.CACHE_MAX_AGE_PROJECTS) || 3600,
+    staleMaxAge: -1,
     // @ts-ignore
     getKeys: (event): string => {
       return event.context.params.slug;
