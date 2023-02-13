@@ -1,5 +1,5 @@
 <template>
-  <a :href="data?.repo?.htmlUrl" target="_blank" v-if="!hide">
+  <a :href="data.repo?.htmlUrl" target="_blank">
     <Card class="p-8 shadow-gray-500/10 dark:shadow-gray-600/10 bg-gray-50 dark:bg-gray-800 overflow-hidden">
       <div v-if="data">
         <div class="flex flex-col gap-4">
@@ -32,46 +32,23 @@
 </template>
 
 <script lang="ts">
-import { RecentGithubCommitResponse } from "~/server/api/v1/fun/recent_github_commit";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
+</script>
 
-export default defineNuxtComponent({
-  data() {
-    return {
-      data: null as RecentGithubCommitResponse | null,
-    }
-  },
+<script setup lang="ts">
+import { RecentGithubCommitResponse } from "~/server/api/v1/fun/recent_github_commit";
 
-  computed: {
-    relativeTime() { // time is relative, you get me fam?
-      if (this.data?.createdAt) {
-        return dayjs(this.data.createdAt).fromNow();
-      }
-      return null;
-    },
-    hide() {
-      if (!this.data) {
-        return false;
-      }
-      return this.data.eventId === null;
-    }
-  },
+const props = defineProps<{
+  data: RecentGithubCommitResponse
+}>();
 
-  methods: {
-    async fetchData() {
-      this.data = (
-          await useFetch<RecentGithubCommitResponse>("/api/v1/fun/recent_github_commit")
-      ).data as unknown as RecentGithubCommitResponse;
-    },
-  },
-
-  mounted() {
-    this.$nextTick(() => {
-      this.fetchData();
-    })
+const relativeTime = computed(() => {
+  if (props.data?.createdAt) {
+    return dayjs(props.data.createdAt).fromNow();
   }
-})
+  return null;
+});
 </script>

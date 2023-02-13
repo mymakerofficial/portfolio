@@ -1,5 +1,5 @@
 <template>
-  <a :href="listening?.shareUrl" target="_blank" v-if="!hide">
+  <a :href="listening?.shareUrl" target="_blank">
     <Card class="p-8 shadow-green-500/10 dark:shadow-green-600/10 bg-green-50 dark:bg-green-800 overflow-hidden">
       <div v-if="listening" class="flex flex-col lg:flex-row gap-4">
         <div v-if="listening.albumArtUrl" class="w-28 h-28 overflow-hidden">
@@ -38,80 +38,58 @@
     </Card>
   </a>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import {CurrentlyListeningResponse} from "~/server/api/v1/fun/currently_listening";
+import {get, set, watchTriggerable} from "@vueuse/core";
 
-export default defineNuxtComponent({
-  data() {
-    return {
-      listening: null as CurrentlyListeningResponse | null,
-      startTime: new Date() as Date,
-      currentTime: new Date() as Date,
-      refreshing: false,
-      mediaHasEnded: false,
-    }
-  },
+const props = defineProps<{
+  data: CurrentlyListeningResponse
+}>();
 
-  computed: {
-    playbackPosition() {
-      if (this.listening?.state === "playing") {
-        // get playback position and compensate for caching
-        const playbackPosition = (this.listening?.playbackPosition || 0) + (this.startTime.getTime() - new Date(this.listening.generatedAt).getTime()) / 1000;
-        const timeDifference = (this.currentTime.getTime() - this.startTime.getTime()) / 1000;
-        return playbackPosition + timeDifference;
-      } else {
-        return this.listening?.playbackPosition || 0;
-      }
-    },
-    hide() {
-      if (!this.listening) {
-        return false;
-      }
-      return this.listening.state !== "playing" && this.listening.state !== "paused";
-    }
-  },
+const listening = ref<CurrentlyListeningResponse>(props.data);
 
-  watch: {
-    playbackPosition(value) {
-      if (!this.listening?.playbackDuration) return;
-      if (value > this.listening.playbackDuration && !this.mediaHasEnded) {
-        this.mediaHasEnded = true;
-        console.log("Playback position is greater than playback duration, refreshing");
-        this.refresh();
-      }
-    },
-    listening: {
-      handler(newValue, oldValue) {
-        if (newValue?.contentId === oldValue?.contentId && newValue?.playbackRepeat !== "one" && newValue?.state !== "paused") {
-          console.log("Content ID is the same, trying again in 10 seconds");
-          setTimeout(() => {
-            this.refresh();
-          }, 10000)
-        } else {
-          this.mediaHasEnded = false;
-          this.startTime = new Date();
-        }
-      },
-      deep: true,
-    }
-  },
+const currentTime = ref(new Date());
+const startTime = ref(new Date());
 
-  methods: {
-    async refresh() {
-      this.refreshing = true;
-      this.listening = (await useFetch<CurrentlyListeningResponse>("/api/v1/fun/currently_listening")).data as unknown as CurrentlyListeningResponse;
-      this.refreshing = false;
-    }
-  },
-
-  mounted() {
-    setInterval(() => {
-      this.currentTime = new Date();
-    }, 1000);
-
-    this.$nextTick(() => {
-      this.refresh();
-    });
+const playbackPosition = computed(() => {
+  if (get(listening).state === "playing") {
+    // get playback position and compensate for caching
+    const playbackPosition = (get(listening).playbackPosition || 0) + (get(startTime).getTime() - new Date(get(listening).generatedAt).getTime()) / 1000;
+    const timeDifference = (get(currentTime).getTime() - get(startTime).getTime()) / 1000;
+    return playbackPosition + timeDifference;
+  } else {
+    return get(listening).playbackPosition || 0;
   }
+});
+
+const refresh = async () => {
+  const { data } = await useFetch<CurrentlyListeningResponse>("/api/v1/fun/currently_listening");
+
+  set(listening, get(data));
+};
+
+const { trigger: startPlayback} = watchTriggerable(listening, () => {
+  set(startTime, new Date());
+
+  // wait until invalidAt has passed
+  const waitTime = new Date(get(listening).invalidAt).getTime() - new Date().getTime();
+
+  console.info(`MediaPlayerCard: Waiting ${waitTime / 1000}s until refreshing`)
+
+  if (get(listening).invalidAt) {
+    setTimeout(() => {
+      refresh();
+    }, waitTime);
+  }
+})
+
+onMounted(() => {
+  setInterval(() => {
+    set(currentTime, new Date());
+  }, 1000);
+
+  console.info("MediaPlayerCard: Initialised")
+
+  startPlayback();
 })
 </script>

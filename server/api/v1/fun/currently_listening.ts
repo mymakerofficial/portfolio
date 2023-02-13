@@ -17,6 +17,7 @@ export interface CurrentlyListeningResponse {
   playbackRepeat: string | null,
   shareUrl: string | null,
   generatedAt: string,
+  invalidAt: string,
 }
 
 export const getCurrentlyListening = async (): Promise<CurrentlyListeningResponse> => {
@@ -45,6 +46,13 @@ export const getCurrentlyListening = async (): Promise<CurrentlyListeningRespons
     return null;
   }
 
+  let invalidAt = new Date(Date.now() + (process.env.DEFAULT_CURRENTLY_PLAYING_INVALIDATION_TIME as unknown as number || 120) * 1000)
+
+  if (data.state === "playing") {
+    // time when the song will be finished
+    invalidAt = new Date(Date.now() + (data.attributes.media_duration - data.attributes.media_position) * 1000);
+  }
+
   return {
     contentProvider: !data.state || data.state !== "idle" ? provider : null,
     contentId: data.attributes.media_content_id ?? null,
@@ -60,6 +68,7 @@ export const getCurrentlyListening = async (): Promise<CurrentlyListeningRespons
     playbackRepeat: data.attributes.repeat ?? null,
     shareUrl: getShareUrl(),
     generatedAt: new Date().toISOString(),
+    invalidAt: invalidAt.toISOString(),
   };
 }
 
@@ -70,11 +79,9 @@ export const getCurrentlyListeningCached = customCachedFunction(
   {
     name: 'currently-listening',
     maxAge: Number(process.env.CACHE_MAX_AGE_FUN) || 600,
-    invalidate: (data: CurrentlyListeningResponse, generatedAt: Date) => {
-      if (data.playbackDuration && data.playbackPosition) {
-        const timeDiff = Date.now() - new Date(generatedAt).getTime();
-        const timeRemainingInSong = ((data.playbackDuration - data.playbackPosition) * 1000);
-        return timeDiff > timeRemainingInSong;
+    invalidate: (data: CurrentlyListeningResponse) => {
+      if (data.invalidAt) {
+        return new Date().getTime() > new Date(data.invalidAt).getTime();
       } else {
         return false;
       }
@@ -102,6 +109,7 @@ export default defineEventHandler(async (): Promise<CurrentlyListeningResponse> 
       playbackRepeat: null,
       shareUrl: null,
       generatedAt: new Date().toISOString(),
+      invalidAt: new Date(Date.now() + (process.env.DEFAULT_CURRENTLY_PLAYING_INVALIDATION_TIME as unknown as number || 120) * 1000).toISOString(),
     };
   }
 

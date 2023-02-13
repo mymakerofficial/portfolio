@@ -1,10 +1,10 @@
 <template>
-  <Card class="shadow-gray-500/10 dark:shadow-gray-600/10 bg-gray-50 dark:bg-gray-800 overflow-hidden" v-if="!hide">
-    <div v-if="battery">
-      <div class="absolute h-full bg-gray-200/30 dark:bg-gray-400/10" :style="{ width: `${ battery.batteryLevel }%` }" />
+  <Card class="shadow-gray-500/10 dark:shadow-gray-600/10 bg-gray-50 dark:bg-gray-800 overflow-hidden">
+    <div v-if="data">
+      <div class="absolute h-full bg-gray-200/30 dark:bg-gray-400/10" :style="{ width: `${ data.batteryLevel }%` }" />
       <div class="p-8 flex flex-col gap-4">
         <h2 class="text-md font-medium text-gray-600 dark:text-gray-100">Phone Battery</h2>
-        <h1 class="text-4xl font-bold text-gray-600 dark:text-gray-100">{{ battery.batteryLevel !== null ? `${battery.batteryLevel}%` : "N/A" }}</h1>
+        <h1 class="text-4xl font-bold text-gray-600 dark:text-gray-100">{{ data.batteryLevel !== null ? `${data.batteryLevel}%` : "N/A" }}</h1>
       </div>
     </div>
     <div v-else class="p-8 flex flex-col gap-4">
@@ -14,35 +14,10 @@
   </Card>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {PhoneBatteryResponse} from "~/server/api/v1/fun/phone_battery";
 
-export default defineNuxtComponent({
-  data() {
-    return {
-      battery: null as PhoneBatteryResponse | null,
-    }
-  },
-
-  computed: {
-    hide() {
-      if (!this.battery) {
-        return false;
-      }
-      return this.battery.batteryLevel === null;
-    }
-  },
-
-  methods: {
-    async fetchData() {
-      this.battery = (await useFetch<PhoneBatteryResponse>("/api/v1/fun/phone_battery")).data as unknown as PhoneBatteryResponse;
-    },
-  },
-
-  mounted() {
-    this.$nextTick(() => {
-      this.fetchData();
-    })
-  }
-})
+defineProps<{
+  data: PhoneBatteryResponse
+}>();
 </script>

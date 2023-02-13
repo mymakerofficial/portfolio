@@ -2,6 +2,8 @@ import {getCurrentlyListeningCached} from "~/server/api/v1/fun/currently_listeni
 import {getRecentGithubCommitCached} from "~/server/api/v1/fun/recent_github_commit";
 import {getFunCardSettingsCached} from "~/lib/checkPageSettings";
 
+// deprecated
+
 const getHomePageList = async () => {
   console.log("Generating home page fun card order");
 
