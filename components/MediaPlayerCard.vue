@@ -68,11 +68,20 @@ const refresh = async () => {
   set(listening, get(data));
 };
 
-const { trigger: startPlayback} = watchTriggerable(listening, () => {
-  set(startTime, new Date());
+const { trigger: startPlayback } = watchTriggerable(listening, (newValue, oldValue) => {
 
-  // wait until invalidAt has passed
-  const waitTime = new Date(get(listening).invalidAt).getTime() - new Date().getTime();
+  let waitTime = 120000;
+
+  if (newValue.state === "playing") {
+    // wait until invalidAt has passed
+    waitTime = new Date(newValue.invalidAt).getTime() - new Date().getTime();
+  }
+
+  if (newValue.state === "playing" && newValue.contentId === oldValue?.contentId && get(playbackPosition) > (newValue.playbackDuration || 0)) {
+    console.info("MediaPlayerCard: Playback ID is the same, but playback position is greater than playback duration. Refreshing in 10s");
+
+    waitTime = 10000;
+  }
 
   console.info(`MediaPlayerCard: Waiting ${waitTime / 1000}s until refreshing`)
 
@@ -81,6 +90,8 @@ const { trigger: startPlayback} = watchTriggerable(listening, () => {
       refresh();
     }, waitTime);
   }
+
+  set(startTime, new Date());
 })
 
 onMounted(() => {
