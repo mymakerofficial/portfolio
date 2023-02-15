@@ -113,5 +113,6 @@ export const getProjectsRawDataCached = cachedFunction(
   {
     name: 'projects-raw-data',
     maxAge: Number(process.env.CACHE_MAX_AGE_PROJECTS) || 3600,
+    staleMaxAge: -1,
   }
 );
