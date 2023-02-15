@@ -1,9 +1,8 @@
 <template>
   <Container class="2xl:w-11/12">
     <div class="flex flex-col gap-12 md:gap-16 mt-12 mb-40 md:mt-32 md:mb-48">
-      <HomePageHero />
-      <div class="flex justify-center">
-        <OpenQuickActionModalButton class="mb-4" />
+      <div class="md:mb-20">
+        <HomePageHero />
       </div>
       <div v-if="!showGrid || windowWidth === Infinity" class="flex flex-col gap-4 lg:hidden">
         <template v-for="item in list" :key="item.key">
@@ -27,6 +26,19 @@
           </template>
         </div>
       </div>
+      <div class="hidden md:block h-0.5 w-full">
+        <ShinyBackgroundGradient class="opacity-50 scale-x-75 -translate-x-32" />
+      </div>
+      <LazyClientOnly>
+        <div class="px-8 md:px-12 flex flex-col md:flex-row justify-between gap-8 md:items-center">
+          <div class="hidden md:block">
+            <ServicesStatusDisplayThingy />
+          </div>
+          <div class="hidden md:block">
+            <OpenQuickActionModalButton />
+          </div>
+        </div>
+      </LazyClientOnly>
     </div>
   </Container>
 </template>
@@ -53,7 +65,6 @@ interface CardItem {
 
 // fetch projects from api
 const { data: projects } = await useFetch('/api/v1/projects?featured_first=true');
-
 
 // create project cards
 const projectCards = ref<CardItem[]>([]);
