@@ -10,8 +10,6 @@ export default cachedEventHandler(
   async (event) => {
     const projectsRaw = await getProjectsRawDataCached();
 
-    console.log('projectsRaw', projectsRaw)
-
     const projectData = projectsRaw?.find((project) => project.slug === event.context.params.slug);
 
     if (!projectData) {
