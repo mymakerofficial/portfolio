@@ -1,6 +1,6 @@
 <template>
   <Container class="2xl:w-11/12">
-    <div class="flex flex-col gap-12 md:gap-16 mt-12 mb-40 md:mt-32 md:mb-48">
+    <div class="flex flex-col gap-12 md:gap-16 my-12 md:my-32">
       <div class="md:mb-20">
         <HomePageHero />
       </div>

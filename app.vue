@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import {NavBarOption} from "~/components/NavBarWrapper.vue";
-import {useMagicKeys, whenever} from "@vueuse/core";
+import {get, set, useMagicKeys, useScroll, whenever} from "@vueuse/core";
 
 const navBarOptions: NavBarOption[] = [
   { href: '/', label: 'home' },
@@ -27,12 +27,24 @@ const { ctrl_k } = useMagicKeys({
   },
 })
 
+const scrolledDown = ref(false);
+
 whenever(ctrl_k, () => {
-  quickActionModalActive.value = !quickActionModalActive.value;
+  set(quickActionModalActive, !get(quickActionModalActive));
 })
 
 let navBarActive = computed(() => {
-  return !quickActionModalActive.value;
+  return !get(quickActionModalActive) && !get(scrolledDown);
+})
+
+onMounted(() => {
+  // we need to do this here because the document is not available on the server
+
+  const { y: pageYScroll } = useScroll(document);
+
+  whenever(pageYScroll, (y) => {
+    set(scrolledDown, y > 69);
+  })
 })
 
 useHead({
