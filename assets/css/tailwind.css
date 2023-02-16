@@ -11,5 +11,13 @@
     font-weight: normal;
 }
 
+::-moz-selection {
+    @apply text-gray-900 bg-pink-200 dark:text-gray-50 dark:bg-pink-300;
+}
+
+::selection {
+    @apply text-gray-900 bg-pink-200 dark:text-gray-50 dark:bg-pink-300;
+}
+
 @tailwind components;
 @tailwind utilities;
