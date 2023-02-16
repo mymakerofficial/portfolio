@@ -10,12 +10,15 @@
 </template>
 
 <script setup lang="ts">
+// @ts-ignore
+import SvgIcon from '@jamescoyle/vue-icon';
+import { mdiHandWave, mdiLightbulb } from '@mdi/js';
 import {NavBarOption} from "~/components/NavBarWrapper.vue";
 import {get, set, useMagicKeys, useScroll, whenever} from "@vueuse/core";
 
 const navBarOptions: NavBarOption[] = [
-  { href: '/', label: 'home' },
-  { href: '/projects', label: 'projects' },
+  { href: '/', label: 'home', iconPath: mdiHandWave },
+  { href: '/projects', label: 'projects', iconPath: mdiLightbulb },
 ]
 
 let quickActionModalActive = ref(false);

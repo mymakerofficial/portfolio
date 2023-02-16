@@ -1,12 +1,13 @@
 <template>
   <NavBar :active-index="activeIndex" :active="active">
     <NavBarButton v-for="option in options" :key="option.label" :href="option.href">
-      <SvgIcon type="mdi" :path="option.iconPath" v-if="option.iconPath" />{{ option.label }}
+      <SvgIcon type="mdi" size="19" :path="option.iconPath" v-if="option.iconPath" />{{ option.label }}
     </NavBarButton>
   </NavBar>
 </template>
 
 <script lang="ts">
+// @ts-ignore
 import SvgIcon from '@jamescoyle/vue-icon';
 import {PropType} from "@vue/runtime-core";
 
