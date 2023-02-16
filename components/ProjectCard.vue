@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink :to="project.htmlUrl">
+  <NuxtLink :to="project.htmlUrl" class="rounded-lg">
     <Card class="p-8 md:p-12 bg-transparent shadow-transparent">
       <div class="flex flex-col gap-8">
         <div v-if="project.thumbnailUrl && project.featured" class="w-full aspect-video rounded-md overflow-hidden">

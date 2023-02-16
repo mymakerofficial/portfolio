@@ -21,7 +21,7 @@
             <h1 class="text-2xl md:text-4xl xl:text-5xl font-extrabold text-gray-800 dark:text-gray-100">{{ project?.displayName }}</h1>
           </div>
           <div class="lg:basis-1/3 lg:flex lg:justify-end" v-if="project?.websiteUrl">
-            <a :href="project?.websiteUrl" target="_blank">
+            <a :href="project?.websiteUrl" target="_blank" class="rounded-full">
               <Button>Visit Website</Button>
             </a>
           </div>

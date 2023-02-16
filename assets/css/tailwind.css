@@ -19,5 +19,9 @@
     @apply text-gray-900 bg-pink-200 dark:text-gray-50 dark:bg-pink-300;
 }
 
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+    @apply outline-none ring-2 ring-gray-500/50;
+}
+
 @tailwind components;
 @tailwind utilities;
