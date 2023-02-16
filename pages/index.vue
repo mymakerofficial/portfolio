@@ -1,7 +1,7 @@
 <template>
   <Container class="2xl:w-11/12">
     <div class="flex flex-col gap-12 md:gap-16 my-12 md:my-32">
-      <div class="md:mb-20">
+      <div class="md:mb-6">
         <HomePageHero />
       </div>
       <div v-if="!showGrid || windowWidth === Infinity" class="flex flex-col gap-4 lg:hidden">
@@ -19,6 +19,7 @@
           <template v-for="item in col || []" :key="item.key">
             <ProjectCard v-if="item.type === CardType.Project" :project="item.data" />
             <PlaceholderCard v-else-if="item.type === CardType.Placeholder" />
+            <div v-else-if="item.type === CardType.Spacer" class="h-24" />
             <MediaPlayerCard v-else-if="item.type === CardType.MediaPlayer" :data="item.data" />
             <GitHubCommitCard v-else-if="item.type === CardType.GitHubCommit" :data="item.data" />
             <PhoneBatteryCard v-else-if="item.type === CardType.PhoneBattery" :data="item.data" />
@@ -51,6 +52,7 @@ import { v4 as uuid } from "uuid";
 enum CardType {
   Project = "project",
   Placeholder = "placeholder",
+  Spacer = "spacer",
   MediaPlayer = "currently-listening",
   GitHubCommit = "recent-github-commit",
   PhoneBattery = "phone-battery",
@@ -85,9 +87,9 @@ set(funCards, Array(4).fill({
 }));
 
 const list = computed(() => {
-  const list: CardItem[] = [...get(projectCards)]
+  const list: CardItem[] = [...get(projectCards)];
 
-  let spliceIndex = 0;
+  let spliceIndex = 4;
   get(funCards)!.forEach((card: CardItem) => {
     list.splice(spliceIndex, 0, card);
 
@@ -107,6 +109,12 @@ const grid = computed(() => {
   for (let i = 0; i < get(list).length; i++) {
     grid[i % cols].push(get(list)[i]);
   }
+
+  grid[1].unshift({
+    type: CardType.Spacer,
+    data: null,
+    key: uuid(),
+  });
 
   return grid;
 })
