@@ -1,47 +1,55 @@
 <template>
-  <Container class="2xl:w-11/12">
-    <div class="flex flex-col gap-12 md:gap-16 my-12 md:my-32">
-      <div class="md:mb-6">
-        <HomePageHero />
-      </div>
-      <div v-if="!showGrid || windowWidth === Infinity" class="flex flex-col gap-4 lg:hidden">
-        <template v-for="item in list" :key="item.key">
-          <ProjectCard v-if="item.type === CardType.Project" :project="item.data" />
-          <PlaceholderCard v-else-if="item.type === CardType.Placeholder" />
-          <MediaPlayerCard v-else-if="item.type === CardType.MediaPlayer" :data="item.data" />
-          <GitHubCommitCard v-else-if="item.type === CardType.GitHubCommit" :data="item.data" />
-          <PhoneBatteryCard v-else-if="item.type === CardType.PhoneBattery" :data="item.data" />
-          <ClockCard v-else-if="item.type === CardType.Clock" />
-        </template>
-      </div>
-      <div v-if="showGrid || windowWidth === Infinity" class="hidden lg:grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
-        <div class="flex flex-col gap-4 lg:gap-8" v-for="(col, index) in grid || []" :key="index">
-          <template v-for="item in col || []" :key="item.key">
+  <div class="flex flex-col gap-12 md:gap-16 my-12 md:my-36">
+    <section class="md:mb-16">
+      <HomePageHero />
+    </section>
+    <main>
+      <Container class="2xl:w-11/12">
+        <div v-if="!showGrid || windowWidth === Infinity" class="flex flex-col gap-4 lg:hidden">
+          <template v-for="item in list" :key="item.key">
             <ProjectCard v-if="item.type === CardType.Project" :project="item.data" />
             <PlaceholderCard v-else-if="item.type === CardType.Placeholder" />
-            <div v-else-if="item.type === CardType.Spacer" class="h-24" />
             <MediaPlayerCard v-else-if="item.type === CardType.MediaPlayer" :data="item.data" />
             <GitHubCommitCard v-else-if="item.type === CardType.GitHubCommit" :data="item.data" />
             <PhoneBatteryCard v-else-if="item.type === CardType.PhoneBattery" :data="item.data" />
             <ClockCard v-else-if="item.type === CardType.Clock" />
           </template>
         </div>
-      </div>
-      <div class="hidden md:block h-0.5 w-full">
-        <ShinyBackgroundGradient class="opacity-50 scale-x-75 -translate-x-32" />
-      </div>
-      <LazyClientOnly>
-        <div class="px-8 md:px-12 flex flex-col md:flex-row justify-between gap-8 md:items-center">
-          <div class="hidden md:block">
-            <ServicesStatusDisplayThingy />
-          </div>
-          <div class="hidden md:block">
-            <OpenQuickActionModalButton />
+        <div v-if="showGrid || windowWidth === Infinity" class="hidden lg:grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
+          <div class="flex flex-col gap-4 lg:gap-6" v-for="(col, index) in grid || []" :key="index">
+            <template v-for="item in col || []" :key="item.key">
+              <ProjectCard v-if="item.type === CardType.Project" :project="item.data" />
+              <PlaceholderCard v-else-if="item.type === CardType.Placeholder" />
+              <div v-else-if="item.type === CardType.Spacer" class="h-24" />
+              <MediaPlayerCard v-else-if="item.type === CardType.MediaPlayer" :data="item.data" />
+              <GitHubCommitCard v-else-if="item.type === CardType.GitHubCommit" :data="item.data" />
+              <PhoneBatteryCard v-else-if="item.type === CardType.PhoneBattery" :data="item.data" />
+              <ClockCard v-else-if="item.type === CardType.Clock" />
+            </template>
           </div>
         </div>
-      </LazyClientOnly>
-    </div>
-  </Container>
+      </Container>
+    </main>
+    <footer>
+      <Container class="2xl:w-11/12">
+        <div class="flex flex-col gap-12 md:gap-16">
+          <div class="h-0.5 w-full">
+            <ShinyBackgroundGradient class="opacity-50 scale-x-60 -translate-x-32" />
+          </div>
+          <LazyClientOnly>
+            <div class="px-8 md:px-12 flex flex-col-reverse md:flex-row justify-between gap-8 md:items-center">
+              <div>
+                <ServicesStatusDisplayThingy />
+              </div>
+              <div>
+                <OpenQuickActionModalButton />
+              </div>
+            </div>
+          </LazyClientOnly>
+        </div>
+      </Container>
+    </footer>
+  </div>
 </template>
 
 <script setup lang="ts">
