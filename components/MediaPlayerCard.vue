@@ -1,5 +1,5 @@
 <template>
-  <a :href="listening?.shareUrl" target="_blank" class="rounded-xl">
+  <a :href="listening?.shareUrl" target="_blank" class="rounded-xl" v-if="!hide">
     <Card class="p-8 shadow-green-500/10 dark:shadow-green-600/10 bg-green-50 dark:bg-green-800 overflow-hidden">
       <div v-if="listening" class="flex flex-col lg:flex-row gap-4">
         <div v-if="listening.albumArtUrl" class="w-28 h-28 overflow-hidden">
@@ -60,6 +60,16 @@ const playbackPosition = computed(() => {
   } else {
     return get(listening).playbackPosition || 0;
   }
+});
+
+const hide = computed(() => {
+  if (get(listening).state === "playing") {
+    return false;
+  } else if (get(listening).state === "paused") {
+    return false;
+  }
+
+  return true;
 });
 
 const refresh = async () => {
