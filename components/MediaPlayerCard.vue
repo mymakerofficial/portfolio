@@ -14,7 +14,7 @@
           </div>
           <div>
             <div class="h-1 w-full bg-green-100 dark:bg-green-700 rounded-full overflow-hidden">
-              <div class="h-full bg-green-900 dark:bg-green-100 transition-[width] duration-1000 ease-linear" :style="{ width: `${(playbackPosition / listening.playbackDuration) * 100}%` }" />
+              <div class="h-full bg-green-900 dark:bg-green-100 transition-[width] duration-1000 ease-linear rounded-full" :style="{ width: `${(playbackPosition / listening.playbackDuration) * 100}%` }" />
             </div>
           </div>
         </div>
