@@ -31,10 +31,10 @@
         <article v-html="bodyHtml" :class="bodyClass" />
       </div>
       <DetailsPanel class="mx-8 md:mx-0">
-        <DetailsPanelSection :title="project?.disclosure?.heading || 'Info'" v-if="project?.disclosure?.text">
+        <DetailsPanelCard :title="project?.disclosure?.heading || 'Info'" v-if="project?.disclosure?.text">
           <p class="text-sm font-medium text-gray-800 dark:text-gray-200 lg:w-3/4">{{ project.disclosure.text }}</p>
-        </DetailsPanelSection>
-        <DetailsPanelSection title="Timeline">
+        </DetailsPanelCard>
+        <DetailsPanelCard title="Timeline">
           <TimelineWrapper>
             <TimelineItem title="started" :text="startedHumanReadable" v-if="project?.startedDate !== null" />
             <TimelineDash v-if="project?.startedDate !== null && project?.releaseDate !== null" />
@@ -42,15 +42,15 @@
             <TimelineDash v-if="project?.startedDate !== null && project?.lastCommitDateTime !== null" />
             <TimelineItem title="last changed" :text="lastChangedHumanReadable" v-if="project?.lastCommitDateTime !== null" />
           </TimelineWrapper>
-        </DetailsPanelSection>
-        <DetailsPanelSection title="Collaborators" v-if="project?.collaborators?.length > 0">
+        </DetailsPanelCard>
+        <DetailsPanelCard title="Collaborators" v-if="project?.collaborators?.length > 0">
           <div class="flex flex-wrap gap-4 items-center">
             <div v-for="collaborator in project?.collaborators" :key="collaborator.slug">
               <NuxtLink :href="collaborator.websiteUrl || `/projects?q=%3D${collaborator.displayName}`" :target="collaborator.websiteUrl ? '_blank' : null" class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ collaborator.displayName }}</NuxtLink>
             </div>
           </div>
-        </DetailsPanelSection>
-        <DetailsPanelSection title="Tech Stack" v-if="project?.technologies?.length > 0">
+        </DetailsPanelCard>
+        <DetailsPanelCard title="Tech Stack" v-if="project?.technologies?.length > 0" class="row-span-2">
           <div class="flex flex-col gap-4">
             <div v-for="type in project?.technologies" :key="type.slug" class="flex flex-col md:flex-row gap-4">
               <div>
@@ -63,17 +63,17 @@
               </div>
             </div>
           </div>
-        </DetailsPanelSection>
-        <DetailsPanelSection title="GitHub Repo" v-if="project?.githubRepo">
+        </DetailsPanelCard>
+        <DetailsPanelCard title="GitHub Repo" v-if="project?.githubRepo">
           <a :href="project.githubRepoUrl" target="_blank" class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ project.githubRepo }}</a>
-        </DetailsPanelSection>
-        <DetailsPanelSection title="Tags" v-if="project?.tags?.length > 0">
-          <div class="flex flex-wrap gap-4 items-center">
+        </DetailsPanelCard>
+        <DetailsPanelCard v-if="project?.tags?.length > 0">
+          <div class="flex flex-wrap gap-x-2 gap-y-3 items-center">
             <div v-for="tag in project?.tags" :key="tag.slug">
-              <NuxtLink :href="`/projects?q=%3D${tag.displayName}`" class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ tag.displayName }}</NuxtLink>
+              <NuxtLink :href="`/projects?q=%3D${tag.displayName}`" class="py-1 px-3 rounded-full text-sm font-medium text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-gray-900">{{ tag.displayName }}</NuxtLink>
             </div>
           </div>
-        </DetailsPanelSection>
+        </DetailsPanelCard>
       </DetailsPanel>
     </div>
   </div>
