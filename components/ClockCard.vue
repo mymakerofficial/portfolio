@@ -1,5 +1,5 @@
 <template>
-  <Card class="shadow-gray-500/10 dark:shadow-gray-600/10 bg-gray-50 dark:bg-gray-800 overflow-hidden">
+  <Card class="bg-gray-50 dark:bg-gray-800 overflow-hidden">
     <div v-if="clockText">
       <div class="p-8 flex flex-col gap-4">
         <h2 class="text-md font-medium text-gray-600 dark:text-gray-100">Time in Germany</h2>

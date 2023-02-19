@@ -1,5 +1,5 @@
 <template>
-  <Card class="shadow-gray-500/10 dark:shadow-gray-600/10 bg-gray-50 dark:bg-gray-800 overflow-hidden">
+  <Card class="bg-gray-50 dark:bg-gray-800 overflow-hidden">
     <div v-if="data">
       <div class="absolute h-full bg-gray-200/30 dark:bg-gray-400/10" :style="{ width: `${ data.batteryLevel }%` }" />
       <div class="p-8 flex flex-col gap-4">
