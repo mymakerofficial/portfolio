@@ -31,10 +31,12 @@
         <article v-html="bodyHtml" :class="bodyClass" />
       </div>
       <DetailsPanel class="mx-8 md:mx-0">
-        <DetailsPanelCard :title="project?.disclosure?.heading || 'Info'" v-if="project?.disclosure?.text">
+        <DetailsPanelCard v-if="project?.disclosure?.text">
+          <template #title>{{project?.disclosure?.heading || 'Info'}}</template>
           <p class="text-sm font-medium text-gray-800 dark:text-gray-200 lg:w-3/4">{{ project.disclosure.text }}</p>
         </DetailsPanelCard>
-        <DetailsPanelCard title="Timeline">
+        <DetailsPanelCard>
+          <template #title>Timeline</template>
           <TimelineWrapper>
             <TimelineItem title="started" :text="startedHumanReadable" v-if="project?.startedDate !== null" />
             <TimelineDash v-if="project?.startedDate !== null && project?.releaseDate !== null" />
@@ -43,14 +45,16 @@
             <TimelineItem title="last changed" :text="lastChangedHumanReadable" v-if="project?.lastCommitDateTime !== null" />
           </TimelineWrapper>
         </DetailsPanelCard>
-        <DetailsPanelCard title="Collaborators" v-if="project?.collaborators?.length > 0">
+        <DetailsPanelCard v-if="project?.collaborators?.length > 0">
+          <template #title>Collaborators</template>
           <div class="flex flex-wrap gap-4 items-center">
             <div v-for="collaborator in project?.collaborators" :key="collaborator.slug">
               <NuxtLink :href="collaborator.websiteUrl || `/projects?q=%3D${collaborator.displayName}`" :target="collaborator.websiteUrl ? '_blank' : null" class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ collaborator.displayName }}</NuxtLink>
             </div>
           </div>
         </DetailsPanelCard>
-        <DetailsPanelCard title="Tech Stack" v-if="project?.technologies?.length > 0" class="row-span-2">
+        <DetailsPanelCard v-if="project?.technologies?.length > 0" class="row-span-2">
+          <template #title>Tech Stack</template>
           <div class="flex flex-col gap-4">
             <div v-for="type in project?.technologies" :key="type.slug" class="flex flex-col md:flex-row gap-4">
               <div>
@@ -64,8 +68,9 @@
             </div>
           </div>
         </DetailsPanelCard>
-        <DetailsPanelCard title="GitHub Repo" v-if="project?.githubRepo">
-          <a :href="project.githubRepoUrl" target="_blank" class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ project.githubRepo }}</a>
+        <DetailsPanelCard v-for="repo in project?.repositories" :kex="repo.owner + repo.name">
+          <template #title><SvgIcon type="mdi" :path="mdiGithub" class="h-8" />{{project?.repositories.length > 1 && repo.title ? repo.title : "Repository"}}</template>
+          <a :href="repo.url" target="_blank" class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ repo.owner }}/{{ repo.name }}</a>
         </DetailsPanelCard>
         <DetailsPanelCard v-if="project?.tags?.length > 0">
           <div class="flex flex-wrap gap-x-2 gap-y-3 items-center">
@@ -85,6 +90,9 @@ import {generateHTML} from "@tiptap/html";
 import tiptapDefaultOptions from "~/lib/tiptapDefaultOptions";
 import {get} from "@vueuse/core";
 import {QuickActionExtendedGroup, QuickActionExtendedItem} from "~/lib/quickActions";
+//@ts-ignore
+import SvgIcon from '@jamescoyle/vue-icon';
+import { mdiGithub } from '@mdi/js';
 
 const { data: project } = await useAsyncData(() => $fetch(`/api/v1/projects/${useRoute().params.slug}`))
 

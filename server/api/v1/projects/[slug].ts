@@ -1,16 +1,44 @@
 import {Octokit} from "octokit";
 import { JSONContent } from "@tiptap/core"
-import {getProjectsRawDataCached} from "~/lib/projects";
+import {ProjectsRawData} from "~/lib/projects";
+import {supabase} from "~/lib/supabase";
+import {PostgrestError} from "@supabase/supabase-js";
 
 const octokit = new Octokit({
   auth: process.env.GITHUB_ACCESS_TOKEN,
 });
 
-export default cachedEventHandler(
+export default defineCachedEventHandler(
   async (event) => {
-    const projectsRaw = await getProjectsRawDataCached();
-
-    const projectData = projectsRaw?.find((project) => project.slug === event.context.params.slug);
+    // fetch projects from supabase
+    const { data: projectData } = await supabase
+      .from('projects')
+      .select('' +
+        'slug, ' +
+        'displayName: display_name, ' +
+        'summary, ' +
+        'bodyProse: body_text_prosemirror,' +
+        'type: type_id ( slug, displayName: display_name, shortDisplayName: short_display_name ), ' +
+        'url, ' +
+        'releaseDate: released_at_date, ' +
+        'startedDate: started_at_date, ' +
+        'featured, ' +
+        'detailsDisclosureHeading: details_disclosure_heading, ' +
+        'detailsDisclosureText: details_disclosure_text, ' +
+        'tags ( slug, displayName: display_name ), ' +
+        'collaborators: people ( slug, displayName: display_name, websiteUrl: website_url ), ' +
+        'technologies ( ' +
+        ' slug, ' +
+        ' displayName: display_name, ' +
+        ' shortDisplayName: short_display_name, ' +
+        ' type: technology_type_id ( slug, displayName: display_name, shortDisplayName: short_display_name ), ' +
+        ' parent: parent_technology_id ( slug, displayName: display_name, shortDisplayName: short_display_name ) ' +
+        '), ' +
+        'repositories ( name, owner, title, description, public, provider ( slug, baseUrl: base_url ) ), ' +
+        'thumbnailPath: thumbnail_path'
+      )
+      .eq('slug', event.context.params.slug)
+      .single() as { data: Partial<ProjectsRawData>, error: PostgrestError | null }
 
     if (!projectData) {
       throw new Error('Project not found');
@@ -20,7 +48,6 @@ export default cachedEventHandler(
     let types: any = {}
 
     if (projectData.technologies) {
-      // @ts-ignore
       for (let technology of projectData.technologies) {
         let type = technology.type
         if (!types[type.slug]) {
@@ -40,21 +67,25 @@ export default cachedEventHandler(
       }
     }
 
-    let lastCommitDate: string | null = null
-    if (projectData.githubRepo) {
+    let lastCommitDate: Date = new Date(0);
+    for (const repo of projectData.repositories?.filter((r) => r.provider.slug === "github") || []) {
       try {
-        let githubRepo = projectData.githubRepo
-
         // get date of last commit to master
         const { data: githubData } = await octokit.request("GET /repos/{owner}/{repo}/commits", {
-          owner: githubRepo.split('/')[0],
-          repo: githubRepo.split('/')[1],
+          owner: repo.owner,
+          repo: repo.name,
           per_page: 1
         });
 
-        if (githubData.length > 0) {
-          lastCommitDate = githubData[0].commit.author?.date || null
+        if (githubData.length === 0) {
+          continue;
         }
+
+        if (!githubData[0].commit.author?.date || new Date(githubData[0].commit.author?.date) < lastCommitDate) {
+          continue;
+        }
+
+        lastCommitDate = new Date(githubData[0].commit.author?.date);
       } catch (_) {}
     }
 
@@ -68,9 +99,17 @@ export default cachedEventHandler(
       websiteUrl: projectData.url,
       releaseDate: projectData.releaseDate,
       startedDate: projectData.startedDate,
-      lastCommitDateTime: lastCommitDate,
-      githubRepo: projectData.keepGithubRepoSecret ? null : projectData.githubRepo,
-      githubRepoUrl: projectData.keepGithubRepoSecret ? null : `https://github.com/${projectData.githubRepo}`,
+      lastCommitDateTime: lastCommitDate.toISOString(),
+      repositories: projectData.repositories?.filter((r) => r.public).map((r) => {
+        return {
+          name: r.name,
+          owner: r.owner,
+          url: `${r.provider.baseUrl}/${r.owner}/${r.name}`.replace(/\/\//g, '/'),
+          title: r.title,
+          description: r.description,
+          provider: r.provider.slug,
+        }
+      }) || [],
       disclosure: {
         heading: projectData.detailsDisclosureHeading,
         text: projectData.detailsDisclosureText

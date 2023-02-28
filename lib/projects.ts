@@ -44,8 +44,18 @@ export interface ProjectsRawData {
     websiteUrl: string;
   }[];
   technologies: ProjectsTechnologyRaw[];
-  githubRepo: string;
-  keepGithubRepoSecret: boolean;
+  repositories: {
+    name: string;
+    owner: string;
+    title: string;
+    description: string;
+    public: boolean;
+    provider: {
+      slug: string;
+      displayName: string;
+      baseUrl: string;
+    }
+  }[],
   thumbnailPath: string;
 }
 
@@ -93,8 +103,7 @@ const getProjectsRawData = async (): Promise<ProjectsRawData[]> => {
       ' type: technology_type_id ( slug, displayName: display_name, shortDisplayName: short_display_name ), ' +
       ' parent: parent_technology_id ( slug, displayName: display_name, shortDisplayName: short_display_name ) ' +
       '), ' +
-      'githubRepo: github_repo, ' +
-      'keepGithubRepoSecret: keep_github_repo_secret, ' +
+      'repositories ( name, owner, title, description, public, provider ( slug, baseUrl: base_url ) ), ' +
       'thumbnailPath: thumbnail_path'
     ) as any as {
     data: ProjectsRawData[]
