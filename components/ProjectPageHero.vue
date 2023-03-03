@@ -6,9 +6,7 @@
         <p class="hidden xl:block">{{ project?.summary }}</p>
       </div>
       <div v-if="project?.websiteUrl">
-        <a :href="project?.websiteUrl" target="_blank">
-          <Button>Visit Website</Button>
-        </a>
+        <Button :href="project?.websiteUrl" target="_blank">Visit Website</Button>
       </div>
     </div>
     <div class="m-auto xl:m-0 w-full xl:w-1/2 max-w-3xl aspect-video" v-if="project?.thumbnailUrl">
@@ -24,20 +22,10 @@
   </div>
 </template>
 
-<script lang="ts">
-import {PropType} from "@vue/runtime-core";
-import {CompactProjectInfo} from "~/server/api/v1/projects";
+<script setup lang="ts">
+import {CompactProjectInfo} from "~/lib/projects";
 
-export default defineNuxtComponent({
-  props: {
-    project: {
-      type: Object as PropType<CompactProjectInfo>,
-      required: true,
-    },
-  },
-});
+defineProps<{
+  project: CompactProjectInfo
+}>();
 </script>
-
-<style scoped>
-
-</style>
