@@ -1,7 +1,7 @@
 <template>
   <component
-    is="button"
-    class="group/button inline-block rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 duration-500 ease-in-out"
+    :is="$attrs.href ? 'a' : 'button'"
+    class="inline-block rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 duration-500 ease-in-out"
   >
     <ClientOnly>
       <SpotlightEffectElement />

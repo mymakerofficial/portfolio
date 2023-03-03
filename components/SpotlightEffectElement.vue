@@ -30,8 +30,8 @@ const spotlightVisible = ref(true);
 watch([x, y], () => {
   const containerRect = container.value?.getBoundingClientRect() ?? { left: 0, top: 0, width: 0, height: 0 };
   const spotlightRect = spotlight.value?.getBoundingClientRect() ?? { left: 0, top: 0, width: 0, height: 0 };
-  const spotlightX = get(x) - containerRect.left - containerRect.width / 2 - spotlightRect.width / 2;
-  const spotlightY = get(y) - containerRect.top - containerRect.height / 2 + spotlightRect.height / 2;
+  const spotlightX = get(x) - containerRect.left - spotlightRect.width / 2;
+  const spotlightY = get(y) - containerRect.top - spotlightRect.height / 2;
 
   // animate the transition using gsap
   gsap.to(spotlight.value, {
