@@ -104,7 +104,7 @@ export default defineCachedEventHandler(
         return {
           name: r.name,
           owner: r.owner,
-          url: `${r.provider.baseUrl}/${r.owner}/${r.name}`.replace(/\/\//g, '/'),
+          url: `${r.provider.baseUrl.replace(/\/$/, "")}/${r.owner}/${r.name}`,
           title: r.title,
           description: r.description,
           provider: r.provider.slug,
