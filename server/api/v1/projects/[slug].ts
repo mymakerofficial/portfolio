@@ -41,7 +41,10 @@ export default defineCachedEventHandler(
       .single() as { data: Partial<ProjectsRawData>, error: PostgrestError | null }
 
     if (!projectData) {
-      throw new Error('Project not found');
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Project Not Found'
+      })
     }
 
     let technologiesOut: any[] = []
