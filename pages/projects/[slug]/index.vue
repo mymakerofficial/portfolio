@@ -1,18 +1,5 @@
 <template>
-  <Head>
-    <Title>{{ project?.displayName }}</Title>
-    <Meta name="description" :content="project?.summary" />
-    <Meta name="og:title" :content="project?.displayName" />
-    <Meta name="og:description" :content="project?.summary" />
-    <Meta name="og:image" :content="project?.thumbnailUrl" v-if="project?.thumbnailUrl"/>
-    <Meta name="twitter:card" content="summary_large_image" />
-    <Meta name="twitter:title" :content="project?.displayName" />
-    <Meta name="twitter:description" :content="project?.summary" />
-    <Meta name="twitter:image" :content="project?.thumbnailUrl" v-if="project?.thumbnailUrl"/>
-  </Head>
-
   <ProjectPageHero :project="project" v-if="project?.thumbnailUrl" />
-
   <div class="lg:w-4/5 2xl:w-3/5 m-auto mb-40 md:mb-48">
     <div class="flex flex-col gap-16 my-12 lg:my-24">
       <div v-if="!project?.thumbnailUrl" class="px-8 md:px-12">
@@ -92,7 +79,48 @@ import {QuickActionExtendedGroup, QuickActionExtendedItem} from "~/lib/quickActi
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiGithub } from '@mdi/js';
 
-const { data: project } = await useAsyncData(() => $fetch(`/api/v1/projects/${useRoute().params.slug}`))
+const { data: project } = await useLazyFetch(`/api/v1/projects/${useRoute().params.slug}`)
+
+if (get(project)) {
+  useHead({
+    title: get(project).displayName,
+    meta: [
+      {
+        name: 'description',
+        content: get(project).summary,
+      },
+      {
+        name: 'og:title',
+        content: get(project).displayName,
+      },
+      {
+        name: 'og:description',
+        content: get(project).summary,
+      },
+      {
+        name: 'twitter:card',
+        content: 'summary',
+      },
+      {
+        name: 'twitter:title',
+        content: get(project).displayName,
+      },
+      {
+        name: 'twitter:description',
+        content: get(project).summary,
+      },
+      {
+        name: 'twitter:image',
+        content: get(project).thumbnailUrl,
+      }
+    ]
+  })
+} else {
+  useHead({
+    title: "Project not found",
+  })
+}
+
 
 const startedHumanReadable = dayjs(get(project).startedDate).format('MMMM D, YYYY');
 const releasedHumanReadable = dayjs(get(project).releaseDate).format('MMMM D, YYYY');
