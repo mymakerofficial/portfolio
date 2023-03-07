@@ -94,7 +94,7 @@ set(funCards, Array(4).fill({
 const list = computed(() => {
   const list: CardItem[] = [...get(projectCards)];
 
-  let spliceIndex = 4;
+  let spliceIndex = 1;
   get(funCards)!.forEach((card: CardItem) => {
     list.splice(spliceIndex, 0, card);
 
