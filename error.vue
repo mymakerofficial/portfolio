@@ -1,13 +1,13 @@
 <template>
   <main>
-    <Container class="2xl:w-11/12">
-      <div class="h-screen flex flex-col justify-center gap-6">
-        <div class="flex flex-row gap-3 items-end">
+    <Container class="2xl:w-11/12 sm:py-12 lg:py-0">
+      <div class="h-screen p-6 flex flex-col lg:justify-center gap-6">
+        <div class="flex flex-col lg:flex-row gap-3 lg:items-end">
           <h1 class="text-4xl font-bold">{{error.statusCode}}</h1>
           <h2 class="text-2xl font-bold flex gap-3 items-center">{{ statusMessage }}</h2>
         </div>
         <p class="text-gray-800 dark:text-gray-300">message: {{ error.message }}</p>
-        <div v-if="error.stack && isDev" v-html="error.stack" class="text-gray-800 dark:text-gray-300"></div>
+        <div v-if="error.stack && isDev" v-html="error.stack" class="text-gray-800 dark:text-gray-300 overflow-x-auto"></div>
         <div>
           <Button @click="handleError">Go Home</Button>
         </div>
