@@ -30,22 +30,6 @@
         </div>
       </Container>
     </main>
-    <footer>
-      <Container class="2xl:w-11/12">
-        <div class="px-10 flex flex-col gap-12 md:gap-16">
-          <LazyClientOnly>
-            <div class="flex flex-col sm:flex-row justify-between gap-8 sm:items-center">
-              <div>
-                <ServicesStatusDisplayThingy />
-              </div>
-              <div>
-                <OpenQuickActionModalButton />
-              </div>
-            </div>
-          </LazyClientOnly>
-        </div>
-      </Container>
-    </footer>
   </div>
 </template>
 
