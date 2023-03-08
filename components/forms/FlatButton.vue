@@ -11,3 +11,7 @@
     </span>
   </component>
 </template>
+
+<script setup lang="ts">
+import SpotlightEffectElement from "~/components/generics/SpotlightEffectElement.vue";
+</script>

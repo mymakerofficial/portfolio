@@ -9,7 +9,7 @@
         <p class="text-gray-800 dark:text-gray-300">message: {{ error.message }}</p>
         <div v-if="error.stack && isDev" v-html="error.stack" class="text-gray-800 dark:text-gray-300 overflow-x-auto"></div>
         <div>
-          <Button @click="handleError">Go Home</Button>
+          <FlatButton @click="handleError">Go Home</FlatButton>
         </div>
       </div>
     </Container>
@@ -20,6 +20,7 @@
 import {clearError, NuxtError, useHead} from "#app";
 import Container from "~/components/generics/Container.vue";
 import {computed} from "vue";
+import FlatButton from "~/components/forms/FlatButton.vue";
 
 const props = defineProps<{
   error: NuxtError

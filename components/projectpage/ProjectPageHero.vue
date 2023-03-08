@@ -6,7 +6,7 @@
         <p class="hidden xl:block">{{ project?.summary }}</p>
       </div>
       <div v-if="project?.websiteUrl">
-        <Button :href="project?.websiteUrl" target="_blank">Visit Website</Button>
+        <FlatButton :href="project?.websiteUrl" target="_blank">Visit Website</FlatButton>
       </div>
     </div>
     <div class="m-auto xl:m-0 w-full xl:w-1/2 max-w-3xl aspect-video" v-if="project?.thumbnailUrl">
@@ -24,6 +24,7 @@
 
 <script setup lang="ts">
 import {CompactProjectInfo} from "~/lib/projects";
+import FlatButton from "~/components/forms/FlatButton.vue";
 
 defineProps<{
   project: CompactProjectInfo
