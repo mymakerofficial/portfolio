@@ -5,19 +5,9 @@
   </div>
 </template>
 
-<script lang="ts">
-import {defineNuxtComponent} from "#app";
-
-export default defineNuxtComponent({
-  props: {
-    title: {
-      type: String,
-      required: true,
-    },
-    text: {
-      type: String,
-      required: true,
-    },
-  },
-});
+<script setup lang="ts">
+defineProps<{
+  title: string;
+  text: string;
+}>();
 </script>

@@ -4,34 +4,14 @@
   </div>
 </template>
 
-<script lang="ts">
-import {PropType} from "@vue/runtime-core";
+<script setup lang="ts">
 import {CompactProjectInfo} from "~/server/api/v1/projects";
-import {defineNuxtComponent} from "#app";
 import ProjectsListItem from "~/components/lists/ProjectsListItem.vue";
 
-export default defineNuxtComponent({
-  components: {
-    ProjectsListItem,
-  },
-
-  props: {
-    projects: {
-      type: Object as PropType<CompactProjectInfo[]>,
-      required: true,
-    },
-    compact: {
-      type: Boolean,
-      default: false,
-    },
-    brighter: {
-      type: Boolean,
-      default: false,
-    },
-    showSummary: {
-      type: Boolean,
-      default: true,
-    },
-  },
-});
+defineProps<{
+  projects: CompactProjectInfo[];
+  compact?: boolean;
+  brighter?: boolean;
+  showSummary?: boolean;
+}>();
 </script>

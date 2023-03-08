@@ -6,13 +6,13 @@
   </NavBar>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 // @ts-ignore
 import SvgIcon from '@jamescoyle/vue-icon';
-import {PropType} from "@vue/runtime-core";
-import {defineNuxtComponent} from "#app";
+import {useRoute} from "#app";
 import NavBar from "~/components/navbar/NavBar.vue";
 import NavBarButton from "~/components/navbar/NavBarButton.vue";
+import {computed} from "vue";
 
 export interface NavBarOption {
   href: string;
@@ -20,28 +20,14 @@ export interface NavBarOption {
   iconPath?: string;
 }
 
-export default defineNuxtComponent({
-  components: {
-    SvgIcon,
-    NavBar,
-    NavBarButton,
-  },
+const route = useRoute();
 
-  props: {
-    options: {
-      type: Array as PropType<NavBarOption[]>,
-      required: true,
-    },
-    active: {
-      type: Boolean,
-      required: true,
-    },
-  },
+const props = defineProps<{
+  options: NavBarOption[];
+  active: boolean;
+}>()
 
-  computed: {
-    activeIndex() {
-      return this.options.findIndex((option) => option.href === this.$route.path);
-    }
-  }
+const activeIndex = computed(() => {
+  return props.options.findIndex((option) => option.href === route.path);
 })
 </script>

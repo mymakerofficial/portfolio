@@ -1,11 +1,6 @@
 <template>
-  <Head>
-    <Title>Projects</Title>
-  </Head>
-
   <Container class="2xl:w-1/2">
     <div class="mt-12 mb-40 md:mt-44 md:mb-48 flex flex-col gap-12">
-      <!--<input type="text" class="w-full h-16 px-6 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-900 rounded-xl placeholder-gray-200 dark:placeholder-gray-700 font-medium text-xl" placeholder="Search" v-model="query" />-->
       <ProjectsGroupedList v-if="data.resultType === 'grouped' && data.data.length > 1" :groups="data.data"/>
       <div class="flex flex-col gap-8" v-else-if="data.resultType === 'grouped'">
         <h1 class="px-4 text-xl font-bold tracking-widest text-gray-200 dark:text-gray-700">Projects made with {{ data.data[0].group.displayName }}</h1>
@@ -19,78 +14,68 @@
   </Container>
 </template>
 
-<script lang="ts">
-import { useDebounceFn } from "@vueuse/core";
-import {defineNuxtComponent, useFetch, useRoute} from "#app";
-import {ref} from "vue";
+<script setup lang="ts">
+import {get} from "@vueuse/core";
+import {useFetch, useHead, useRoute} from "#app";
+import {computed} from "vue";
 import Container from "~/components/generics/Container.vue";
 import ProjectsGroupedList from "~/components/lists/ProjectsGroupedList.vue";
 import ProjectsList from "~/components/lists/ProjectsList.vue";
 
-const fetchData = async (query: string, groupBy: string) => {
-  const { data, error } = await useFetch(`/api/v1/projects?q=${query}&group_by=${groupBy}`);
-  if (error.value) {
-    console.error(error.value);
+const route = useRoute();
+
+const query = computed(() => {
+  if (route.query.q) {
+    return route.query.q as string;
   } else {
-    return data.value;
+    return '';
   }
-}
-
-const debouncedSearch = useDebounceFn(async (query: string, groupBy: string) => {
-  return await fetchData(query, groupBy);
-}, 500)
-
-export default defineNuxtComponent({
-  components: {
-    Container,
-    ProjectsGroupedList,
-    ProjectsList,
-  },
-
-  async setup () {
-    let query = '';
-    let groupBy = 'date:year';
-
-    if (useRoute().query.q) {
-      query = useRoute().query.q as string;
-      groupBy = 'auto';
-    }
-
-    if (useRoute().query.group_by) {
-      const groupByQuery = useRoute().query.group_by as string;
-
-      if (groupByQuery === 'date') {
-        groupBy = 'date:year';
-      } else if (groupByQuery === 'language') {
-        groupBy = 'technology-type:programming-language';
-      } else if (groupByQuery === 'framework') {
-        groupBy = 'technology-type:frontend-framework';
-      } else {
-        groupBy = groupByQuery;
-      }
-    }
-
-    // fetch projects from api
-    const data = await fetchData(query, groupBy);
-
-    return {
-      data: ref(data),
-    }
-  },
-
-  data () {
-    return {
-      query: "",
-    }
-  },
-
-  watch: {
-    query: async function (newQuery) {
-      const res = await debouncedSearch(newQuery, `auto`);
-      if (res) {
-        this.data = res;
-      }
-    }
-  },
 });
+
+const groupBy = computed(() => {
+  if (get(query) !== '') {
+    return 'auto';
+  }
+
+  if (route.query.group_by) {
+    switch (route.query.group_by) {
+      case 'date':
+        return 'date:year';
+      case 'language':
+        return 'technology-type:programming-language';
+      case 'framework':
+        return 'technology-type:frontend-framework';
+    }
+  }
+
+  return 'date:year';
+})
+
+const requestUrl = computed(() => {
+  const url = `/api/v1/projects`
+
+  const params = new URLSearchParams();
+
+  if (get(query)) {
+    params.append('q', get(query));
+  }
+
+  if (get(groupBy)) {
+    params.append('group_by', get(groupBy));
+  }
+
+  return `${url}?${params.toString()}`;
+})
+
+const { data } = await useFetch(get(requestUrl));
+
+useHead({
+  title: 'Projects',
+  meta: [
+    {
+      name: 'description',
+      content: 'Projects made by me'
+    }
+  ]
+})
 </script>

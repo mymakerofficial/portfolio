@@ -6,34 +6,14 @@
   </div>
 </template>
 
-<script lang="ts">
-import {PropType} from "@vue/runtime-core";
+<script setup lang="ts">
 import {ProjectsGroup} from "~/server/api/v1/projects";
-import {defineNuxtComponent} from "#app";
 import ProjectsList from "~/components/lists/ProjectsList.vue";
 
-export default defineNuxtComponent({
-  components: {
-    ProjectsList,
-  },
-
-  props: {
-    group: {
-      type: Object as PropType<ProjectsGroup[]>,
-      required: true,
-    },
-    compact: {
-      type: Boolean,
-      default: false,
-    },
-    brighter: {
-      type: Boolean,
-      default: false,
-    },
-    showSummary: {
-      type: Boolean,
-      default: true,
-    },
-  },
-});
+defineProps<{
+  group: ProjectsGroup[];
+  compact: boolean;
+  brighter: boolean;
+  showSummary: boolean;
+}>();
 </script>

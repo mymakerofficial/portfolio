@@ -28,18 +28,19 @@
         <label>output</label>
         <input v-model="editorJSONString" readonly @focus="$event.target.select()" class="w-full bg-gray-100 dark:bg-gray-700 text-inherit"/>
         <label>input</label>
-        <input ref="inputJSON" @focus="$event.target.select()" class="w-full bg-gray-100 dark:bg-gray-700 bg-transparent text-inherit"/>
+        <input ref="JSONInput" @focus="$event.target.select()" class="w-full bg-gray-100 dark:bg-gray-700 bg-transparent text-inherit"/>
         <button class="inline-block" @click="setEditor">set</button>
       </div>
     </div>
   </Container>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { Editor, EditorContent } from "@tiptap/vue-3";
 import tiptapDefaultOptions from "~/lib/tiptapDefaultOptions";
-import {defineNuxtComponent} from "#app";
 import Container from "~/components/generics/Container.vue";
+import {ref} from "vue";
+import {get, set} from "@vueuse/core";
 
 class EditorButton {
   private label: string;
@@ -55,192 +56,182 @@ class EditorButton {
   }
 }
 
-export default defineNuxtComponent({
-  components: {
-    Container,
-    EditorContent,
-  },
+const editor = new Editor({
+  ...tiptapDefaultOptions,
+  content: "write something beautifully...",
+  onUpdate: onUpdate,
+});
 
-  data() {
-    const editor = new Editor({
-      ...tiptapDefaultOptions,
-      content: "write something beautifully...",
-      /* @ts-ignore */
-      onUpdate: this.onUpdate,
-    });
+const editorJSONString = ref("");
+const JSONInput = ref("");
 
-    const editorButtons: EditorButton[][] = [
-      [
-        new EditorButton(
-            "bold",
-            () => editor.chain().focus().toggleBold().run(),
-            () => !editor.can().chain().focus().toggleBold().run(),
-            () => editor.isActive("bold")
-        ),
-        new EditorButton(
-            "italic",
-            () => editor.chain().focus().toggleItalic().run(),
-            () => !editor.can().chain().focus().toggleItalic().run(),
-            () => editor.isActive("italic")
-        ),
-        new EditorButton(
-            "underline",
-            () => editor.chain().focus().toggleUnderline().run(),
-            () => !editor.can().chain().focus().toggleUnderline().run(),
-            () => editor.isActive("underline")
-        ),
-        new EditorButton(
-            "strike",
-            () => editor.chain().focus().toggleStrike().run(),
-            () => !editor.can().chain().focus().toggleStrike().run(),
-            () => editor.isActive("strike")
-        ),
-        new EditorButton(
-            "code",
-            () => editor.chain().focus().toggleCode().run(),
-            () => !editor.can().chain().focus().toggleCode().run(),
-            () => editor.isActive("code")
-        ),
-      ],
-      [
-        new EditorButton(
-            "h1",
-            () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
-            () => false,
-            () => editor.isActive("heading", { level: 1 })
-        ),
-        new EditorButton(
-            "h2",
-            () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
-            () => false,
-            () => editor.isActive("heading", { level: 2 })
-        ),
-        new EditorButton(
-            "h3",
-            () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
-            () => false,
-            () => editor.isActive("heading", { level: 3 })
-        ),
-      ],
-      [
-        new EditorButton(
-            "set link",
-            () => this.setLink(),
-            () => false,
-            () => editor.isActive("link")
-        ),
-        new EditorButton(
-            "remove link",
-            () => editor.chain().focus().unsetLink().run(),
-            () => !editor.isActive("link"),
-            () => false
-        ),
-      ],
-      [
-        new EditorButton(
-            "code block",
-            () => editor.chain().focus().toggleCodeBlock().run(),
-            () => !editor.can().chain().focus().toggleCodeBlock().run(),
-            () => editor.isActive("codeBlock")
-        ),
-        new EditorButton(
-            "blockquote",
-            () => editor.chain().focus().toggleBlockquote().run(),
-            () => !editor.can().chain().focus().toggleBlockquote().run(),
-            () => editor.isActive("blockquote")
-        ),
-      ],
-      [
-        new EditorButton(
-            "bullet list",
-            () => editor.chain().focus().toggleBulletList().run(),
-            () => !editor.can().chain().focus().toggleBulletList().run(),
-            () => editor.isActive("bulletList")
-        ),
-        new EditorButton(
-            "ordered list",
-            () => editor.chain().focus().toggleOrderedList().run(),
-            () => !editor.can().chain().focus().toggleOrderedList().run(),
-            () => editor.isActive("orderedList")
-        ),
-      ],
-      [
-        new EditorButton(
-            "add image",
-            () => this.addImage(),
-            () => false,
-            () => editor.isActive("image")
-        ),
-        new EditorButton(
-            "add video",
-            () => this.addVideo(),
-            () => false,
-            () => editor.isActive("video")
-        ),
-      ],
-    ]
+const editorButtons: EditorButton[][] = [
+  [
+    new EditorButton(
+        "bold",
+        () => editor.chain().focus().toggleBold().run(),
+        () => !editor.can().chain().focus().toggleBold().run(),
+        () => editor.isActive("bold")
+    ),
+    new EditorButton(
+        "italic",
+        () => editor.chain().focus().toggleItalic().run(),
+        () => !editor.can().chain().focus().toggleItalic().run(),
+        () => editor.isActive("italic")
+    ),
+    new EditorButton(
+        "underline",
+        () => editor.chain().focus().toggleUnderline().run(),
+        () => !editor.can().chain().focus().toggleUnderline().run(),
+        () => editor.isActive("underline")
+    ),
+    new EditorButton(
+        "strike",
+        () => editor.chain().focus().toggleStrike().run(),
+        () => !editor.can().chain().focus().toggleStrike().run(),
+        () => editor.isActive("strike")
+    ),
+    new EditorButton(
+        "code",
+        () => editor.chain().focus().toggleCode().run(),
+        () => !editor.can().chain().focus().toggleCode().run(),
+        () => editor.isActive("code")
+    ),
+  ],
+  [
+    new EditorButton(
+        "h1",
+        () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
+        () => false,
+        () => editor.isActive("heading", { level: 1 })
+    ),
+    new EditorButton(
+        "h2",
+        () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
+        () => false,
+        () => editor.isActive("heading", { level: 2 })
+    ),
+    new EditorButton(
+        "h3",
+        () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
+        () => false,
+        () => editor.isActive("heading", { level: 3 })
+    ),
+  ],
+  [
+    new EditorButton(
+        "set link",
+        () => setLink(),
+        () => false,
+        () => editor.isActive("link")
+    ),
+    new EditorButton(
+        "remove link",
+        () => editor.chain().focus().unsetLink().run(),
+        () => !editor.isActive("link"),
+        () => false
+    ),
+  ],
+  [
+    new EditorButton(
+        "code block",
+        () => editor.chain().focus().toggleCodeBlock().run(),
+        () => !editor.can().chain().focus().toggleCodeBlock().run(),
+        () => editor.isActive("codeBlock")
+    ),
+    new EditorButton(
+        "blockquote",
+        () => editor.chain().focus().toggleBlockquote().run(),
+        () => !editor.can().chain().focus().toggleBlockquote().run(),
+        () => editor.isActive("blockquote")
+    ),
+  ],
+  [
+    new EditorButton(
+        "bullet list",
+        () => editor.chain().focus().toggleBulletList().run(),
+        () => !editor.can().chain().focus().toggleBulletList().run(),
+        () => editor.isActive("bulletList")
+    ),
+    new EditorButton(
+        "ordered list",
+        () => editor.chain().focus().toggleOrderedList().run(),
+        () => !editor.can().chain().focus().toggleOrderedList().run(),
+        () => editor.isActive("orderedList")
+    ),
+  ],
+  [
+    new EditorButton(
+        "add image",
+        () => addImage(),
+        () => false,
+        () => editor.isActive("image")
+    ),
+    new EditorButton(
+        "add video",
+        () => addVideo(),
+        () => false,
+        () => editor.isActive("video")
+    ),
+  ],
+]
 
-    return {
-      editor,
-      editorButtons,
-      editorJSONString: "",
-    };
-  },
+function onUpdate() {
+  set(editorJSONString, JSON.stringify(editor.getJSON()));
+}
 
-  methods: {
-    onUpdate() {
-      this.editorJSONString = JSON.stringify(this.editor.getJSON());
-    },
-    setLink() {
-      const previousUrl = this.editor.getAttributes("link").href;
-      const url = window.prompt("URL", previousUrl);
+function setLink() {
+  const previousUrl = editor.getAttributes("link").href;
+  const url = window.prompt("URL", previousUrl);
 
-      // cancelled
-      if (url === null) {
-        return;
-      }
+  // cancelled
+  if (url === null) {
+    return;
+  }
 
-      // empty
-      if (url === "") {
-        this.editor.chain().focus().extendMarkRange("link").unsetLink().run();
+  // empty
+  if (url === "") {
+    editor.chain().focus().extendMarkRange("link").unsetLink().run();
 
-        return;
-      }
+    return;
+  }
 
-      // update link
-      this.editor
-        .chain()
-        .focus()
-        .extendMarkRange("link")
-        .setLink({ href: url })
-        .run();
-    },
-    addImage() {
-      const url = window.prompt('URL')
+  // update link
+  editor
+    .chain()
+    .focus()
+    .extendMarkRange("link")
+    .setLink({ href: url })
+    .run();
+}
 
-      if (url) {
-        this.editor
-          .chain()
-          .focus()
-          .setImage({ src: url })
-          .run()
-      }
-    },
-    addVideo() {
-      const url = window.prompt('URL')
+function addImage() {
+  const url = window.prompt("URL");
 
-      if (url) {
-        this.editor
-          .chain()
-          .focus()
-          .insertContent(`<video src="${url}"></video>`)
-          .run();
-      }
-    },
-    setEditor() {
-      // @ts-ignore
-      this.editor.commands.setContent(JSON.parse(this.$refs.inputJSON.value));
-    },
-  },
-})
+  // cancelled
+  if (url === null) {
+    return;
+  }
+
+  editor.chain().focus().setImage({ src: url }).run();
+}
+
+function addVideo() {
+  const url = window.prompt("URL");
+
+  // cancelled
+  if (url === null) {
+    return;
+  }
+
+  editor
+    .chain()
+    .focus()
+    .insertContent(`<video src="${url}"></video>`)
+    .run();
+}
+
+function setEditor() {
+  editor.commands.setContent(JSON.parse(get(JSONInput)));
+}
 </script>

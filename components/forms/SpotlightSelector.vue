@@ -22,6 +22,8 @@ interface Transforms {
   height: number | undefined;
 }
 
+// TODO: convert to composition API
+
 export default defineNuxtComponent({
   props: {
     activeIndex: {

@@ -8,29 +8,13 @@
   </NuxtLink>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {CompactProjectInfo} from "~/server/api/v1/projects";
-import {PropType} from "@vue/runtime-core";
-import {defineNuxtComponent} from "#app";
 
-export default defineNuxtComponent({
-  props: {
-    project: {
-      type: Object as PropType<CompactProjectInfo>,
-      required: true,
-    },
-    compact: {
-      type: Boolean,
-      default: false,
-    },
-    brighter: {
-      type: Boolean,
-      default: false,
-    },
-    showSummary: {
-      type: Boolean,
-      default: true,
-    },
-  },
-})
+defineProps<{
+  project: CompactProjectInfo
+  compact: boolean
+  brighter: boolean
+  showSummary: boolean
+}>();
 </script>

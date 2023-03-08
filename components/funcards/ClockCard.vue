@@ -17,42 +17,19 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import {defineNuxtComponent} from "#app";
-import Card from "~/components/generics/Card.vue";
 
 dayjs.extend(utc);
 dayjs.extend(timezone)
-
-export default defineNuxtComponent({
-  components: {
-    Card
-  },
-
-  data() {
-    return {
-      clockText: null as string | null,
-    }
-  },
-
-  methods: {
-    updateClockText() {
-      //get current time for germany
-      this.clockText = dayjs().tz("Europe/Berlin").format("HH:mm:ss");
-    }
-  },
-
-  mounted() {
-    setInterval(() => {
-      this.updateClockText();
-    }, 1000);
-
-    this.$nextTick(() => {
-      this.updateClockText();
-    });
-  }
-})
 </script>
 
-<style scoped>
+<script setup lang="ts">
+import Card from "~/components/generics/Card.vue";
+import {get, useNow} from "@vueuse/core";
+import {computed} from "vue";
 
-</style>
+const now = useNow();
+
+const clockText = computed(() => {
+  return dayjs(get(now)).tz("Europe/Berlin").format("HH:mm:ss");
+})
+</script>

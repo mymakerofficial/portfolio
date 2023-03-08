@@ -6,24 +6,11 @@
   </nav>
 </template>
 
-<script lang="ts">
-import {defineNuxtComponent} from "#app";
+<script setup lang="ts">
 import SpotlightSelector from "~/components/forms/SpotlightSelector.vue";
 
-export default defineNuxtComponent({
-  components: {
-    SpotlightSelector,
-  },
-
-  props: {
-    activeIndex: {
-      type: Number,
-      default: 0,
-    },
-    active: {
-      type: Boolean,
-      required: true,
-    },
-  },
-});
+defineProps<{
+  activeIndex: number;
+  active: boolean;
+}>();
 </script>
