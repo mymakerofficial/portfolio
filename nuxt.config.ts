@@ -10,4 +10,7 @@ export default defineNuxtConfig({
   imports: {
     autoImport: false
   },
+  devtools: {
+    enabled: true,
+  }
 })
