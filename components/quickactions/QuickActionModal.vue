@@ -46,6 +46,11 @@ import {CompactProjectInfo, ProjectsGroup, ProjectsResponse} from "~/server/api/
 import {QuickActionExtendedGroup, QuickActionGroup} from "~/lib/quickActions";
 import Fuse from "fuse.js";
 import gsap from "gsap";
+import {nextTick, ref, watch} from "vue";
+import {useFetch, useRouter} from "#app";
+import QuickActionsGroupedList from "~/components/quickactions/QuickActionsGroupedList.vue";
+import SmallKey from "~/components/goodies/SmallKey.vue";
+import ShinyBackgroundGradient from "~/components/goodies/ShinyBackgroundGradient.vue";
 
 const props = defineProps({
   active: {

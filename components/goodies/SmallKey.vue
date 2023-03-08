@@ -12,6 +12,7 @@
 
 <script setup lang="ts">
 import {useMagicKeys} from "@vueuse/core";
+import {ref, watch} from "vue";
 
 const props = defineProps({
   keyCode: String

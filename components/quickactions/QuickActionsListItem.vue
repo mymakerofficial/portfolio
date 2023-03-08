@@ -9,6 +9,7 @@
 <script setup lang="ts">
 import {QuickActionItem} from "~/lib/quickActions";
 import {get, whenever} from "@vueuse/core";
+import {computed, ref} from "vue";
 
 const props = defineProps<{
   item: QuickActionItem;

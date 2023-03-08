@@ -21,6 +21,11 @@
 
 <script lang="ts">
 import { useDebounceFn } from "@vueuse/core";
+import {defineNuxtComponent, useFetch, useRoute} from "#app";
+import {ref} from "vue";
+import Container from "~/components/generics/Container.vue";
+import ProjectsGroupedList from "~/components/lists/ProjectsGroupedList.vue";
+import ProjectsList from "~/components/lists/ProjectsList.vue";
 
 const fetchData = async (query: string, groupBy: string) => {
   const { data, error } = await useFetch(`/api/v1/projects?q=${query}&group_by=${groupBy}`);
@@ -36,6 +41,12 @@ const debouncedSearch = useDebounceFn(async (query: string, groupBy: string) => 
 }, 500)
 
 export default defineNuxtComponent({
+  components: {
+    Container,
+    ProjectsGroupedList,
+    ProjectsList,
+  },
+
   async setup () {
     let query = '';
     let groupBy = 'date:year';

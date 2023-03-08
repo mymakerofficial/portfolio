@@ -17,11 +17,17 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import {defineNuxtComponent} from "#app";
+import Card from "~/components/generics/Card.vue";
 
 dayjs.extend(utc);
 dayjs.extend(timezone)
 
 export default defineNuxtComponent({
+  components: {
+    Card
+  },
+
   data() {
     return {
       clockText: null as string | null,

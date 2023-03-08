@@ -7,7 +7,14 @@
 </template>
 
 <script lang="ts">
+import {defineNuxtComponent} from "#app";
+import SpotlightSelector from "~/components/forms/SpotlightSelector.vue";
+
 export default defineNuxtComponent({
+  components: {
+    SpotlightSelector,
+  },
+
   props: {
     activeIndex: {
       type: Number,

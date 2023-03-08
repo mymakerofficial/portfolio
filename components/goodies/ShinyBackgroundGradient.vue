@@ -4,6 +4,7 @@
 
 <script lang="ts">
 import gsap from "gsap";
+import {defineNuxtComponent} from "#app";
 
 export default defineNuxtComponent({
   methods: {

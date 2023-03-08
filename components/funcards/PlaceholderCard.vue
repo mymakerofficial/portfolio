@@ -6,3 +6,6 @@
     </div>
   </Card>
 </template>
+<script setup lang="ts">
+import Card from "~/components/generics/Card.vue";
+</script>

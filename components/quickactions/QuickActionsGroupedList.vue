@@ -8,6 +8,9 @@
 <script setup lang="ts">
 import {QuickActionGroup, QuickActionItem} from "~/lib/quickActions";
 import {get, set, whenever} from "@vueuse/core";
+import {computed, nextTick, ref, watch} from "vue";
+import QuickActionListItemHighlight from "~/components/quickactions/QuickActionListItemHighlight.vue";
+import QuickActionsGroup from "~/components/quickactions/QuickActionsGroup.vue";
 
 const props = defineProps<{
   groups: QuickActionGroup[];

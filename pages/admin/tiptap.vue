@@ -38,6 +38,8 @@
 <script lang="ts">
 import { Editor, EditorContent } from "@tiptap/vue-3";
 import tiptapDefaultOptions from "~/lib/tiptapDefaultOptions";
+import {defineNuxtComponent} from "#app";
+import Container from "~/components/generics/Container.vue";
 
 class EditorButton {
   private label: string;
@@ -55,6 +57,7 @@ class EditorButton {
 
 export default defineNuxtComponent({
   components: {
+    Container,
     EditorContent,
   },
 

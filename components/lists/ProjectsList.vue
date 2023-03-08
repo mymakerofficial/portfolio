@@ -7,8 +7,14 @@
 <script lang="ts">
 import {PropType} from "@vue/runtime-core";
 import {CompactProjectInfo} from "~/server/api/v1/projects";
+import {defineNuxtComponent} from "#app";
+import ProjectsListItem from "~/components/lists/ProjectsListItem.vue";
 
 export default defineNuxtComponent({
+  components: {
+    ProjectsListItem,
+  },
+
   props: {
     projects: {
       type: Object as PropType<CompactProjectInfo[]>,

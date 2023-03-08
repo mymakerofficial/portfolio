@@ -15,6 +15,8 @@
 
 <script setup lang="ts">
 import {CompactProjectInfo} from "~/lib/projects";
+import Card from "~/components/generics/Card.vue";
+import {computed} from "vue";
 
 const props = defineProps<{
   project: CompactProjectInfo

@@ -6,6 +6,7 @@
 <script setup lang="ts">
 import {get, useResizeObserver} from "@vueuse/core";
 import gsap from "gsap";
+import {computed, onMounted, ref, watch} from "vue";
 
 const props = defineProps<{
   activeElement: HTMLElement | null;

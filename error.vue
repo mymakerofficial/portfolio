@@ -17,7 +17,9 @@
 </template>
 
 <script setup lang="ts">
-import {NuxtError} from "#app";
+import {clearError, NuxtError, useHead} from "#app";
+import Container from "~/components/generics/Container.vue";
+import {computed} from "vue";
 
 const props = defineProps<{
   error: NuxtError
@@ -32,8 +34,6 @@ useHead({
   },
   title: props.error.message,
 });
-
-const route = useRoute();
 
 const messages: Record<number, string> = {
   401: 'You are not authorized to view this page.',

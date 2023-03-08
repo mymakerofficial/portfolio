@@ -7,6 +7,8 @@
 
 <script setup lang="ts">
 import {QuickActionGroup, QuickActionItem} from "~/lib/quickActions";
+import QuickActionsList from "~/components/quickactions/QuickActionsList.vue";
+import {ref} from "vue";
 
 const props = defineProps<{
   group: QuickActionGroup;

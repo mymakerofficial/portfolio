@@ -11,6 +11,7 @@
 <script lang="ts">
 import {CompactProjectInfo} from "~/server/api/v1/projects";
 import {PropType} from "@vue/runtime-core";
+import {defineNuxtComponent} from "#app";
 
 export default defineNuxtComponent({
   props: {

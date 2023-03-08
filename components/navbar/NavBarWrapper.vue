@@ -10,6 +10,9 @@
 // @ts-ignore
 import SvgIcon from '@jamescoyle/vue-icon';
 import {PropType} from "@vue/runtime-core";
+import {defineNuxtComponent} from "#app";
+import NavBar from "~/components/navbar/NavBar.vue";
+import NavBarButton from "~/components/navbar/NavBarButton.vue";
 
 export interface NavBarOption {
   href: string;
@@ -19,7 +22,9 @@ export interface NavBarOption {
 
 export default defineNuxtComponent({
   components: {
-    SvgIcon
+    SvgIcon,
+    NavBar,
+    NavBarButton,
   },
 
   props: {

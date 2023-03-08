@@ -40,6 +40,8 @@ dayjs.extend(relativeTime);
 
 <script setup lang="ts">
 import { RecentGithubCommitResponse } from "~/server/api/v1/fun/recent_github_commit";
+import Card from "~/components/generics/Card.vue";
+import {computed} from "vue";
 
 const props = defineProps<{
   data: RecentGithubCommitResponse

@@ -5,7 +5,9 @@
 </template>
 
 <script setup lang="ts">
-import { QuickActionItem } from "~~/lib/quickActions";
+import { QuickActionItem } from "~/lib/quickActions";
+import {ref} from "vue";
+import QuickActionsListItem from "~/components/quickactions/QuickActionsListItem.vue";
 
 const props = defineProps<{
   items: QuickActionItem[];

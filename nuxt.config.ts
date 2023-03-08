@@ -6,5 +6,8 @@ export default defineNuxtConfig({
     '/_nuxt/**': { headers: { 'cache-control': 's-maxage=0' } },
     '/admin/**': { ssr: false },
     '/api/v1/**': { cors: true },
-  }
+  },
+  imports: {
+    autoImport: false
+  },
 })

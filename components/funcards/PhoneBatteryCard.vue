@@ -16,6 +16,7 @@
 
 <script setup lang="ts">
 import {PhoneBatteryResponse} from "~/server/api/v1/fun/phone_battery";
+import Card from "~/components/generics/Card.vue";
 
 defineProps<{
   data: PhoneBatteryResponse

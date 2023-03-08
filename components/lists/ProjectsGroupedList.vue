@@ -7,8 +7,14 @@
 <script lang="ts">
 import {PropType} from "@vue/runtime-core";
 import {ProjectsGroup} from "~/server/api/v1/projects";
+import {defineNuxtComponent} from "#app";
+import ProjectsListGroup from "~/components/lists/ProjectsListGroup.vue";
 
 export default defineNuxtComponent({
+  components: {
+    ProjectsListGroup,
+  },
+
   props: {
     groups: {
       type: Array as PropType<ProjectsGroup[]>,

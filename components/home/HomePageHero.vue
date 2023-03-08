@@ -17,4 +17,5 @@
 // @ts-ignore
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiHandWaveOutline, mdiWeb, mdiControllerClassicOutline, mdiDice5Outline, mdiLightbulbOutline, mdiSchoolOutline } from '@mdi/js';
+import Container from "~/components/generics/Container.vue";
 </script>

@@ -41,6 +41,9 @@
 <script setup lang="ts">
 import {CurrentlyListeningResponse} from "~/server/api/v1/fun/currently_listening";
 import {get, set, watchTriggerable} from "@vueuse/core";
+import Card from "~/components/generics/Card.vue";
+import {computed, onMounted, ref} from "vue";
+import {useFetch} from "#app";
 
 const props = defineProps<{
   data: CurrentlyListeningResponse

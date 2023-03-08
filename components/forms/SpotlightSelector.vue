@@ -14,6 +14,7 @@
 
 <script lang="ts">
 import {gsap} from "gsap";
+import {defineNuxtComponent} from "#app";
 
 interface Transforms {
   x: number;

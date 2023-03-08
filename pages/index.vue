@@ -37,6 +37,16 @@
 import {useWindowSize, get, set} from "@vueuse/core";
 // @ts-ignore
 import { v4 as uuid } from "uuid";
+import {useFetch} from "#app";
+import {computed, nextTick, onMounted, ref} from "vue";
+import HomePageHero from "~/components/home/HomePageHero.vue";
+import Container from "~/components/generics/Container.vue";
+import ProjectCard from "~/components/home/ProjectCard.vue";
+import PlaceholderCard from "~/components/funcards/PlaceholderCard.vue";
+import MediaPlayerCard from "~/components/funcards/MediaPlayerCard.vue";
+import GitHubCommitCard from "~/components/funcards/GitHubCommitCard.vue";
+import PhoneBatteryCard from "~/components/funcards/PhoneBatteryCard.vue";
+import ClockCard from "~/components/funcards/ClockCard.vue";
 
 enum CardType {
   Project = "project",

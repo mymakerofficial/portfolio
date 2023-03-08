@@ -79,6 +79,13 @@ import {get} from "@vueuse/core";
 //@ts-ignore
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiGithub } from '@mdi/js';
+import {useFetch, useHead, useRoute} from "#app";
+import {computed} from "vue";
+import ProjectPageHero from "~/components/projectpage/ProjectPageHero.vue";
+import DetailsPanel from "~/components/detailspanel/DetailsPanel.vue";
+import DetailsPanelCard from "~/components/detailspanel/DetailsPanelCard.vue";
+import TimelineWrapper from "~/components/timeline/TimelineWrapper.vue";
+import TimelineItem from "~/components/timeline/TimelineItem.vue";
 
 const { data: project, error} = await useFetch(`/api/v1/projects/${useRoute().params.slug}`)
 
