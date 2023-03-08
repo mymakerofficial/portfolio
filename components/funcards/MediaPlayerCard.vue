@@ -40,7 +40,7 @@
 </template>
 <script setup lang="ts">
 import {CurrentlyListeningResponse} from "~/server/api/v1/fun/currently_listening";
-import {get, set, watchTriggerable} from "@vueuse/core";
+import {get, set, useNow, watchTriggerable} from "@vueuse/core";
 import Card from "~/components/generics/Card.vue";
 import {computed, onMounted, ref} from "vue";
 import {useFetch} from "#app";
@@ -51,7 +51,7 @@ const props = defineProps<{
 
 const listening = ref<CurrentlyListeningResponse>(props.data);
 
-const currentTime = ref(new Date());
+const { now: currentTime } = useNow({ controls: true });
 const startTime = ref(new Date());
 
 const playbackPosition = computed(() => {
@@ -59,7 +59,7 @@ const playbackPosition = computed(() => {
     // get playback position and compensate for caching
     const playbackPosition = (get(listening).playbackPosition || 0) + (get(startTime).getTime() - new Date(get(listening).generatedAt).getTime()) / 1000;
     const timeDifference = (get(currentTime).getTime() - get(startTime).getTime()) / 1000;
-    return playbackPosition + timeDifference;
+    return Math.round(playbackPosition + timeDifference);
   } else {
     return get(listening).playbackPosition || 0;
   }
@@ -108,10 +108,6 @@ const { trigger: startPlayback } = watchTriggerable(listening, (newValue, oldVal
 })
 
 onMounted(() => {
-  setInterval(() => {
-    set(currentTime, new Date());
-  }, 1000);
-
   console.info("MediaPlayerCard: Initialised")
 
   startPlayback();
