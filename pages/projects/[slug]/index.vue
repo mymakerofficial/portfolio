@@ -9,7 +9,7 @@
               <h1 class="text-2xl md:text-4xl xl:text-5xl font-extrabold text-gray-800 dark:text-gray-100">{{ project.displayName }}</h1>
             </div>
             <div class="lg:basis-1/3 lg:flex lg:justify-end" v-if="project.websiteUrl">
-              <Button :href="project.websiteUrl" target="_blank">Visit Website</Button>
+              <FlatButton :href="project.websiteUrl" target="_blank">Visit Website</FlatButton>
             </div>
           </div>
         </div>
@@ -86,6 +86,7 @@ import DetailsPanel from "~/components/detailspanel/DetailsPanel.vue";
 import DetailsPanelCard from "~/components/detailspanel/DetailsPanelCard.vue";
 import TimelineWrapper from "~/components/timeline/TimelineWrapper.vue";
 import TimelineItem from "~/components/timeline/TimelineItem.vue";
+import FlatButton from "~/components/forms/FlatButton.vue";
 
 const { data: project, error} = await useFetch(`/api/v1/projects/${useRoute().params.slug}`)
 
