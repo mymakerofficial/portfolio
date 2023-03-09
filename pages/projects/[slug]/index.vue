@@ -103,12 +103,24 @@ if (get(project)) {
         content: get(project).summary,
       },
       {
+        name: 'og:type',
+        content: 'website',
+      },
+      {
+        name: 'og:site_name',
+        content: 'maiker.de',
+      },
+      {
         name: 'og:title',
         content: get(project).displayName,
       },
       {
         name: 'og:description',
         content: get(project).summary,
+      },
+      {
+        name: 'og:image',
+        content: get(project).thumbnailUrl,
       },
       {
         name: 'twitter:card',
