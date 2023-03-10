@@ -47,6 +47,7 @@ import MediaPlayerCard from "~/components/funcards/MediaPlayerCard.vue";
 import GitHubCommitCard from "~/components/funcards/GitHubCommitCard.vue";
 import PhoneBatteryCard from "~/components/funcards/PhoneBatteryCard.vue";
 import ClockCard from "~/components/funcards/ClockCard.vue";
+import {defineOgImageScreenshot} from "#imports";
 
 enum CardType {
   Project = "project",
@@ -63,6 +64,8 @@ interface CardItem {
   data: any | null;
   key: string;
 }
+
+defineOgImageScreenshot();
 
 // fetch projects from api
 const { data: projects } = await useFetch('/api/v1/projects?featured_first=true');
