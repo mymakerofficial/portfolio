@@ -70,7 +70,6 @@ defineOgImageScreenshot({
   height: 720,
   colorScheme: 'dark',
   mask: '.fun-card',
-  prerender: false,
 });
 
 // fetch projects from api
