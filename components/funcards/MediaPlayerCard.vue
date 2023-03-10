@@ -1,5 +1,5 @@
 <template>
-  <a :href="listening?.shareUrl" target="_blank" class="rounded-xl" v-if="!hide">
+  <a :href="listening?.shareUrl" target="_blank" class="fun-card rounded-xl" v-if="!hide">
     <Card class="p-8 bg-green-50 dark:bg-green-800 overflow-hidden">
       <div v-if="listening" class="flex flex-col lg:flex-row gap-4">
         <div v-if="listening.albumArtUrl" class="w-28 h-28 overflow-hidden">

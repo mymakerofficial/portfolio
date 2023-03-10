@@ -65,7 +65,12 @@ interface CardItem {
   key: string;
 }
 
-defineOgImageScreenshot();
+defineOgImageScreenshot({
+  width: 1280,
+  height: 720,
+  colorScheme: 'dark',
+  mask: '.fun-card'
+});
 
 // fetch projects from api
 const { data: projects } = await useFetch('/api/v1/projects?featured_first=true');
