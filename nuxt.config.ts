@@ -5,8 +5,9 @@ export default defineNuxtConfig({
   plugins: [{ src: '~/plugins/vercel.ts', mode: 'client' }],
   routeRules: {
     '/_nuxt/**': { headers: { 'cache-control': 's-maxage=0' } },
-    '/admin/**': { ssr: false },
+    '/admin/**': { ssr: false, index: false },
     '/api/v1/**': { cors: true },
+    'teapot': { index: false },
   },
   imports: {
     autoImport: false
