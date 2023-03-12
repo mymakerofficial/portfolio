@@ -17,24 +17,16 @@
 </template>
 
 <script setup lang="ts">
-import {clearError, NuxtError, useHead} from "#app";
+import {clearError, NuxtError} from "#app";
 import Container from "~/components/generics/Container.vue";
 import {computed} from "vue";
 import FlatButton from "~/components/forms/FlatButton.vue";
+import {useSeoMeta} from "unhead";
+import {get} from "@vueuse/core";
 
 const props = defineProps<{
   error: NuxtError
 }>();
-
-useHead({
-  bodyAttrs: {
-    class: 'dark:bg-gray-900 dark:text-gray-100',
-  },
-  htmlAttrs: {
-    lang: 'en',
-  },
-  title: props.error.message,
-});
 
 const messages: Record<number, string> = {
   401: 'You are not authorized to view this page.',
@@ -50,5 +42,10 @@ const statusMessage = computed(() => {
 
 const isDev = import.meta.env.DEV;
 
-const handleError = () => clearError({ redirect: '/' })
+const handleError = () => clearError({ redirect: '/' });
+
+useSeoMeta({
+  title: `${props.error.statusCode} - ${get(statusMessage)}`,
+  description:  props.error.message,
+})
 </script>

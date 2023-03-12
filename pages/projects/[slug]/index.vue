@@ -79,7 +79,7 @@ import {get} from "@vueuse/core";
 //@ts-ignore
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiGithub } from '@mdi/js';
-import {useFetch, useHead, useRoute} from "#app";
+import {useFetch, useRoute, createError} from "#app";
 import {computed} from "vue";
 import ProjectPageHero from "~/components/projectpage/ProjectPageHero.vue";
 import DetailsPanel from "~/components/detailspanel/DetailsPanel.vue";
@@ -87,6 +87,7 @@ import DetailsPanelCard from "~/components/detailspanel/DetailsPanelCard.vue";
 import TimelineWrapper from "~/components/timeline/TimelineWrapper.vue";
 import TimelineItem from "~/components/timeline/TimelineItem.vue";
 import FlatButton from "~/components/forms/FlatButton.vue";
+import {useSeoMeta} from "unhead";
 
 const { data: project, error} = await useFetch(`/api/v1/projects/${useRoute().params.slug}`)
 
@@ -95,54 +96,10 @@ if (get(error)) {
 }
 
 if (get(project)) {
-  useHead({
-    title: get(project).displayName,
-    meta: [
-      {
-        name: 'description',
-        content: get(project).summary,
-      },
-      {
-        name: 'og:type',
-        content: 'website',
-      },
-      {
-        name: 'og:site_name',
-        content: 'maiker.de',
-      },
-      {
-        name: 'og:title',
-        content: get(project).displayName,
-      },
-      {
-        name: 'og:description',
-        content: get(project).summary,
-      },
-      {
-        name: 'og:image',
-        content: get(project).thumbnailUrl,
-      },
-      {
-        name: 'twitter:card',
-        content: 'summary_large_image',
-      },
-      {
-        name: 'twitter:title',
-        content: get(project).displayName,
-      },
-      {
-        name: 'twitter:description',
-        content: get(project).summary,
-      },
-      {
-        name: 'twitter:image',
-        content: get(project).thumbnailUrl,
-      }
-    ]
-  })
-} else {
-  useHead({
-    title: "Project not found",
+  useSeoMeta({
+    title:  get(project).displayName,
+    description:  get(project).summary,
+    ogImage: get(project).thumbnailUrl,
   })
 }
 

@@ -48,6 +48,7 @@ import GitHubCommitCard from "~/components/funcards/GitHubCommitCard.vue";
 import PhoneBatteryCard from "~/components/funcards/PhoneBatteryCard.vue";
 import ClockCard from "~/components/funcards/ClockCard.vue";
 import {defineOgImageScreenshot} from "#imports";
+import {useSeoMeta} from "unhead";
 
 enum CardType {
   Project = "project",
@@ -64,6 +65,11 @@ interface CardItem {
   data: any | null;
   key: string;
 }
+
+useSeoMeta({
+  title: "My_Maker",
+  description:  "Hi, I'm My_Maker. I'm a software developer and maker. I'm currently working at My_Maker.",
+});
 
 defineOgImageScreenshot({
   width: 1280,

@@ -17,9 +17,14 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://example.com',
-      siteName: 'My_Maker',
-      siteDescription: 'Hai Im My_Maker. Making mostly dumb websites and games online. Passionate about all tings coding.',
-      language: 'en', // prefer more explicit language codes like `en-AU` over `en`
+      language: 'en',
+    }
+  },
+  app: {
+    head: {
+      bodyAttrs: {
+        class: 'bg-white text-dark-900 dark:bg-gray-900 dark:text-gray-100',
+      },
     }
   },
 })

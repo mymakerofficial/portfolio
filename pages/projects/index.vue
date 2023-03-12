@@ -16,11 +16,13 @@
 
 <script setup lang="ts">
 import {get} from "@vueuse/core";
-import {useFetch, useHead, useRoute} from "#app";
+import {useFetch, useRoute} from "#app";
 import {computed} from "vue";
 import Container from "~/components/generics/Container.vue";
 import ProjectsGroupedList from "~/components/lists/ProjectsGroupedList.vue";
 import ProjectsList from "~/components/lists/ProjectsList.vue";
+import {useSeoMeta} from "unhead";
+import {defineOgImageScreenshot} from "#imports";
 
 const route = useRoute();
 
@@ -69,13 +71,14 @@ const requestUrl = computed(() => {
 
 const { data } = await useFetch(get(requestUrl));
 
-useHead({
-  title: 'Projects',
-  meta: [
-    {
-      name: 'description',
-      content: 'Projects made by me'
-    }
-  ]
-})
+useSeoMeta({
+  title: "Projects by My_Maker",
+  description: "Find all my projects here.",
+});
+
+defineOgImageScreenshot({
+  width: 1280,
+  height: 720,
+  colorScheme: 'dark',
+});
 </script>
