@@ -18,7 +18,11 @@ export default defineNuxtConfig({
     public: {
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL || 'https://example.com',
       language: 'en',
-    }
+    },
+  },
+  robots: {
+    indexable: process.env.NUXT_INDEXABLE === 'true',
+    disallow: ['/admin/**'],
   },
   app: {
     head: {
