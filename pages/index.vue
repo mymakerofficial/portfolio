@@ -68,7 +68,7 @@ interface CardItem {
 
 useSeoMeta({
   title: "My_Maker",
-  description:  "Hi, I'm My_Maker. I'm a software developer and maker. I'm currently working at My_Maker.",
+  description:  "Hai Im My_Maker. Making mostly dumb websites and games online. Find all my projects and other random stuff here about me here."
 });
 
 defineOgImageScreenshot({
