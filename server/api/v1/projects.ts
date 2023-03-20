@@ -223,7 +223,7 @@ const convertProjectsRawToCompact = (projects: ProjectsRawData[]): CompactProjec
       technologies: project.technologies?.map((technology: any) => technology.displayName),
       date: (project.releaseDate || project.startedDate) as string,
       featured: project.featured as boolean,
-      thumbnailUrl: project.thumbnailPath ? `/cdn/${project.thumbnailPath.replace(/^\//, '')}` : null,
+      thumbnailUrl: project.thumbnailPath ? `/cdn/${project.thumbnailPath.replace(/^\//, '').replace('.webp', '.jpg')}` : null,
       htmlUrl: `/projects/${project.slug}`,
       url: `/api/v1/projects/${project.slug}`,
     } as CompactProjectInfo;
