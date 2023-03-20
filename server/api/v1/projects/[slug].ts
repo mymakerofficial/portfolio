@@ -11,6 +11,7 @@ const octokit = new Octokit({
 export default defineCachedEventHandler(
   async (event) => {
     // fetch projects from supabase
+    // @ts-ignore
     const { data: projectData } = await supabase
       .from('projects')
       .select('' +
@@ -37,7 +38,7 @@ export default defineCachedEventHandler(
         'repositories ( name, owner, title, description, public, provider ( slug, baseUrl: base_url ) ), ' +
         'thumbnailPath: thumbnail_path'
       )
-      .eq('slug', event.context.params.slug)
+      .eq('slug', event.context.params!.slug)
       .single() as { data: Partial<ProjectsRawData>, error: PostgrestError | null }
 
     if (!projectData) {
@@ -98,7 +99,7 @@ export default defineCachedEventHandler(
       summary: projectData.summary,
       bodyProse: projectData.bodyProse as JSONContent,
       type: projectData.type?.shortDisplayName || projectData.type?.displayName || 'Project',
-      thumbnailUrl: projectData.thumbnailPath ? `/cdn/${projectData.thumbnailPath.replace(/^\//, '')}` : null,
+      thumbnailUrl: projectData.thumbnailPath ? `${process.env.STORAGE_URL}/${encodeURIComponent(projectData.thumbnailPath.replace(/^\//, ''))}?alt=media` : null,
       websiteUrl: projectData.url,
       releaseDate: projectData.releaseDate,
       startedDate: projectData.startedDate,
