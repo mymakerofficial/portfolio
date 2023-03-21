@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import {useWindowSize, get, set} from "@vueuse/core";
+import { get, set} from "@vueuse/core";
 // @ts-ignore
 import { v4 as uuid } from "uuid";
 import {useFetch} from "#app";
@@ -97,32 +97,6 @@ const list = computed(() => {
   });
 
   return list;
-})
-
-const grid = computed(() => {
-  const cols = 2;
-  let grid: CardItem[][] = [];
-
-  for (let i = 0; i < cols; i++) {
-    grid.push([]);
-  }
-  for (let i = 0; i < get(list).length; i++) {
-    grid[i % cols].push(get(list)[i]);
-  }
-
-  grid[1].unshift({
-    type: CardType.Spacer,
-    data: null,
-    key: uuid(),
-  });
-
-  return grid;
-})
-
-const { width: windowWidth } = useWindowSize()
-
-const showGrid = computed(() => {
-  return get(windowWidth) > 1024
 })
 
 const getMediaPlayerItem = async () => {
