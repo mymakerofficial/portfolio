@@ -91,13 +91,28 @@ import {useSeoMeta} from "unhead";
 
 const { data: project, error} = await useFetch(`/api/v1/projects/${useRoute().params.slug}`)
 
+const pageTitle = computed(() => {
+  // create list of collaborators
+  const collaborators = ["My_Maker", ...get(project)?.collaborators.map((c: any) => c.displayName).sort()];
+
+  // limit to first 3 collaborators
+  if (collaborators.length > 3) {
+    collaborators.splice(2, collaborators.length - 3, "more");
+  }
+
+  // generate human-readable string of collaborators, concat with "," and last with "and"
+  const collaboratorsHumanReadable = collaborators.join(", ").replace(/,(?!.*,)/gmi, " and");
+
+  return `${get(project)?.displayName} by ${collaboratorsHumanReadable}`;
+});
+
 if (get(error)) {
   throw createError(get(error)!);
 }
 
 if (get(project)) {
   useSeoMeta({
-    title:  get(project).displayName,
+    title:  get(pageTitle),
     description:  get(project).summary,
     ogImage: get(project).thumbnailUrl,
   })
