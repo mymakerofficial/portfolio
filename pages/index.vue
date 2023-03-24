@@ -61,6 +61,7 @@ useSeoMeta({
 defineOgImageScreenshot({
   width: 1280,
   height: 720,
+  static: false,
   colorScheme: 'dark',
   mask: '.fun-card, .toast',
 });
