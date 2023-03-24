@@ -66,7 +66,7 @@ defineOgImageScreenshot({
 });
 
 // fetch projects from api
-const { data: projects } = await useFetch('/api/v1/projects?featured_first=true');
+const { data: projects } = await useFetch('/api/v1/projects?featured_first=true&limit=10');
 
 // create project cards
 const projectCards = ref<CardItem[]>([]);
