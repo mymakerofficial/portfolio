@@ -1,5 +1,5 @@
 <template>
-  <div v-if="show" class="fixed bottom-8 right-8 left-8 lg:left-auto z-50 md:xl-w-1/2 xl:w-1/4 flex flex-col gap-4 bg-gray-200 dark:bg-gray-800 p-6 rounded-xl shadow-xl shadow-gray-700/25">
+  <div v-if="show" class="toast fixed bottom-8 right-8 left-8 lg:left-auto z-50 md:xl-w-1/2 xl:w-1/4 flex flex-col gap-4 bg-gray-200 dark:bg-gray-800 p-6 rounded-xl shadow-xl shadow-gray-700/25">
     <h3 class="text-lg font-medium flex items-center gap-3"><SvgIcon type="mdi" :path="mdiFlaskOutline" class="h-6"/>Hello there traveler, new stuff ahead.</h3>
     <p>Welcome to my new website. Please keep in mind that you are viewing a <b>development preview</b>. Things <b>will</b> change.</p>
     <div>
