@@ -99,7 +99,7 @@ export default defineCachedEventHandler(
       summary: projectData.summary,
       bodyProse: projectData.bodyProse as JSONContent,
       type: projectData.type?.shortDisplayName || projectData.type?.displayName || 'Project',
-      thumbnailUrl: projectData.thumbnailPath ? `${process.env.STORAGE_URL}/${encodeURIComponent(projectData.thumbnailPath.replace(/^\//, ''))}?alt=media` : null,
+      thumbnailUrl: projectData.thumbnailPath ? `/cdn/${projectData.thumbnailPath.replace(/^\//, '')}` : null,
       websiteUrl: projectData.url,
       releaseDate: projectData.releaseDate,
       startedDate: projectData.startedDate,

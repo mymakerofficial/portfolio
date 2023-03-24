@@ -223,7 +223,7 @@ const convertProjectsRawToCompact = (projects: ProjectsRawData[]): CompactProjec
       technologies: project.technologies?.map((technology: any) => technology.displayName),
       date: (project.releaseDate || project.startedDate) as string,
       featured: project.featured as boolean,
-      thumbnailUrl: project.thumbnailPath ? `${process.env.STORAGE_URL}/${encodeURIComponent(project.thumbnailPath.replace(/^\//, ''))}?alt=media` : null, // TODO: we need to return the direct firestore url, otherwise the og image won't work...
+      thumbnailUrl: project.thumbnailPath ? `/cdn/${project.thumbnailPath.replace(/^\//, '')}` : null,
       htmlUrl: `/projects/${project.slug}`,
       url: `/api/v1/projects/${project.slug}`,
     } as CompactProjectInfo;
