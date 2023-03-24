@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col gap-12 md:gap-16 my-12 md:my-36">
-    <section class="md:mb-16">
+  <div class="flex flex-col gap-12 md:gap-28 my-12 mb-36 md:mt-36">
+    <section>
       <HomePageHero />
     </section>
     <main>
