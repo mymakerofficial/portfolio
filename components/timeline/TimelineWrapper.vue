@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col sm:flex-row gap-4 sm:items-center">
+  <div class="flex flex-col gap-4">
     <slot />
   </div>
 </template>

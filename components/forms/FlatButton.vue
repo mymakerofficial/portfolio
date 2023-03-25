@@ -6,7 +6,7 @@
     <ClientOnly>
       <SpotlightEffectElement />
     </ClientOnly>
-    <span class="h-12 px-10 inline-flex justify-center items-center text-md font-medium text-gray-900 dark:text-gray-100">
+    <span class="h-12 px-6 inline-flex justify-center items-center gap-2 text-md font-medium text-gray-900 dark:text-gray-100">
       <slot />
     </span>
   </component>
