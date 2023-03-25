@@ -1,9 +1,9 @@
 <template>
   <NuxtLink :to="project.htmlUrl" class="rounded-lg">
-    <Card class="p-8 md:p-12">
+    <Card class="group/project-card p-8 md:p-12 hover:-translate-y-1 hover:scale-[1.02] duration-500 ease-in-out">
       <div class="flex flex-col gap-8">
         <div v-if="showThumbnail" class="w-full aspect-video rounded-lg overflow-hidden">
-          <img :src="project.thumbnailUrl" :alt="project.displayName" class="absolute w-full h-full z-10" />
+          <img :src="project.thumbnailUrl" :alt="project.displayName" class="absolute w-full h-full z-10 group-hover/project-card:scale-[1.02] duration-500 ease-in-out" />
           <div class="w-full h-full bg-gray-600/20 dark:bg-gray-100/20 animate-pulse" />
         </div>
         <h1 v-if="!showThumbnail" class="text-xl text-gray-900 dark:text-gray-100 font-bold">{{project.displayName}}</h1>
