@@ -1,6 +1,6 @@
 <template>
   <a :href="data.repo?.htmlUrl" target="_blank" class="fun-card rounded-xl">
-    <Card class="p-8 bg-gray-50 dark:bg-gray-800 overflow-hidden">
+    <Card class="p-8 border border-gray-100/80 dark:border-gray-800/80 overflow-hidden duration-500 ease-in-out">
       <div v-if="data">
         <div class="flex flex-col gap-4">
           <div class="mr-9">

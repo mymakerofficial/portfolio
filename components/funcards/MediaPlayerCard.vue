@@ -1,20 +1,20 @@
 <template>
   <a :href="listening?.shareUrl" target="_blank" class="fun-card rounded-xl" v-if="!hide">
-    <Card class="p-8 bg-green-50 dark:bg-green-800 overflow-hidden">
+    <Card class="p-8 border border-gray-100/80 dark:border-gray-800/80 overflow-hidden duration-500 ease-in-out">
       <div v-if="listening" class="flex flex-col lg:flex-row gap-4">
         <div v-if="listening.albumArtUrl" class="w-28 h-28 overflow-hidden">
           <img :alt="listening.albumName" :src="listening.albumArtUrl" class="absolute w-full h-full z-10" />
-          <div class="absolute w-full h-full bg-green-600/20 dark:bg-green-100/20 animate-pulse" />
+          <div class="absolute w-full h-full bg-gray-600/20 dark:bg-gray-100/20 animate-pulse" />
         </div>
         <div class="flex-1 flex flex-col gap-4 justify-between">
           <div class="flex flex-col gap-2 mr-9">
-            <h1 class="text-md text-green-700 dark:text-green-100 font-bold">{{listening.trackTitle}}</h1>
-            <p class="text-sm text-green-600 dark:text-green-200">{{listening.artistName}}</p>
-            <p class="text-sm text-green-600 dark:text-green-200">{{listening.albumName}}</p>
+            <h1 class="text-md text-gray-700 dark:text-gray-100 font-bold">{{listening.trackTitle}}</h1>
+            <p class="text-sm text-gray-700 dark:text-gray-400">{{listening.artistName}}</p>
+            <p class="text-sm text-gray-700 dark:text-gray-400">{{listening.albumName}}</p>
           </div>
           <div>
-            <div class="h-1 w-full bg-green-100 dark:bg-green-700 rounded-full overflow-hidden">
-              <div class="h-full bg-green-900 dark:bg-green-100 transition-[width] duration-1000 ease-linear rounded-full" :style="{ width: `${(playbackPosition / listening.playbackDuration) * 100}%` }" />
+            <div class="h-1 w-full bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+              <div class="h-full bg-gray-900 dark:bg-gray-100 transition-[width] duration-1000 ease-linear rounded-full" :style="{ width: `${(playbackPosition / listening.playbackDuration) * 100}%` }" />
             </div>
           </div>
         </div>
@@ -23,15 +23,15 @@
         </div>
       </div>
       <div v-else class="flex flex-col lg:flex-row gap-4">
-        <div class="w-28 h-28 bg-green-600/20 dark:bg-green-100/20 animate-pulse" />
+        <div class="w-28 h-28 bg-gray-600/20 dark:bg-gray-100/20 animate-pulse" />
         <div class="flex-1 flex flex-col gap-4 justify-between">
           <div class="flex flex-col gap-4">
-            <div class="w-28 h-4 bg-green-600/20 dark:bg-green-100/20 animate-pulse rounded-md" />
-            <div class="w-16 h-4 bg-green-600/20 dark:bg-green-100/20 animate-pulse rounded-md" />
-            <div class="w-20 h-4 bg-green-600/20 dark:bg-green-100/20 animate-pulse rounded-md" />
+            <div class="w-28 h-4 bg-gray-600/20 dark:bg-gray-100/20 animate-pulse rounded-md" />
+            <div class="w-16 h-4 bg-gray-600/20 dark:bg-gray-100/20 animate-pulse rounded-md" />
+            <div class="w-20 h-4 bg-gray-600/20 dark:bg-gray-100/20 animate-pulse rounded-md" />
           </div>
           <div>
-            <div class="h-1 w-full bg-green-900/20 dark:bg-green-100/20 animate-pulse rounded-full" />
+            <div class="h-1 w-full bg-gray-900/20 dark:bg-gray-100/20 animate-pulse rounded-full" />
           </div>
         </div>
       </div>
