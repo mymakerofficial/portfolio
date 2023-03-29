@@ -17,6 +17,7 @@
         </div>
       </Container>
     </main>
+    <Footer />
   </div>
 </template>
 
@@ -36,6 +37,7 @@ import PhoneBatteryCard from "~/components/funcards/PhoneBatteryCard.vue";
 import ClockCard from "~/components/funcards/ClockCard.vue";
 import {defineOgImageScreenshot} from "#imports";
 import {useSeoMeta} from "unhead";
+import Footer from "~/components/generics/Footer.vue";
 
 enum CardType {
   Project = "project",
