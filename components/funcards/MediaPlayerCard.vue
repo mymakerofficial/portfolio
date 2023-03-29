@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="absolute top-0 right-0 z-10" v-if="listening.contentProvider">
-          <img v-if="listening.contentProvider === 'spotify'" alt="Spotify" src="~/assets/img/Spotify_Icon_RGB_Green.png" class="h-6" />
+          <img v-if="listening.contentProvider === 'spotify'" alt="Spotify" src="~/assets/img/Spotify_Icon_RGB_White.png" class="h-6 invert dark:invert-0" />
         </div>
       </div>
       <div v-else class="flex flex-col lg:flex-row gap-4">

@@ -14,8 +14,7 @@
           </div>
         </div>
         <div class="absolute top-0 right-0 z-10">
-          <img alt="GitHub" src="~/assets/img/github-mark-white.svg" class="h-6 hidden dark:block" />
-          <img alt="GitHub" src="~/assets/img/github-mark.svg" class="h-6 block dark:hidden" />
+          <img alt="GitHub" src="~/assets/img/github-mark-white.svg" class="h-6 invert dark:invert-0" />
         </div>
       </div>
       <div v-else class="flex flex-col gap-4">
