@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-2xl">
+  <article class="rounded-2xl">
     <slot />
-  </div>
+  </article>
 </template>

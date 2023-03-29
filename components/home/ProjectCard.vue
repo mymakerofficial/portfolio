@@ -1,13 +1,21 @@
 <template>
-  <NuxtLink :to="project.htmlUrl" class="rounded-lg">
-    <Card class="group/project-card p-8 md:p-12 hover:-translate-y-1 hover:scale-[1.02] duration-500 ease-in-out">
-      <div class="flex flex-col gap-8">
+  <NuxtLink :to="project.htmlUrl" class="rounded-xl">
+    <Card class="group/project-card hover:bg-gray-100/50 dark:hover:bg-gray-800/50 border border-gray-100/80 dark:border-gray-800/80 overflow-hidden duration-500 ease-in-out">
+      <ClientOnly>
+        <SpotlightEffectElement class="opacity-5" />
+      </ClientOnly>
+      <div class="flex flex-col gap-6 p-8">
         <div v-if="showThumbnail" class="w-full aspect-video rounded-lg overflow-hidden">
-          <img :src="project.thumbnailUrl" :alt="project.displayName" class="absolute w-full h-full z-10 group-hover/project-card:scale-[1.02] duration-500 ease-in-out" />
+          <img :src="project.thumbnailUrl" :alt="project.displayName" class="absolute w-full h-full z-10" />
           <div class="w-full h-full bg-gray-600/20 dark:bg-gray-100/20 animate-pulse" />
         </div>
-        <h1 v-if="!showThumbnail" class="text-xl text-gray-900 dark:text-gray-100 font-bold">{{project.displayName}}</h1>
-        <p v-if="!showThumbnail" class="text-sm text-gray-700 dark:text-gray-400">{{project.summary}}</p>
+        <div class="flex flex-col gap-3">
+          <time :datetime="project.date" class="text-xs text-gray-900 dark:text-gray-100">{{dateFormatted}}</time>
+          <h1 class="text-2xl text-gray-900 dark:text-gray-100 font-bold">{{project.displayName}}</h1>
+        </div>
+        <div>
+          <p class="text-sm text-gray-700 dark:text-gray-400 group-hover/project-card:text-gray-900 group-hover/project-card:dark:text-gray-100 duration-500 ease-in-out">{{project.summary}}</p>
+        </div>
       </div>
     </Card>
   </NuxtLink>
@@ -17,12 +25,13 @@
 import {CompactProjectInfo} from "~/lib/projects";
 import Card from "~/components/generics/Card.vue";
 import {computed} from "vue";
+import SpotlightEffectElement from "~/components/generics/SpotlightEffectElement.vue";
+import dayjs from "dayjs";
 
 const props = defineProps<{
   project: CompactProjectInfo
+  showThumbnail?: boolean;
 }>();
 
-const showThumbnail = computed(() => {
-  return props.project.thumbnailUrl && props.project.featured;
-});
+const dateFormatted = computed(() => dayjs(props.project.date).format('MMMM, YYYY'))
 </script>
