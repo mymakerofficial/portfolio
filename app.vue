@@ -3,7 +3,7 @@
     <ClientOnly>
       <QuickActionModal v-model:active="quickActionModalActive" />
     </ClientOnly>
-    <NavBarWrapper :options="navBarOptions" :active="navBarActive" />
+    <NavBarWrapper :options="navBarOptions" :active="false" />
     <NuxtLoadingIndicator color="#f6f8fa" :height="2" />
     <NuxtPage />
     <ClientOnly>
