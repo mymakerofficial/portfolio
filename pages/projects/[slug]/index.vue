@@ -5,9 +5,9 @@
         <ProjectPageHero :project="project" />
         <article v-html="bodyHtml" :class="bodyClass" />
         <DetailsPanel>
-          <DetailsPanelCard v-if="project.disclosure.text">
-            <template #title>{{project.disclosure.heading || 'Info'}}</template>
-            <p class="text-sm font-medium text-gray-800 dark:text-gray-200 lg:w-3/4">{{ project.disclosure.text }}</p>
+          <DetailsPanelCard v-for="(disclosure, index) in project.disclosures" :key="index">
+            <template #title>{{disclosure.title || 'Info'}}</template>
+            <p class="text-sm font-medium text-gray-800 dark:text-gray-200 lg:w-3/4">{{ disclosure.text }}</p>
           </DetailsPanelCard>
           <DetailsPanelCard>
             <template #title>Timeline</template>

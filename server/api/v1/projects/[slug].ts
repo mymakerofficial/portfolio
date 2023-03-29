@@ -24,8 +24,7 @@ export default defineCachedEventHandler(
         'releaseDate: released_at_date, ' +
         'startedDate: started_at_date, ' +
         'featured, ' +
-        'detailsDisclosureHeading: details_disclosure_heading, ' +
-        'detailsDisclosureText: details_disclosure_text, ' +
+        'disclosures: disclosure_panels ( title, text ), ' +
         'tags ( slug, displayName: display_name ), ' +
         'collaborators: people ( slug, displayName: display_name, websiteUrl: website_url ), ' +
         'technologies ( ' +
@@ -114,10 +113,7 @@ export default defineCachedEventHandler(
           provider: r.provider.slug,
         }
       }) || [],
-      disclosure: {
-        heading: projectData.detailsDisclosureHeading,
-        text: projectData.detailsDisclosureText
-      },
+      disclosures: projectData.disclosures,
       tags: projectData.tags,
       collaborators: projectData.collaborators,
       technologies: technologiesOut,
