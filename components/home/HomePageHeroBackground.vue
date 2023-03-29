@@ -43,6 +43,7 @@
 svg.background {
   mix-blend-mode: soft-light;
   opacity: 0.08;
+  filter: brightness(0.75);
 }
 
 svg .circle {
