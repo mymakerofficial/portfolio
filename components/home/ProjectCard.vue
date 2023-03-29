@@ -2,7 +2,7 @@
   <NuxtLink :to="project.htmlUrl" class="rounded-xl">
     <Card class="group/project-card hover:bg-gray-100/50 dark:hover:bg-gray-800/50 border border-gray-100/80 dark:border-gray-800/80 overflow-hidden duration-500 ease-in-out">
       <ClientOnly>
-        <SpotlightEffectElement class="opacity-5" />
+        <SpotlightEffectElement class="opacity-[.025] group-hover/project-card:opacity-5 duration-500 ease-in-out" />
       </ClientOnly>
       <div class="flex flex-col gap-6 p-8">
         <div v-if="showThumbnail" class="w-full aspect-video rounded-lg overflow-hidden">
