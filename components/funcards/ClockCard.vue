@@ -1,15 +1,7 @@
 <template>
-  <Card class="fun-card border border-gray-100/80 dark:border-gray-800/80 overflow-hidden duration-500 ease-in-out">
-    <div v-if="clockText">
-      <div class="p-8 flex flex-col gap-4">
-        <h2 class="text-md font-medium text-gray-600 dark:text-gray-100">Time in Germany</h2>
-        <h1  class="text-4xl font-bold text-gray-600 dark:text-gray-100">{{ clockText }}</h1>
-      </div>
-    </div>
-    <div v-else class="p-8 flex flex-col gap-4">
-      <div class="w-28 h-5 bg-gray-600/20 dark:bg-gray-100/20 animate-pulse rounded-md" />
-      <div class="w-48 h-11 bg-gray-600/20 dark:bg-gray-100/20 animate-pulse rounded-md" />
-    </div>
+  <Card class="fun-card p-8 flex flex-col gap-4">
+    <h2 class="text-md font-medium text-gray-600 dark:text-gray-100">Time in Germany</h2>
+    <h1  class="text-4xl font-bold text-gray-600 dark:text-gray-100">{{ clockText }}</h1>
   </Card>
 </template>
 

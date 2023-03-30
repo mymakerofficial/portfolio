@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="$attrs.href ? 'a' : 'button'"
+    :is="$attrs.href ? 'a' : $attrs.to ? NuxtLink : 'button'"
     class="inline-block rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 duration-500 ease-in-out"
   >
     <ClientOnly>
@@ -14,4 +14,5 @@
 
 <script setup lang="ts">
 import SpotlightEffectElement from "~/components/generics/SpotlightEffectElement.vue";
+import {NuxtLink} from "#components";
 </script>
