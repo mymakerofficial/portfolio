@@ -40,10 +40,10 @@
               </div>
             </div>
           </DetailsPanelCard>
-          <DetailsPanelCard v-for="repo in project.repositories" :href="repo.url" target="_blank" :kex="repo.owner + repo.name">
+          <DetailsPanelCardLink v-for="repo in project.repositories" :href="repo.url" target="_blank" :kex="repo.owner + repo.name">
             <template #title><SvgIcon type="mdi" :path="mdiGithub" class="h-8" />{{project.repositories.length > 1 && repo.title ? repo.title : "Repository"}}</template>
             <p class="text-sm font-medium text-gray-800 dark:text-gray-200">{{ repo.owner }}/{{ repo.name }}</p>
-          </DetailsPanelCard>
+          </DetailsPanelCardLink>
           <DetailsPanelCard v-if="project.tags.length > 0">
             <div class="flex flex-wrap gap-x-2 gap-y-3 items-center">
               <div v-for="tag in project.tags" :key="tag.slug">
@@ -73,6 +73,7 @@ import DetailsPanelCard from "~/components/detailspanel/DetailsPanelCard.vue";
 import TimelineWrapper from "~/components/timeline/TimelineWrapper.vue";
 import TimelineItem from "~/components/timeline/TimelineItem.vue";
 import {useSeoMeta} from "unhead";
+import DetailsPanelCardLink from "~/components/detailspanel/DetailsPanelCardLink.vue";
 
 const { data: project, error} = await useFetch(`/api/v1/projects/${useRoute().params.slug}`)
 

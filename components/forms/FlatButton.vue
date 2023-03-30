@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="$attrs.href ? 'a' : $attrs.to ? NuxtLink : 'button'"
+    :is="$attrs.href || $attrs.to ? NuxtLink : 'button'"
     class="inline-block rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 duration-500 ease-in-out"
   >
     <ClientOnly>

@@ -1,25 +1,27 @@
 <template>
-  <Card class="fun-card p-8 flex flex-col lg:flex-row gap-4" :href="listening?.shareUrl" target="_blank" v-if="!hide">
-    <div v-if="listening.albumArtUrl" class="w-28 h-28 overflow-hidden">
-      <img :alt="listening.albumName" :src="listening.albumArtUrl" class="absolute w-full h-full z-10" />
-      <div class="absolute w-full h-full bg-gray-600/20 dark:bg-gray-100/20 animate-pulse" />
-    </div>
-    <div class="flex-1 flex flex-col gap-4 justify-between">
-      <div class="flex flex-col gap-2 mr-9">
-        <h1 class="text-md text-gray-700 dark:text-gray-100 font-bold">{{listening.trackTitle}}</h1>
-        <p class="text-sm text-gray-700 dark:text-gray-400">{{listening.artistName}}</p>
-        <p class="text-sm text-gray-700 dark:text-gray-400">{{listening.albumName}}</p>
+  <NuxtLink :href="listening?.shareUrl" target="_blank" class="rounded-2xl" v-if="!hide">
+    <Card class="fun-card p-8 flex flex-col lg:flex-row gap-4">
+      <div v-if="listening.albumArtUrl" class="w-28 h-28 overflow-hidden">
+        <img :alt="listening.albumName" :src="listening.albumArtUrl" class="absolute w-full h-full z-10" />
+        <div class="absolute w-full h-full bg-gray-600/20 dark:bg-gray-100/20 animate-pulse" />
       </div>
-      <div>
-        <div class="h-1 w-full bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
-          <div class="h-full bg-gray-900 dark:bg-gray-100 transition-[width] duration-1000 ease-linear rounded-full" :style="{ width: `${(playbackPosition / listening.playbackDuration) * 100}%` }" />
+      <div class="flex-1 flex flex-col gap-4 justify-between">
+        <div class="flex flex-col gap-2 mr-9">
+          <h1 class="text-md text-gray-700 dark:text-gray-100 font-bold">{{listening.trackTitle}}</h1>
+          <p class="text-sm text-gray-700 dark:text-gray-400">{{listening.artistName}}</p>
+          <p class="text-sm text-gray-700 dark:text-gray-400">{{listening.albumName}}</p>
+        </div>
+        <div>
+          <div class="h-1 w-full bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+            <div class="h-full bg-gray-900 dark:bg-gray-100 transition-[width] duration-1000 ease-linear rounded-full" :style="{ width: `${(playbackPosition / listening.playbackDuration) * 100}%` }" />
+          </div>
         </div>
       </div>
-    </div>
-    <div class="absolute top-8 right-8 z-10" v-if="listening.contentProvider">
-      <img v-if="listening.contentProvider === 'spotify'" alt="Spotify" src="~/assets/img/Spotify_Icon_RGB_White.png" class="h-6 invert dark:invert-0" />
-    </div>
-  </Card>
+      <div class="absolute top-8 right-8 z-10" v-if="listening.contentProvider">
+        <img v-if="listening.contentProvider === 'spotify'" alt="Spotify" src="~/assets/img/Spotify_Icon_RGB_White.png" class="h-6 invert dark:invert-0" />
+      </div>
+    </Card>
+  </NuxtLink>
 </template>
 <script setup lang="ts">
 import {CurrentlyListeningResponse} from "~/server/api/v1/fun/currently_listening";
