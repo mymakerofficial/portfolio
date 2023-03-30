@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxtjs/tailwindcss', '@unlighthouse/nuxt'],
+  modules: ['@nuxtjs/tailwindcss', '@unlighthouse/nuxt', '@nuxt/content'],
   extends: ['nuxt-seo-kit'],
   plugins: [{ src: '~/plugins/vercel.ts', mode: 'client' }],
   routeRules: {

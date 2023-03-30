@@ -1,6 +1,6 @@
 <template>
   <Container class="2xl:w-1/2">
-    <div class="mt-12 mb-40 md:mt-44 md:mb-48 flex flex-col gap-12">
+    <div class="mt-12 md:mt-44 flex flex-col gap-12">
       <ProjectsGroupedList v-if="data.resultType === 'grouped' && data.data.length > 1" :groups="data.data"/>
       <div class="flex flex-col gap-8" v-else-if="data.resultType === 'grouped'">
         <h1 class="px-4 text-xl font-bold tracking-widest text-gray-200 dark:text-gray-700">Projects made with {{ data.data[0].group.displayName }}</h1>

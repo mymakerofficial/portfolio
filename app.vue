@@ -1,14 +1,12 @@
 <template>
   <div>
+    <NuxtLoadingIndicator color="#f6f8fa" :height="2" />
     <ClientOnly>
       <QuickActionModal v-model:active="quickActionModalActive" />
-    </ClientOnly>
-    <NavBarWrapper :options="navBarOptions" :active="false" />
-    <NuxtLoadingIndicator color="#f6f8fa" :height="2" />
-    <NuxtPage />
-    <ClientOnly>
       <DevVersionWarningMessage />
     </ClientOnly>
+    <NuxtPage />
+    <Footer />
   </div>
 </template>
 
@@ -18,12 +16,7 @@ import {get, set, useMagicKeys, whenever} from "@vueuse/core";
 import {computed, ref} from "vue";
 import QuickActionModal from "~/components/quickactions/QuickActionModal.vue";
 import DevVersionWarningMessage from "~/components/goodies/DevVersionWarningMessage.vue";
-import NavBarWrapper from "~/components/navbar/NavBarWrapper.vue";
-
-const navBarOptions: NavBarOption[] = [
-  { href: '/', label: 'home' },
-  { href: '/projects', label: 'projects' },
-]
+import Footer from "~/components/generics/Footer.vue";
 
 let quickActionModalActive = ref(false);
 

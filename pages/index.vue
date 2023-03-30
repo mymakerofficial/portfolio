@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-12 md:gap-28 my-12 mb-36 md:mt-36">
+  <div class="flex flex-col gap-12 md:gap-28 my-12 md:mt-36">
     <section>
       <HomePageHero />
     </section>
@@ -17,7 +17,6 @@
         </div>
       </Container>
     </main>
-    <Footer />
   </div>
 </template>
 
@@ -37,7 +36,6 @@ import PhoneBatteryCard from "~/components/funcards/PhoneBatteryCard.vue";
 import ClockCard from "~/components/funcards/ClockCard.vue";
 import {defineOgImageScreenshot} from "#imports";
 import {useSeoMeta} from "unhead";
-import Footer from "~/components/generics/Footer.vue";
 
 enum CardType {
   Project = "project",

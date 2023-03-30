@@ -45,7 +45,7 @@
     @apply font-mono;
 }
 
-.prose a {
+.prose a:not(h1 a, h2 a, h3 a) {
     @apply underline;
     @apply text-blue-400;
     @apply dark:text-blue-200;
@@ -82,4 +82,27 @@
 
 .prose img, .prose video {
     @apply my-8 rounded-md w-full;
+}
+
+.prose table {
+    @apply m-8 w-full;
+}
+
+.prose table th {
+    @apply border-b-2;
+    @apply border-gray-400 dark:border-gray-700;
+    @apply text-left;
+    @apply py-2;
+}
+
+.prose table td {
+    @apply py-2;
+}
+
+.prose hr {
+    @apply border-0;
+    @apply border-b-2;
+    @apply border-gray-400;
+    @apply dark:border-gray-800;
+    @apply my-8;
 }
