@@ -17,7 +17,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      siteUrl: process.env.VERCEL_URL || process.env.NUXT_PUBLIC_SITE_URL || 'https://example.com',
+      siteUrl: process.env.NUXT_ENV_VERCEL_URL || process.env.NUXT_PUBLIC_SITE_URL || 'https://example.com',
       language: 'en',
     },
   },
