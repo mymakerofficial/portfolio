@@ -4,8 +4,8 @@
     class="group/card rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden duration-500 ease-in-out"
     :class="{ 'hover:bg-gray-100/50 dark:hover:bg-gray-800/50': hoverable }"
   >
-    <ClientOnly v-if="hoverable">
-      <SpotlightEffectElement class="opacity-5 group-hover/card:opacity-10 duration-500 ease-in-out" />
+    <ClientOnly class="absolute">
+      <SpotlightEffectElement class="opacity-5 group-hover/card:opacity-10 duration-500 ease-in-out" v-if="hoverable" />
     </ClientOnly>
     <slot />
   </component>
