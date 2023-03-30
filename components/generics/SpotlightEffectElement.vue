@@ -2,8 +2,6 @@
   <span
     ref="container"
     class="absolute top-0 left-0 right-0 bottom-0"
-    @mouseenter="onMouseEnter"
-    @mouseleave="onMouseLeave"
   >
     <span
       ref="spotlight"
