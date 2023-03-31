@@ -1,5 +1,6 @@
 <template>
   <NuxtLink :to="project.htmlUrl" class="rounded-2xl">
+    <span v-if="isNew" class="absolute px-4 py-2 text-sm font-black tracking-tighter text-gray-900 z-50 right-12 -top-3 rotate-12 bg-lime-200 shadow-lg shadow-gray-800/10">NEW</span>
     <Card :hoverable="true" class="flex flex-col gap-6 p-8">
       <div v-if="showThumbnail" class="w-full aspect-video rounded-lg overflow-hidden">
         <img :src="project.thumbnailUrl" :alt="project.displayName" class="absolute w-full h-full z-10" />
@@ -28,4 +29,10 @@ const props = defineProps<{
 }>();
 
 const dateFormatted = computed(() => dayjs(props.project.date).format('MMMM, YYYY'))
+
+const isNew = computed(() => {
+  const date = dayjs(props.project.date);
+  const now = dayjs();
+  return now.diff(date, 'month') < 3;
+})
 </script>
