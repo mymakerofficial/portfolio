@@ -3,7 +3,6 @@
     <NuxtLoadingIndicator color="#f6f8fa" :height="2" />
     <ClientOnly>
       <QuickActionModal v-model:active="quickActionModalActive" />
-      <DevVersionWarningMessage />
     </ClientOnly>
     <NuxtPage />
     <Footer />
@@ -15,7 +14,6 @@ import {NavBarOption} from "~/components/navbar/NavBarWrapper.vue";
 import {get, set, useMagicKeys, whenever} from "@vueuse/core";
 import {ref} from "vue";
 import QuickActionModal from "~/components/quickactions/QuickActionModal.vue";
-import DevVersionWarningMessage from "~/components/goodies/DevVersionWarningMessage.vue";
 import Footer from "~/components/generics/Footer.vue";
 import {useHead} from "unhead";
 
@@ -62,5 +60,5 @@ useHead({
       href: '/site.webmanifest',
     }
   ]
-})
+});
 </script>
