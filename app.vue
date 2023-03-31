@@ -13,10 +13,11 @@
 <script setup lang="ts">
 import {NavBarOption} from "~/components/navbar/NavBarWrapper.vue";
 import {get, set, useMagicKeys, whenever} from "@vueuse/core";
-import {computed, ref} from "vue";
+import {ref} from "vue";
 import QuickActionModal from "~/components/quickactions/QuickActionModal.vue";
 import DevVersionWarningMessage from "~/components/goodies/DevVersionWarningMessage.vue";
 import Footer from "~/components/generics/Footer.vue";
+import {useHead} from "unhead";
 
 let quickActionModalActive = ref(false);
 
@@ -32,7 +33,34 @@ whenever(ctrl_k, () => {
   set(quickActionModalActive, !get(quickActionModalActive));
 })
 
-let navBarActive = computed(() => {
-  return !get(quickActionModalActive);
+useHead({
+  link: [
+    {
+      rel: 'icon',
+      type: 'image/x-icon',
+      href: '/favicon.ico',
+    },
+    {
+      rel: 'icon',
+      type: 'image/png',
+      sizes: '32x32',
+      href: '/favicon-32x32.png',
+    },
+    {
+      rel: 'icon',
+      type: 'image/png',
+      sizes: '16x16',
+      href: '/favicon-16x16.png',
+    },
+    {
+      rel: 'apple-touch-icon',
+      sizes: '180x180',
+      href: '/apple-touch-icon.png',
+    },
+    {
+      rel: 'manifest',
+      href: '/site.webmanifest',
+    }
+  ]
 })
 </script>

@@ -21,7 +21,7 @@ import {clearError, NuxtError} from "#app";
 import Container from "~/components/generics/Container.vue";
 import {computed} from "vue";
 import FlatButton from "~/components/forms/FlatButton.vue";
-import {useSeoMeta} from "unhead";
+import {useHead, useSeoMeta} from "unhead";
 import {get} from "@vueuse/core";
 
 const props = defineProps<{
@@ -47,5 +47,36 @@ const handleError = () => clearError({ redirect: '/' });
 useSeoMeta({
   title: `${props.error.statusCode} - ${get(statusMessage)}`,
   description:  props.error.message,
+});
+
+useHead({
+  link: [
+    {
+      rel: 'icon',
+      type: 'image/x-icon',
+      href: '/favicon.ico',
+    },
+    {
+      rel: 'icon',
+      type: 'image/png',
+      sizes: '32x32',
+      href: '/favicon-32x32.png',
+    },
+    {
+      rel: 'icon',
+      type: 'image/png',
+      sizes: '16x16',
+      href: '/favicon-16x16.png',
+    },
+    {
+      rel: 'apple-touch-icon',
+      sizes: '180x180',
+      href: '/apple-touch-icon.png',
+    },
+    {
+      rel: 'manifest',
+      href: '/site.webmanifest',
+    }
+  ]
 })
 </script>
