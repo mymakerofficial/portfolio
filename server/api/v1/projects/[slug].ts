@@ -97,7 +97,7 @@ export default defineCachedEventHandler(
       displayName: projectData.displayName,
       summary: projectData.summary,
       bodyProse: projectData.bodyProse as JSONContent,
-      type: projectData.type?.shortDisplayName || projectData.type?.displayName || 'Project',
+      type: projectData.type?.slug,
       thumbnailUrl: projectData.thumbnailPath ? `/cdn/${projectData.thumbnailPath.replace(/^\//, '')}` : null,
       websiteUrl: projectData.url,
       releaseDate: projectData.releaseDate,

@@ -66,6 +66,9 @@ export interface CompactProjectInfo {
   displayName: string;
   summary: string;
   type: string;
+  collaborators: string[];
+  technologies: string[];
+  tags: string[];
   date: string;
   featured: boolean;
   thumbnailUrl: string | null;

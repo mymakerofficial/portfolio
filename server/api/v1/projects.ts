@@ -218,7 +218,7 @@ const convertProjectsRawToCompact = (projects: ProjectsRawData[]): CompactProjec
       slug: project.slug as string,
       displayName: project.displayName as string,
       summary: project.summary as string,
-      type: project.type?.shortDisplayName || project.type?.displayName || 'Project',
+      type: project.type.slug,
       collaborators: project.collaborators?.map((collaborator: any) => collaborator.displayName),
       technologies: project.technologies?.map((technology: any) => technology.slug),
       tags: project.tags?.map((tag: any) => tag.slug),
@@ -227,7 +227,7 @@ const convertProjectsRawToCompact = (projects: ProjectsRawData[]): CompactProjec
       thumbnailUrl: project.thumbnailPath ? `/cdn/${project.thumbnailPath.replace(/^\//, '')}` : null,
       htmlUrl: `/projects/${project.slug}`,
       url: `/api/v1/projects/${project.slug}`,
-    } as CompactProjectInfo;
+    };
   });
 }
 
