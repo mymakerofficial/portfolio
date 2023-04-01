@@ -1,6 +1,6 @@
 <template>
   <NuxtLink :href="listening?.shareUrl" target="_blank" class="rounded-2xl" v-if="!hide">
-    <span class="absolute right-1/4 -top-2 rotate-[-16deg] z-50 h-16 aspect-video"><LiveSticker /></span>
+    <span class="absolute right-1/4 -top-2 rotate-[-16deg] z-50 h-28 aspect-square"><LiveSticker /></span>
     <Card class="fun-card p-8 flex flex-col lg:flex-row gap-4">
       <div v-if="listening.albumArtUrl" class="w-28 h-28 overflow-hidden">
         <img :alt="listening.albumName" :src="listening.albumArtUrl" class="absolute w-full h-full z-10" />
