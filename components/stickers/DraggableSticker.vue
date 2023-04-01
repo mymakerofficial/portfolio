@@ -73,11 +73,11 @@ watch([mouseXOffset, mouseYOffset], ([newXOffset, newYOffset], [oldXOffset]) => 
   set(lastY, newYOffset);
 
   // calculate velocity
-  const xVelocity = (newXOffset - oldXOffset) / 0.1;
+  const xVelocity = newXOffset - oldXOffset;
 
   // calculate rotation based on velocity
   // tilt the sticker slightly in the direction of the mouse
-  const rotation = clamp(xVelocity / 10, -45, 45);
+  const rotation = clamp(xVelocity, -45, 45);
 
   gsap.to(get(translateEl)!, {
     x: newXOffset,
