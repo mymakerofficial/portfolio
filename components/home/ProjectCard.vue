@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink :to="project.htmlUrl" class="rounded-2xl">
+  <NuxtLink :to="project.htmlUrl" class="relative rounded-2xl">
     <span v-if="isNew" class="absolute right-12 -top-3 rotate-12 z-50 h-12 aspect-video"><NewSticker /></span>
     <Card :hoverable="true" class="flex flex-col gap-6 p-8">
       <div v-if="showThumbnail" class="w-full aspect-video rounded-lg overflow-hidden">

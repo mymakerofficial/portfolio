@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-2">
+  <div class="relative flex flex-col gap-2">
     <h1 class="mx-4 text-sm font-medium text-gray-400 dark:text-gray-600">{{ group.displayName }}</h1>
     <QuickActionsList :items="group.items" ref="listComponent" @action-triggered="onActionTriggered" :group-key="group.key" :active-combined-key="activeCombinedKey" @update-active-item="updateActiveItem" />
   </div>

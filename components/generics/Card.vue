@@ -1,7 +1,7 @@
 <template>
   <component
     :is="is || 'article'"
-    class="group/card rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden duration-500 ease-in-out"
+    class="group/card relative rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden duration-500 ease-in-out"
     :class="{ 'hover:bg-gray-100/50 dark:hover:bg-gray-800/50': hoverable }"
   >
     <ClientOnly class="absolute">

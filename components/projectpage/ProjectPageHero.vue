@@ -4,7 +4,7 @@
       <h1 class="text-2xl md:text-4xl xl:text-5xl font-extrabold text-gray-800 dark:text-gray-100">{{ project.displayName }}</h1>
       <p class="font-medium text-gray-600 dark:text-gray-300">{{ project.summary }}</p>
     </div>
-    <div class="w-full aspect-video rounded-xl overflow-hidden" v-if="project.thumbnailUrl">
+    <div class="relative w-full aspect-video rounded-xl overflow-hidden" v-if="project.thumbnailUrl">
       <img :src="project.thumbnailUrl" :alt="project.displayName" class="absolute w-full h-full z-10" />
       <div class="w-full h-full bg-gray-600/20 dark:bg-gray-100/20 animate-pulse" />
     </div>
