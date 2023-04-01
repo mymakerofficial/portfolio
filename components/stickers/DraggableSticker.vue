@@ -8,6 +8,7 @@
 import {get, set, useMouse, useMousePressed, whenever} from "@vueuse/core";
 import {computed, ref, watch} from "vue";
 import gsap from "gsap";
+import {clamp} from "~/lib/utils";
 
 const active = ref(false);
 
@@ -28,6 +29,8 @@ const startYOffset = ref(0);
 const lastX = ref(0);
 const lastY = ref(0);
 
+const firstTrigger = ref(true);
+
 whenever(() => !get(mousePressed), deactivate);
 
 function activate() {
@@ -35,6 +38,7 @@ function activate() {
   set(startYOffset, get(lastY));
   set(startX, get(mouseX));
   set(startY, get(mouseY));
+  set(firstTrigger, true);
   set(active, true);
 }
 
@@ -54,28 +58,33 @@ function deactivate() {
   }
 }
 
-watch([mouseXOffset, mouseYOffset], (_, [oldXOffset]) => {
-  if (get(active) && get(translateEl)) {
-    const x = get(mouseXOffset);
-    const y = get(mouseYOffset);
-
-    set(lastX, x);
-    set(lastY, y);
-
-    // calculate velocity
-    const xVelocity = (get(mouseXOffset) - oldXOffset) / 0.1;
-
-    // calculate rotation based on velocity
-    // tilt the sticker slightly in the direction of the mouse
-    const rotation = Math.min(Math.max(xVelocity / 10, -45), 45);
-
-    gsap.to(get(translateEl)!, {
-      x,
-      y,
-      rotation,
-      duration: 0.3,
-      ease: "power2.out",
-    });
+watch([mouseXOffset, mouseYOffset], ([newXOffset, newYOffset], [oldXOffset]) => {
+  if (!get(active) || !get(translateEl)) {
+    return;
   }
+
+  // we ignore the trigger so the last position doesn't affect the velocity
+  if (get(firstTrigger)) {
+    set(firstTrigger, false);
+    return;
+  }
+
+  set(lastX, newXOffset);
+  set(lastY, newYOffset);
+
+  // calculate velocity
+  const xVelocity = (newXOffset - oldXOffset) / 0.1;
+
+  // calculate rotation based on velocity
+  // tilt the sticker slightly in the direction of the mouse
+  const rotation = clamp(xVelocity / 10, -45, 45);
+
+  gsap.to(get(translateEl)!, {
+    x: newXOffset,
+    y: newYOffset,
+    rotation,
+    duration: 0.3,
+    ease: "power2.out",
+  });
 });
 </script>
