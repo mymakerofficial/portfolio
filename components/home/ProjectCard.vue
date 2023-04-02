@@ -3,7 +3,7 @@
     <DraggableSticker v-if="stickers.isJs" class="absolute right-[10%] top-10 z-10" :rotation-randomize="30" :x-randomize="30" :y-randomize="40">
       <JsSticker class="h-16 md:h-20 pointer-events-none" />
     </DraggableSticker>
-    <DraggableSticker v-if="stickers.isTs" class="absolute right-[15%] top-10 z-10" :rotation-randomize="30" :x-randomize="30" :y-randomize="40">
+    <DraggableSticker v-if="stickers.isTs" class="absolute right-[10%] top-10 z-10" :rotation-randomize="30" :x-randomize="30" :y-randomize="40">
       <TsSticker class="h-16 md:h-20 pointer-events-none" />
     </DraggableSticker>
     <DraggableSticker v-if="stickers.isVue" class="absolute right-8 md:-right-4 bottom-0 z-10" :rotation="-10" :rotation-randomize="4" :x-randomize="30" :y-randomize="20">
@@ -12,7 +12,7 @@
     <DraggableSticker v-if="stickers.isNuxt" class="absolute right-8 bottom-0 z-10" :rotation="-10" :rotation-randomize="4" :x-randomize="30" :y-randomize="20">
       <NuxtSticker class="h-16 md:h-20 pointer-events-none" />
     </DraggableSticker>
-    <DraggableSticker v-if="stickers.isChess" class="absolute right-[20%] top-8 z-10" :rotation="-14">
+    <DraggableSticker v-if="stickers.isChess" class="absolute right-[5%] -top-2 z-10" :rotation="-14">
       <ChessSticker class="h-16 md:h-20 pointer-events-none" />
     </DraggableSticker>
     <DraggableSticker v-if="stickers.isNew" class="absolute right-[10%] -top-3 z-10" :rotation="12">
