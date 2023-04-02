@@ -9,6 +9,9 @@
     <DraggableSticker v-if="stickers.isVue" class="absolute right-8 md:-right-4 bottom-0 z-10" :rotation="-10" :rotation-randomize="4" :x-randomize="30" :y-randomize="20">
       <VueSticker class="h-16 md:h-20 pointer-events-none" />
     </DraggableSticker>
+    <DraggableSticker v-if="stickers.isNuxt" class="absolute right-8 bottom-0 z-10" :rotation="-10" :rotation-randomize="4" :x-randomize="30" :y-randomize="20">
+      <NuxtSticker class="h-16 md:h-20 pointer-events-none" />
+    </DraggableSticker>
     <DraggableSticker v-if="stickers.isChess" class="absolute right-[20%] top-8 z-10" :rotation="-14">
       <ChessSticker class="h-16 md:h-20 pointer-events-none" />
     </DraggableSticker>
@@ -44,6 +47,7 @@ import ChessSticker from "~/components/stickers/ChessSticker.vue";
 import JsSticker from "~/components/stickers/JsSticker.vue";
 import TsSticker from "~/components/stickers/TsSticker.vue";
 import VueSticker from "~/components/stickers/VueSticker.vue";
+import NuxtSticker from "~/components/stickers/NuxtSticker.vue";
 
 const props = defineProps<{
   project: CompactProjectInfo
@@ -61,6 +65,7 @@ const stickers = reactive({
   isChess: computed(() => props.project.tags.includes('chess')),
   isJs: computed(() => props.project.technologies.includes('js') && !props.project.technologies.includes('ts')),
   isTs: computed(() => props.project.technologies.includes('ts')),
-  isVue: computed(() => props.project.technologies.includes('vue-2') || props.project.technologies.includes('vue-3')),
+  isVue: computed(() => (props.project.technologies.includes('vue-2') || props.project.technologies.includes('vue-3')) && !props.project.technologies.includes('nuxt-3')),
+  isNuxt: computed(() => props.project.technologies.includes('nuxt-3')),
 });
 </script>
