@@ -5,23 +5,9 @@
   </Card>
 </template>
 
-<script lang="ts">
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-
-dayjs.extend(utc);
-dayjs.extend(timezone)
-</script>
-
 <script setup lang="ts">
 import Card from "~/components/generics/Card.vue";
-import {get, useNow} from "@vueuse/core";
-import {computed} from "vue";
+import {useDateFormat, useNow} from "@vueuse/core";
 
-const now = useNow();
-
-const clockText = computed(() => {
-  return dayjs(get(now)).tz("Europe/Berlin").format("HH:mm:ss");
-})
+const clockText = useDateFormat(useNow(), "HH:mm:ss");
 </script>

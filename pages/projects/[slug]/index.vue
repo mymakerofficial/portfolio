@@ -58,10 +58,9 @@
 </template>
 
 <script setup lang="ts">
-import dayjs from "dayjs";
 import {generateHTML} from "@tiptap/html";
 import tiptapDefaultOptions from "~/lib/tiptapDefaultOptions";
-import {get} from "@vueuse/core";
+import {get, useDateFormat} from "@vueuse/core";
 //@ts-ignore
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiGithub } from '@mdi/js';
@@ -105,9 +104,9 @@ if (get(project)) {
 }
 
 
-const startedHumanReadable = computed(() => dayjs(get(project)?.startedDate).format('MMMM D, YYYY'));
-const releasedHumanReadable = computed(() => dayjs(get(project)?.releaseDate).format('MMMM D, YYYY'));
-const lastChangedHumanReadable = computed(() => dayjs(get(project)?.lastCommitDateTime).format('MMMM D, YYYY'));
+const startedHumanReadable = useDateFormat(get(project).startedDate, "MMMM D, YYYY");
+const releasedHumanReadable = useDateFormat(get(project).releaseDate, "MMMM D, YYYY");
+const lastChangedHumanReadable = useDateFormat(get(project).lastCommitDateTime, "MMMM D, YYYY");
 const bodyHtml = computed(() => get(project)?.bodyProse ? generateHTML(get(project)?.bodyProse, tiptapDefaultOptions.extensions) : "");
 const bodyClass = computed(() => tiptapDefaultOptions.editorProps.attributes.class);
 </script>

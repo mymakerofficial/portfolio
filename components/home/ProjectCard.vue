@@ -37,20 +37,20 @@
 import {CompactProjectInfo} from "~/lib/projects";
 import Card from "~/components/generics/Card.vue";
 import {computed, reactive} from "vue";
-import dayjs from "dayjs";
 import DraggableSticker from "~/components/stickers/DraggableSticker.vue";
 import ChessSticker from "~/components/stickers/ChessSticker.vue";
 import JsSticker from "~/components/stickers/JsSticker.vue";
 import TsSticker from "~/components/stickers/TsSticker.vue";
 import VueSticker from "~/components/stickers/VueSticker.vue";
 import NuxtSticker from "~/components/stickers/NuxtSticker.vue";
+import {useDateFormat} from "@vueuse/core";
 
 const props = defineProps<{
   project: CompactProjectInfo
   showThumbnail?: boolean;
 }>();
 
-const dateFormatted = computed(() => dayjs(props.project.date).format('MMMM, YYYY'))
+const dateFormatted = useDateFormat(props.project.date, 'MMMM, YYYY')
 
 const stickers = reactive({
   isChess: computed(() => props.project.tags.includes('chess')),
