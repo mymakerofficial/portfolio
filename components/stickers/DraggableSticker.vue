@@ -1,5 +1,5 @@
 <template>
-  <div @mousedown.prevent="activate" :data-active="active" ref="translateEl" class="cursor-grab data-[active=true]:cursor-grabbing">
+  <div @mousedown.prevent="activate" :data-active="active" ref="translateEl" class="cursor-grab data-[active=true]:cursor-grabbing data-[active=true]:z-20 data-[active=true]:drop-shadow-lg">
     <slot />
   </div>
 </template>
