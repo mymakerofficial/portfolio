@@ -1,10 +1,10 @@
 <template>
   <div>
-    <DraggableSticker v-if="stickers.isChess" class="absolute right-[20%] top-8 z-10">
-      <ChessSticker class="h-20 rotate-[-14deg] pointer-events-none" />
+    <DraggableSticker v-if="stickers.isChess" class="absolute right-[20%] top-8 z-10" :rotation="-14">
+      <ChessSticker class="h-20 pointer-events-none" />
     </DraggableSticker>
-    <DraggableSticker v-if="stickers.isNew" class="absolute right-[10%] -top-3 z-10">
-      <NewSticker class="h-12 rotate-12 pointer-events-none" />
+    <DraggableSticker v-if="stickers.isNew" class="absolute right-[10%] -top-3 z-10" :rotation="12">
+      <NewSticker class="h-12 pointer-events-none" />
     </DraggableSticker>
     <NuxtLink :to="project.htmlUrl" class="rounded-2xl">
       <Card :hoverable="true" class="flex flex-col gap-6 p-8">

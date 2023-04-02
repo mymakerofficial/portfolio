@@ -1,19 +1,40 @@
 <template>
-  <div @mousedown.prevent="activate" :data-active="active" ref="translateEl" class="cursor-grab data-[active=true]:cursor-grabbing data-[active=true]:z-20 data-[active=true]:drop-shadow-lg">
+  <div
+    @mousedown.prevent="activate"
+    :data-active="active"
+    ref="translateEl"
+    class="cursor-grab data-[active=true]:cursor-grabbing data-[active=true]:z-20 data-[active=true]:drop-shadow-lg"
+  >
     <slot />
   </div>
 </template>
 
 <script setup lang="ts">
 import {get, set, useMouse, useMousePressed, whenever} from "@vueuse/core";
-import {computed, ref, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import gsap from "gsap";
-import {clamp} from "~/lib/utils";
+import {clamp, randomBetween} from "~/lib/utils";
+
+const props = withDefaults(defineProps<{
+  rotation?: number
+  rotationRandomize?: number
+  xRandomize?: number
+  yRandomize?: number
+}>(), {
+  rotation: 0,
+  rotationRandomize: 10,
+  xRandomize: 10,
+  yRandomize: 10
+});
 
 const active = ref(false);
 
 const { x: mouseX, y: mouseY } = useMouse();
 const { pressed: mousePressed } = useMousePressed()
+
+const originX = ref(0);
+const originY = ref(0);
+const originRotation = ref(0);
 
 const startX = ref(0);
 const startY = ref(0);
@@ -31,6 +52,25 @@ const lastY = ref(0);
 
 const firstTrigger = ref(true);
 
+onMounted(() => {
+  if (!get(translateEl)) return;
+
+  const { rotation, rotationRandomize, xRandomize, yRandomize } = props;
+
+  set(originX, randomBetween(-xRandomize, xRandomize));
+  set(originY, randomBetween(-yRandomize, yRandomize));
+  set(originRotation, rotation + randomBetween(-rotationRandomize, rotationRandomize));
+
+  set(lastX, get(originX));
+  set(lastY, get(originY));
+
+  gsap.set(get(translateEl)!, {
+    x: get(originX),
+    y: get(originY),
+    rotation: get(originRotation),
+  });
+})
+
 whenever(() => !get(mousePressed), deactivate);
 
 function activate() {
@@ -45,29 +85,29 @@ function activate() {
 function deactivate() {
   set(active, false);
 
-  if (get(translateEl)) {
-    gsap.killTweensOf(get(translateEl)!);
+  if (!get(translateEl)) return;
 
-    gsap.to(get(translateEl)!, {
-      x: get(lastX),
-      y: get(lastY),
-      rotation: 0,
-      duration: 0.3,
-      ease: "power2.out",
-    });
-  }
+  gsap.killTweensOf(get(translateEl)!);
+
+  gsap.to(get(translateEl)!, {
+    x: get(lastX),
+    y: get(lastY),
+    rotation: get(originRotation),
+    duration: 0.3,
+    ease: "power2.out",
+  });
 }
 
 watch([mouseXOffset, mouseYOffset], ([newXOffset, newYOffset], [oldXOffset]) => {
-  if (!get(active) || !get(translateEl)) {
-    return;
-  }
+  if (!get(active) || !get(translateEl)) return;
 
   // we ignore the trigger so the last position doesn't affect the velocity
   if (get(firstTrigger)) {
     set(firstTrigger, false);
     return;
   }
+
+  const { rotation: originRotation } = props;
 
   set(lastX, newXOffset);
   set(lastY, newYOffset);
@@ -77,7 +117,7 @@ watch([mouseXOffset, mouseYOffset], ([newXOffset, newYOffset], [oldXOffset]) => 
 
   // calculate rotation based on velocity
   // tilt the sticker slightly in the direction of the mouse
-  const rotation = clamp(xVelocity, -45, 45);
+  const rotation = clamp(xVelocity + originRotation, -45, 45);
 
   gsap.to(get(translateEl)!, {
     x: newXOffset,
