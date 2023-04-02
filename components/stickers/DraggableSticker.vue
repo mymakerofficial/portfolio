@@ -5,7 +5,9 @@
     ref="translateEl"
     class="cursor-grab data-[active=true]:cursor-grabbing data-[active=true]:z-20 data-[active=true]:drop-shadow-lg"
   >
-    <slot />
+    <ClientOnly>
+      <slot />
+    </ClientOnly>
   </div>
 </template>
 
