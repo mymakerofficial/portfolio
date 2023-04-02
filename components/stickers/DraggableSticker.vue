@@ -3,7 +3,7 @@
     @mousedown.prevent="activate"
     :data-active="active"
     ref="translateEl"
-    class="cursor-grab data-[active=true]:cursor-grabbing data-[active=true]:z-20 data-[active=true]:drop-shadow-lg"
+    class="cursor-grab data-[active=true]:cursor-grabbing data-[active=true]:z-20 drop-shadow-md data-[active=true]:drop-shadow-lg"
   >
     <ClientOnly>
       <slot />
