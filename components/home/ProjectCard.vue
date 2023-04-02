@@ -1,10 +1,13 @@
 <template>
   <div>
-    <DraggableSticker v-if="stickers.isJs" class="absolute right-[15%] top-10 z-10" :rotation-randomize="30" :x-randomize="30" :y-randomize="40">
+    <DraggableSticker v-if="stickers.isJs" class="absolute right-[10%] top-10 z-10" :rotation-randomize="30" :x-randomize="30" :y-randomize="40">
       <JsSticker class="h-16 md:h-20 pointer-events-none" />
     </DraggableSticker>
-    <DraggableSticker v-if="stickers.isTs" class="absolute right-[10%] top-10 z-10" :rotation-randomize="30" :x-randomize="30" :y-randomize="40">
+    <DraggableSticker v-if="stickers.isTs" class="absolute right-[15%] top-10 z-10" :rotation-randomize="30" :x-randomize="30" :y-randomize="40">
       <TsSticker class="h-16 md:h-20 pointer-events-none" />
+    </DraggableSticker>
+    <DraggableSticker v-if="stickers.isVue" class="absolute right-8 md:-right-4 bottom-0 z-10" :rotation="-10" :rotation-randomize="4" :x-randomize="30" :y-randomize="20">
+      <VueSticker class="h-16 md:h-20 pointer-events-none" />
     </DraggableSticker>
     <DraggableSticker v-if="stickers.isChess" class="absolute right-[20%] top-8 z-10" :rotation="-14">
       <ChessSticker class="h-16 md:h-20 pointer-events-none" />
@@ -40,6 +43,7 @@ import DraggableSticker from "~/components/stickers/DraggableSticker.vue";
 import ChessSticker from "~/components/stickers/ChessSticker.vue";
 import JsSticker from "~/components/stickers/JsSticker.vue";
 import TsSticker from "~/components/stickers/TsSticker.vue";
+import VueSticker from "~/components/stickers/VueSticker.vue";
 
 const props = defineProps<{
   project: CompactProjectInfo
@@ -57,5 +61,6 @@ const stickers = reactive({
   isChess: computed(() => props.project.tags.includes('chess')),
   isJs: computed(() => props.project.technologies.includes('js') && !props.project.technologies.includes('ts')),
   isTs: computed(() => props.project.technologies.includes('ts')),
+  isVue: computed(() => props.project.technologies.includes('vue-2') || props.project.technologies.includes('vue-3')),
 });
 </script>
