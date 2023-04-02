@@ -1,5 +1,5 @@
 <template>
-  <div ref="el" class="relative w-full h-full absolute bg-gradient-to-r from-transparent via-gray-100 to-transparent dark:from-transparent dark:via-gray-700 dark:to-transparent" />
+  <div ref="el" class="w-full h-full absolute bg-gradient-to-r from-transparent via-gray-100 to-transparent dark:from-transparent dark:via-gray-700 dark:to-transparent" />
 </template>
 
 <script setup lang="ts">

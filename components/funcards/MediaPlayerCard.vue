@@ -1,11 +1,11 @@
 <template>
-  <div class="relative">
+  <div>
     <DraggableSticker class="absolute right-1/4 -top-2 z-50">
       <LiveSticker class="rotate-[-16deg] h-20 pointer-events-none" />
     </DraggableSticker>
     <NuxtLink :href="listening?.shareUrl" target="_blank" class="rounded-2xl" v-if="!hide">
       <Card class="fun-card p-8 flex flex-col lg:flex-row gap-4">
-        <div v-if="listening.albumArtUrl" class="relative w-28 h-28 overflow-hidden">
+        <div v-if="listening.albumArtUrl" class="w-28 h-28 overflow-hidden">
           <img :alt="listening.albumName" :src="listening.albumArtUrl" class="absolute w-full h-full z-10" />
           <div class="absolute w-full h-full bg-gray-600/20 dark:bg-gray-100/20 animate-pulse" />
         </div>

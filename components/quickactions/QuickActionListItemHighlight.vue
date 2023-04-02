@@ -1,6 +1,6 @@
 <template>
   <div ref="highlight" class="absolute w-full px-1.5">
-    <div :data-active="active" class="relative h-full w-full bg-gray-100 dark:bg-gray-700 opacity-0 data-[active=true]:opacity-100 transition-opacity duration-500 ease-in-out rounded-lg" />
+    <div :data-active="active" class="h-full w-full bg-gray-100 dark:bg-gray-700 opacity-0 data-[active=true]:opacity-100 transition-opacity duration-500 ease-in-out rounded-lg" />
   </div>
 </template>
 <script setup lang="ts">

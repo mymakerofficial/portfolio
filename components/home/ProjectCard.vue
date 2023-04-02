@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div>
     <DraggableSticker v-if="isNew" class="absolute right-12 -top-3 z-50">
       <NewSticker class="h-12 aspect-video rotate-12 pointer-events-none" />
     </DraggableSticker>

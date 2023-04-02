@@ -1,5 +1,5 @@
 <template>
-  <div class="relative flex flex-col gap-4" ref="el">
+  <div class="flex flex-col gap-4" ref="el">
     <QuickActionListItemHighlight :active-element="activeItemElement" ref="highlight" />
     <QuickActionsGroup v-for="group in groups" :key="group.key" ref="groupComponents" :group="group" :active-combined-key="activeCombinedKey" @action-triggered="onActionTriggered" @update-active-item="updateActiveItem" />
   </div>
