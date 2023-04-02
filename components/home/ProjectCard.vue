@@ -1,7 +1,13 @@
 <template>
   <div>
+    <DraggableSticker v-if="stickers.isJs" class="absolute right-[15%] top-10 z-10" :rotation-randomize="30" :x-randomize="30" :y-randomize="40">
+      <JsSticker class="h-16 md:h-20 pointer-events-none" />
+    </DraggableSticker>
+    <DraggableSticker v-if="stickers.isTs" class="absolute right-[10%] top-10 z-10" :rotation-randomize="30" :x-randomize="30" :y-randomize="40">
+      <TsSticker class="h-16 md:h-20 pointer-events-none" />
+    </DraggableSticker>
     <DraggableSticker v-if="stickers.isChess" class="absolute right-[20%] top-8 z-10" :rotation="-14">
-      <ChessSticker class="h-20 pointer-events-none" />
+      <ChessSticker class="h-16 md:h-20 pointer-events-none" />
     </DraggableSticker>
     <DraggableSticker v-if="stickers.isNew" class="absolute right-[10%] -top-3 z-10" :rotation="12">
       <NewSticker class="h-12 pointer-events-none" />
@@ -32,6 +38,8 @@ import dayjs from "dayjs";
 import NewSticker from "~/components/stickers/NewSticker.vue";
 import DraggableSticker from "~/components/stickers/DraggableSticker.vue";
 import ChessSticker from "~/components/stickers/ChessSticker.vue";
+import JsSticker from "~/components/stickers/JsSticker.vue";
+import TsSticker from "~/components/stickers/TsSticker.vue";
 
 const props = defineProps<{
   project: CompactProjectInfo
@@ -46,6 +54,8 @@ const stickers = reactive({
     const now = dayjs();
     return now.diff(date, 'month') < 3;
   }),
-  isChess: computed(() => props.project.tags.includes('chess'))
+  isChess: computed(() => props.project.tags.includes('chess')),
+  isJs: computed(() => props.project.technologies.includes('js') && !props.project.technologies.includes('ts')),
+  isTs: computed(() => props.project.technologies.includes('ts')),
 });
 </script>
