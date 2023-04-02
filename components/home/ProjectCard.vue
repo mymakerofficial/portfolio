@@ -1,7 +1,10 @@
 <template>
   <div>
-    <DraggableSticker v-if="isNew" class="absolute right-12 -top-3 z-10">
-      <NewSticker class="h-12 aspect-video rotate-12 pointer-events-none" />
+    <DraggableSticker v-if="stickers.isChess" class="absolute right-[20%] top-8 z-10">
+      <ChessSticker class="h-20 rotate-[-14deg] pointer-events-none" />
+    </DraggableSticker>
+    <DraggableSticker v-if="stickers.isNew" class="absolute right-[10%] -top-3 z-10">
+      <NewSticker class="h-12 rotate-12 pointer-events-none" />
     </DraggableSticker>
     <NuxtLink :to="project.htmlUrl" class="rounded-2xl">
       <Card :hoverable="true" class="flex flex-col gap-6 p-8">
@@ -24,10 +27,11 @@
 <script setup lang="ts">
 import {CompactProjectInfo} from "~/lib/projects";
 import Card from "~/components/generics/Card.vue";
-import {computed} from "vue";
+import {computed, reactive} from "vue";
 import dayjs from "dayjs";
 import NewSticker from "~/components/stickers/NewSticker.vue";
 import DraggableSticker from "~/components/stickers/DraggableSticker.vue";
+import ChessSticker from "~/components/stickers/ChessSticker.vue";
 
 const props = defineProps<{
   project: CompactProjectInfo
@@ -36,9 +40,12 @@ const props = defineProps<{
 
 const dateFormatted = computed(() => dayjs(props.project.date).format('MMMM, YYYY'))
 
-const isNew = computed(() => {
-  const date = dayjs(props.project.date);
-  const now = dayjs();
-  return now.diff(date, 'month') < 3;
-})
+const stickers = reactive({
+  isNew: computed(() => {
+    const date = dayjs(props.project.date);
+    const now = dayjs();
+    return now.diff(date, 'month') < 3;
+  }),
+  isChess: computed(() => props.project.tags.includes('chess'))
+});
 </script>
