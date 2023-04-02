@@ -28,7 +28,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       bodyAttrs: {
-        class: 'bg-white text-dark-900 dark:bg-gray-900 dark:text-gray-100',
+        class: 'bg-white text-dark-900 dark:bg-gray-900 dark:text-gray-100 overflow-x-hidden',
       },
     }
   },
