@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DraggableSticker v-if="isNew" class="absolute right-12 -top-3 z-50">
+    <DraggableSticker v-if="isNew" class="absolute right-12 -top-3 z-10">
       <NewSticker class="h-12 aspect-video rotate-12 pointer-events-none" />
     </DraggableSticker>
     <NuxtLink :to="project.htmlUrl" class="rounded-2xl">

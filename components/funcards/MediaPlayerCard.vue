@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DraggableSticker class="absolute right-1/4 -top-2 z-50">
+    <DraggableSticker class="absolute right-1/4 -top-2 z-10">
       <LiveSticker class="rotate-[-16deg] h-20 pointer-events-none" />
     </DraggableSticker>
     <NuxtLink :href="listening?.shareUrl" target="_blank" class="rounded-2xl" v-if="!hide">
