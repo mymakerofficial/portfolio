@@ -277,7 +277,7 @@ export default defineEventHandler(
     }
 
     // filter out non public projects if not dev environment
-    if (process.env.NODE_ENV !== 'development') {
+    if (process.env.NODE_ENV !== 'development' || process.env.SHOW_NON_PUBLIC_PROJECTS !== 'true') {
       projectsData = projectsData.filter((project) => project.public);
     }
 
