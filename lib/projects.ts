@@ -32,6 +32,7 @@ export interface ProjectsRawData {
   releaseDate: string;
   startedDate: string;
   featured: boolean;
+  public: boolean;
   tags: {
     slug: string;
     displayName: string;
@@ -97,6 +98,7 @@ const getProjectsRawData = async (): Promise<ProjectsRawData[]> => {
       'releaseDate: released_at_date, ' +
       'startedDate: started_at_date, ' +
       'featured, ' +
+      'public, ' +
       'disclosures: disclosure_panels ( title, text ), ' +
       'tags ( slug, displayName: display_name ), ' +
       'collaborators: people ( slug, displayName: display_name, websiteUrl: website_url ), ' +

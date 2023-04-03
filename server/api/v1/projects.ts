@@ -276,6 +276,11 @@ export default defineEventHandler(
       throw new Error('Failed to fetch projects');
     }
 
+    // filter out non public projects if not dev environment
+    if (process.env.NODE_ENV !== 'development') {
+      projectsData = projectsData.filter((project) => project.public);
+    }
+
     let technologies = null;
 
     if (searchQuery) {
