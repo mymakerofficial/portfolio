@@ -6,7 +6,7 @@
     <span
       ref="spotlight"
       :data-visible="spotlightVisible"
-      class="absolute w-1/2 aspect-square rounded-full bg-gray-700 dark:bg-gray-300 opacity-0 data-[visible=true]:opacity-100 blur-3xl transition-opacity duration-200 ease-in-out"
+      class="absolute w-full aspect-square rounded-full bg-gradient-radial from-gray-300 via-25% via-gray-300/50 to-50% to-gray-300/0 opacity-0 data-[visible=true]:opacity-100 transition-opacity duration-200 ease-in-out"
     />
   </span>
 </template>

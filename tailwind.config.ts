@@ -15,6 +15,9 @@ export default <Partial<Config>>{
   safelist: [],
   theme: {
     extend: {
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+      },
       colors: {
         gray: {
           50: "#f6f8f9",
