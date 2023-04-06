@@ -121,7 +121,6 @@ whenever(() => !get(mousePressed), deactivate);
 function onMousedown(e: MouseEvent) {
   const posX = e.clientX + window.scrollX;
   const posY = e.clientY + window.scrollY;
-  console.log(e.clientY, window.scrollY);
   set(startXOffset, get(lastX));
   set(startYOffset, get(lastY));
   set(startX, posX);
