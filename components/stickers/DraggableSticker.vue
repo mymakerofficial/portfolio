@@ -1,6 +1,7 @@
 <template>
   <div
-    @mousedown.prevent="activate"
+    @mousedown.prevent="onMousedown"
+    @touchstart.prevent="onTouchstart"
     :data-active="active"
     ref="translateEl"
     class="cursor-grab data-[active=true]:cursor-grabbing data-[active=true]:z-20 drop-shadow-md data-[active=true]:drop-shadow-lg"
@@ -113,14 +114,30 @@ onMounted(() => {
 })
 
 // if the mouse is released, deactivate the element
-// whenever acts like an event listener in this case, we cant just use the mouseup event because the mouse might be released outside of the element
+// whenever acts like an event listener in this case, we cant just use the mouseup event because the mouse might be released outside the element
+// also this works for both mouse and touch
 whenever(() => !get(mousePressed), deactivate);
 
-function activate() {
+function onMousedown(e: MouseEvent) {
+  const posX = e.clientX + window.scrollX;
+  const posY = e.clientY + window.scrollY;
+  console.log(e.clientY, window.scrollY);
   set(startXOffset, get(lastX));
   set(startYOffset, get(lastY));
-  set(startX, get(mouseX));
-  set(startY, get(mouseY));
+  set(startX, posX);
+  set(startY, posY);
+  set(firstTrigger, true);
+  set(active, true);
+}
+
+function onTouchstart(e: TouchEvent) {
+  // we need to separate the touchstart event from the mousedown event because for some reason useMouse() doesn't update before the touchstart event
+  const posX = e.touches[0].clientX + window.scrollX;
+  const posY = e.touches[0].clientY + window.scrollY;
+  set(startXOffset, get(lastX));
+  set(startYOffset, get(lastY));
+  set(startX, posX);
+  set(startY, posY);
   set(firstTrigger, true);
   set(active, true);
 }
