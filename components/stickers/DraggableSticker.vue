@@ -29,29 +29,68 @@ const props = withDefaults(defineProps<{
   yRandomize: 10
 });
 
+/***
+ * active is true when the element is being dragged
+ */
 const active = ref(false);
 
 const { x: mouseX, y: mouseY } = useMouse();
 const { pressed: mousePressed } = useMousePressed()
 
+/***
+ * originX is the start x offset position of the element
+ */
 const originX = ref(0);
+/***
+ * originY is the start y offset position of the element
+ */
 const originY = ref(0);
+/***
+ * originRotation is the start rotation of the element
+ */
 const originRotation = ref(0);
 
+/***
+ * startX is the x position of the mouse when the element is clicked
+ */
 const startX = ref(0);
+/***
+ * startY is the y position of the mouse when the element is clicked
+ */
 const startY = ref(0);
 
+/***
+ * mouseXOffset is the x offset of the mouse position relative to the start position
+ */
 const mouseXOffset = computed(() => get(mouseX) - get(startX) + get(startXOffset));
+/***
+ * mouseYOffset is the y offset of the mouse position relative to the start position
+ */
 const mouseYOffset = computed(() => get(mouseY) - get(startY) + get(startYOffset));
 
 const translateEl = ref<HTMLElement>();
 
+/***
+ * startXOffset is the x offset of the element when the element is clicked
+ */
 const startXOffset = ref(0);
+/***
+ * startYOffset is the y offset of the element when the element is clicked
+ */
 const startYOffset = ref(0);
 
+/***
+ * lastX is the last x position of the element (used for calculating the offset after the element is dragged and clicked again)
+ */
 const lastX = ref(0);
+/***
+ * lastY is the last y position of the element (used for calculating the offset after the element is dragged and clicked again)
+ */
 const lastY = ref(0);
 
+/***
+ * firstTrigger is true during the first trigger of the watch function after the element is clicked
+ */
 const firstTrigger = ref(true);
 
 onMounted(() => {
@@ -73,6 +112,8 @@ onMounted(() => {
   });
 })
 
+// if the mouse is released, deactivate the element
+// whenever acts like an event listener in this case, we cant just use the mouseup event because the mouse might be released outside of the element
 whenever(() => !get(mousePressed), deactivate);
 
 function activate() {
