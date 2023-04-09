@@ -1,3 +1,16 @@
 <template>
-  <img src="~/assets/img/vue-sticker.svg" alt="Vue Sticker"/>
+  <svg width="100%" height="100%" viewBox="0 0 1080 1080" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <path d="M637.322,131.037L961.419,131.037C977.138,131.037 991.664,139.423 999.524,153.037C1007.38,166.65 1007.38,183.423 999.524,197.037L578.105,926.963C570.245,940.577 555.72,948.963 540,948.963C524.28,948.963 509.755,940.577 501.895,926.963L80.476,197.037C72.616,183.423 72.617,166.65 80.476,153.037C88.336,139.423 102.862,131.037 118.581,131.037L442.678,131.037C458.398,131.037 472.923,139.423 480.783,153.037C480.783,153.037 506.867,198.215 524.412,228.604C527.627,234.173 533.569,237.604 540,237.604C546.431,237.604 552.373,234.173 555.588,228.604C573.133,198.215 599.217,153.037 599.217,153.037C607.077,139.423 621.602,131.037 637.322,131.037Z" style="fill:url(#__VueSticker_Linear1);"/>
+    <g transform="matrix(4.29318,0,0,-4.29318,637.322,175.037)">
+      <path d="M0,0L-22.669,-39.264L-45.338,0L-120.829,0L-22.669,-170.02L75.491,0L0,0Z" style="fill:url(#__VueSticker_Linear2);fill-rule:nonzero;"/>
+    </g>
+    <g transform="matrix(4.29318,0,0,-4.29318,637.322,175.037)">
+      <path d="M0,0L-22.669,-39.264L-45.338,0L-81.565,0L-22.669,-102.01L36.227,0L0,0Z" style="fill:url(#__VueSticker_Linear3);fill-rule:nonzero;"/>
+    </g>
+    <defs>
+      <linearGradient id="__VueSticker_Linear1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(918.279,258.14,-226.827,806.892,87.1396,281.86)"><stop offset="0" style="stop-color:rgb(245,245,244);stop-opacity:1"/><stop offset="0.22" style="stop-color:rgb(245,245,244);stop-opacity:1"/><stop offset="0.38" style="stop-color:white;stop-opacity:1"/><stop offset="0.61" style="stop-color:rgb(245,245,244);stop-opacity:1"/><stop offset="1" style="stop-color:rgb(245,245,244);stop-opacity:1"/></linearGradient>
+      <linearGradient id="__VueSticker_Linear2" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(309.924,-85.3977,73.9574,268.405,-177.555,-13.5879)"><stop offset="0" style="stop-color:rgb(34,197,94);stop-opacity:1"/><stop offset="0.25" style="stop-color:rgb(34,197,94);stop-opacity:1"/><stop offset="0.44" style="stop-color:rgb(134,239,172);stop-opacity:1"/><stop offset="0.75" style="stop-color:rgb(34,197,94);stop-opacity:1"/><stop offset="1" style="stop-color:rgb(34,197,94);stop-opacity:1"/></linearGradient>
+      <linearGradient id="__VueSticker_Linear3" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(243.683,-77.8411,67.4118,211.034,-131.078,7.33521)"><stop offset="0" style="stop-color:rgb(17,94,89);stop-opacity:1"/><stop offset="0.24" style="stop-color:rgb(17,94,89);stop-opacity:1"/><stop offset="0.41" style="stop-color:rgb(13,148,136);stop-opacity:1"/><stop offset="0.75" style="stop-color:rgb(17,94,89);stop-opacity:1"/><stop offset="1" style="stop-color:rgb(17,94,89);stop-opacity:1"/></linearGradient>
+    </defs>
+</svg>
 </template>

@@ -1,3 +1,17 @@
 <template>
-  <img src="~/assets/img/js-sticker.svg" alt="JavaScript Sticker"/>
+  <svg width="100%" height="100%" viewBox="0 0 1080 1080" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <g transform="matrix(1.21589,0,0,1.21589,156.996,156.996)">
+      <path d="M681.814,0L681.814,630C681.814,658.616 658.616,681.814 630,681.814L0,681.814C-28.616,681.814 -51.814,658.616 -51.814,630L-51.814,-0C-51.814,-28.616 -28.616,-51.814 0,-51.814L630,-51.814C658.616,-51.814 681.814,-28.616 681.814,0Z" style="fill:url(#__JsSticker_Linear1);"/>
+    </g>
+    <g transform="matrix(1.21589,0,0,1.21589,156.996,156.996)">
+      <rect x="0" y="0" width="630" height="630" style="fill:url(#__JsSticker_Linear2);"/>
+    </g>
+    <g transform="matrix(1.21589,0,0,1.21589,156.996,156.996)">
+      <path d="M423.2,492.19C435.89,512.91 452.4,528.14 481.6,528.14C506.13,528.14 521.8,515.88 521.8,498.94C521.8,478.64 505.7,471.45 478.7,459.64L463.9,453.29C421.18,435.09 392.8,412.29 392.8,364.09C392.8,319.69 426.63,285.89 479.5,285.89C517.14,285.89 544.2,298.99 563.7,333.29L517.6,362.89C507.45,344.69 496.5,337.52 479.5,337.52C462.16,337.52 451.17,348.52 451.17,362.89C451.17,380.65 462.17,387.84 487.57,398.84L502.37,405.18C552.67,426.75 581.07,448.74 581.07,498.18C581.07,551.48 539.2,580.68 482.97,580.68C427.99,580.68 392.47,554.48 375.09,520.14L423.2,492.19ZM214.07,497.32C223.37,513.82 231.83,527.77 252.17,527.77C271.62,527.77 283.89,520.16 283.89,490.57L283.89,289.27L343.09,289.27L343.09,491.37C343.09,552.67 307.15,580.57 254.69,580.57C207.29,580.57 179.84,556.04 165.88,526.495L214.07,497.32Z" style="fill-rule:nonzero;"/>
+    </g>
+    <defs>
+      <linearGradient id="__JsSticker_Linear1" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(803.744,198.379,-198.379,803.744,-85.5752,138.663)"><stop offset="0" style="stop-color:rgb(245,245,244);stop-opacity:1"/><stop offset="0.18" style="stop-color:rgb(245,245,244);stop-opacity:1"/><stop offset="0.4" style="stop-color:white;stop-opacity:1"/><stop offset="0.7" style="stop-color:rgb(245,245,244);stop-opacity:1"/><stop offset="1" style="stop-color:rgb(245,245,244);stop-opacity:1"/></linearGradient>
+      <linearGradient id="__JsSticker_Linear2" x1="0" y1="0" x2="1" y2="0" gradientUnits="userSpaceOnUse" gradientTransform="matrix(803.744,198.379,-198.379,803.744,-85.5752,138.663)"><stop offset="0" style="stop-color:rgb(253,224,71);stop-opacity:1"/><stop offset="0.18" style="stop-color:rgb(253,224,71);stop-opacity:1"/><stop offset="0.4" style="stop-color:rgb(254,240,138);stop-opacity:1"/><stop offset="0.7" style="stop-color:rgb(253,224,71);stop-opacity:1"/><stop offset="1" style="stop-color:rgb(253,224,71);stop-opacity:1"/></linearGradient>
+    </defs>
+  </svg>
 </template>
