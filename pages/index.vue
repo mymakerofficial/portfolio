@@ -34,7 +34,7 @@ import MediaPlayerCard from "~/components/funcards/MediaPlayerCard.vue";
 import GitHubCommitCard from "~/components/funcards/GitHubCommitCard.vue";
 import PhoneBatteryCard from "~/components/funcards/PhoneBatteryCard.vue";
 import ClockCard from "~/components/funcards/ClockCard.vue";
-import {defineOgImageScreenshot} from "#imports";
+import {defineOgImageScreenshot, useProjectsList} from "#imports";
 import {useSeoMeta} from "unhead";
 
 enum CardType {
@@ -65,8 +65,11 @@ defineOgImageScreenshot({
   mask: '.fun-card, .toast, nav',
 });
 
-// fetch projects from api
-const { data: projects } = await useFetch('/api/v1/projects?featured_first=true&limit=10');
+// fetch projects
+const projects = await useProjectsList({
+  limit: 10,
+  featuredFist: true,
+});
 
 // create project cards
 const projectCards = ref<CardItem[]>([]);
