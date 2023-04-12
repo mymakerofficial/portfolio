@@ -58,7 +58,7 @@ const dateFormatted = useDateFormat(props.project.date, 'MMMM, YYYY')
 
 const stickers = reactive({
   isChess: computed(() => props.project.tags.includes('chess')),
-  isGame: computed(() => props.project.type === "game"),
+  isGame: computed(() => props.project.type === "game" && !props.project.tags.includes('chess')),
   isJs: computed(() => props.project.technologies.includes('js') && !props.project.technologies.includes('ts')),
   isTs: computed(() => props.project.technologies.includes('ts')),
   isVue: computed(() => (props.project.technologies.includes('vue-2') || props.project.technologies.includes('vue-3')) && !props.project.technologies.includes('nuxt-3')),
