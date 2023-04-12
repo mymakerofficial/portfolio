@@ -15,6 +15,9 @@
     <DraggableSticker v-if="stickers.isChess" class="absolute right-[5%] -top-2 z-10" :rotation="-14">
       <ChessSticker class="h-16 md:h-20 pointer-events-none" />
     </DraggableSticker>
+    <DraggableSticker v-if="stickers.isGame" class="absolute right-[12%] md:-right-[3%] top-12 md:top-6 z-10" :rotation="0" :rotation-randomize="23">
+      <JoystickSticker class="h-20 md:h-28 pointer-events-none" />
+    </DraggableSticker>
     <NuxtLink :to="project.htmlUrl" class="rounded-2xl">
       <Card :hoverable="true" class="flex flex-col gap-6 p-8">
         <div v-if="showThumbnail" class="w-full aspect-video rounded-lg overflow-hidden">
@@ -43,6 +46,7 @@ import JsSticker from "~/components/stickers/JsSticker.vue";
 import TsSticker from "~/components/stickers/TsSticker.vue";
 import VueSticker from "~/components/stickers/VueSticker.vue";
 import NuxtSticker from "~/components/stickers/NuxtSticker.vue";
+import JoystickSticker from "~/components/stickers/JoystickSticker.vue";
 import {useDateFormat} from "@vueuse/core";
 
 const props = defineProps<{
@@ -54,6 +58,7 @@ const dateFormatted = useDateFormat(props.project.date, 'MMMM, YYYY')
 
 const stickers = reactive({
   isChess: computed(() => props.project.tags.includes('chess')),
+  isGame: computed(() => props.project.type === "game"),
   isJs: computed(() => props.project.technologies.includes('js') && !props.project.technologies.includes('ts')),
   isTs: computed(() => props.project.technologies.includes('ts')),
   isVue: computed(() => (props.project.technologies.includes('vue-2') || props.project.technologies.includes('vue-3')) && !props.project.technologies.includes('nuxt-3')),
