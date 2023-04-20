@@ -64,7 +64,7 @@ import {get, useDateFormat} from "@vueuse/core";
 //@ts-ignore
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiGithub } from '@mdi/js';
-import {useFetch, useRoute, createError} from "#app";
+import {useRoute, createError} from "#app";
 import {computed} from "vue";
 import ProjectPageHero from "~/components/projectpage/ProjectPageHero.vue";
 import DetailsPanel from "~/components/detailspanel/DetailsPanel.vue";
@@ -73,8 +73,9 @@ import TimelineWrapper from "~/components/timeline/TimelineWrapper.vue";
 import TimelineItem from "~/components/timeline/TimelineItem.vue";
 import {useSeoMeta} from "unhead";
 import DetailsPanelCardLink from "~/components/detailspanel/DetailsPanelCardLink.vue";
+import {useProject} from "~/composables/useProject";
 
-const { data: project, error} = await useFetch(`/api/v1/projects/${useRoute().params.slug}`)
+const { data: project, error} = await useProject(useRoute().params.slug as string)
 
 const pageTitle = computed(() => {
   // create list of collaborators
