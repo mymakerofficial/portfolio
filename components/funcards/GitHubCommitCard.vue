@@ -3,9 +3,9 @@
     <Card class="fun-card p-8">
       <div class="flex flex-col gap-4">
         <div class="mr-9">
-          <h1 class="text-2xl font-bold text-gray-600 dark:text-gray-100 truncate">{{ data.commit.message }}</h1>
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100 truncate">{{ data.commit.message }}</h1>
         </div>
-        <div class="flex flex-wrap gap-2 items-baseline text-sm text-gray-600 dark:text-gray-200">
+        <div class="flex flex-wrap gap-2 items-baseline text-sm text-gray-700 dark:text-gray-400 group-hover/card:text-gray-900 group-hover/card:dark:text-gray-100 duration-500 ease-in-out">
           <NuxtLink :href="data.actor.htmlUrl" target="_blank" class="text-md font-medium truncate rounded-sm">{{ data.actor.displayLogin }}</NuxtLink>
           <span class="truncate">committed to</span>
           <NuxtLink :href="data.repo.htmlUrl" target="_blank" class="text-md font-medium truncate rounded-sm">{{ data.repo.name }}</NuxtLink>

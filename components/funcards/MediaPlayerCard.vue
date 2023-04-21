@@ -11,9 +11,9 @@
         </div>
         <div class="flex-1 flex flex-col gap-4 justify-between">
           <div class="flex flex-col gap-2 mr-9">
-            <h1 class="text-md text-gray-700 dark:text-gray-100 font-bold">{{listening.trackTitle}}</h1>
-            <p class="text-sm text-gray-700 dark:text-gray-400">{{listening.artistName}}</p>
-            <p class="text-sm text-gray-700 dark:text-gray-400">{{listening.albumName}}</p>
+            <h1 class="text-md text-gray-900 dark:text-gray-100 font-bold">{{listening.trackTitle}}</h1>
+            <p class="text-sm text-gray-700 dark:text-gray-400 group-hover/card:text-gray-900 group-hover/card:dark:text-gray-100 duration-500 ease-in-out">{{listening.artistName}}</p>
+            <p class="text-sm text-gray-700 dark:text-gray-400 group-hover/card:text-gray-900 group-hover/card:dark:text-gray-100 duration-500 ease-in-out">{{listening.albumName}}</p>
           </div>
           <div>
             <div class="h-1 w-full bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
