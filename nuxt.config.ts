@@ -12,9 +12,6 @@ export default defineNuxtConfig({
   imports: {
     autoImport: false
   },
-  devtools: {
-    enabled: true,
-  },
   runtimeConfig: {
     public: {
       siteUrl: process.env.NUXT_ENV_VERCEL_URL || process.env.NUXT_PUBLIC_SITE_URL || 'https://example.com',
@@ -27,6 +24,9 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
+      htmlAttrs: {
+        'data-mode': 'dark',
+      },
       bodyAttrs: {
         class: 'bg-white text-dark-900 dark:bg-gray-900 dark:text-gray-100 overflow-x-hidden',
       },

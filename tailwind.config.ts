@@ -13,6 +13,7 @@ export default <Partial<Config>>{
     `error.{js,ts,vue}`,
   ],
   safelist: [],
+  darkMode: ['class', '[data-mode="dark"]'],
   theme: {
     extend: {
       backgroundImage: {

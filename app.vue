@@ -31,7 +31,18 @@ whenever(ctrl_k, () => {
   set(quickActionModalActive, !get(quickActionModalActive));
 })
 
+let mode: 'light' | 'dark';
+
+if (process.client && !window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  mode = 'light'
+} else {
+  mode = 'dark'
+}
+
 useHead({
+  htmlAttrs: {
+    'data-mode': mode,
+  },
   link: [
     {
       rel: 'icon',
