@@ -1,5 +1,4 @@
 <template>
-  <HomePageHeroBackground />
   <Container class="2xl:w-5/12">
     <div class="flex flex-col gap-8 justify-center mx-8 md:mx-12">
       <div>
