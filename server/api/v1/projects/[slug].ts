@@ -70,7 +70,8 @@ export default defineCachedEventHandler(
       }
     }
 
-    let lastCommitDate: Date = new Date(0);
+    let lastCommitDate: Date | null = null;
+
     for (const repo of projectData.repositories?.filter((r) => r.provider.slug === "github") || []) {
       try {
         // get date of last commit to master
@@ -81,14 +82,18 @@ export default defineCachedEventHandler(
         });
 
         if (githubData.length === 0) {
+          continue; // psst, continue means skip and continue the next iteration of the loop and not continue whatever were doing...
+        }
+
+        if (!githubData[0].commit.author?.date) {
           continue;
         }
 
-        if (!githubData[0].commit.author?.date || new Date(githubData[0].commit.author?.date) < lastCommitDate) {
-          continue;
-        }
+        const gitDate = new Date(githubData[0].commit.author.date);
 
-        lastCommitDate = new Date(githubData[0].commit.author?.date);
+        if (lastCommitDate === null || gitDate > lastCommitDate) {
+          lastCommitDate = gitDate;
+        }
       } catch (_) {}
     }
 
@@ -102,7 +107,7 @@ export default defineCachedEventHandler(
       websiteUrl: projectData.url,
       releaseDate: projectData.releaseDate,
       startedDate: projectData.startedDate,
-      lastCommitDateTime: lastCommitDate.toISOString(),
+      lastCommitDateTime: lastCommitDate?.toISOString() || null,
       repositories: projectData.repositories?.filter((r) => r.public).map((r) => {
         return {
           name: r.name,
