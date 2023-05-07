@@ -8,7 +8,7 @@
         <div class="flex gap-4 justify-center underline">
           <NuxtLink to="/">Home</NuxtLink>
           <NuxtLink to="/projects">Projects</NuxtLink>
-          <NuxtLink to="/legal">Privacy Policy</NuxtLink>
+          <NuxtLink to="/privacy-policy">Privacy Policy</NuxtLink>
         </div>
       </div>
       <div class="flex flex-col gap-2">
