@@ -4,6 +4,7 @@
       <div class="flex flex-col gap-8">
         <div class="flex flex-row gap-8 justify-center items-center">
           <QuickactionsOpenQuickActionModalButton />
+          <ColorModeSwitcher />
         </div>
         <div class="flex gap-4 justify-center underline">
           <NuxtLink to="/">Home</NuxtLink>
@@ -25,4 +26,5 @@
 
 <script setup lang="ts">
 import NuxtIcon from "~/components/icons/NuxtIcon.vue";
+import ColorModeSwitcher from "~/components/goodies/ColorModeSwitcher.vue";
 </script>

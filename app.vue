@@ -11,38 +11,70 @@
 
 <script setup lang="ts">
 import {NavBarOption} from "~/components/navbar/NavBarWrapper.vue";
-import {get, set, useMagicKeys, whenever} from "@vueuse/core";
-import {ref} from "vue";
+import {
+  get,
+  set,
+  syncRef,
+  useMagicKeys,
+  usePreferredColorScheme,
+  useStorage,
+  useToggle,
+  whenever
+} from "@vueuse/core";
+import {onMounted, watch} from "vue";
 import QuickActionModal from "~/components/quickactions/QuickActionModal.vue";
 import Footer from "~/components/generics/Footer.vue";
 import {useHead} from "unhead";
+import {useColorMode} from "~/composables/states";
 
-let quickActionModalActive = ref(false);
+// quick action modal toggle
+
+const [quickActionModalActive, toggleActionModal] = useToggle(false);
 
 const { ctrl_k } = useMagicKeys({
   passive: false,
   onEventFired(e) {
+    // we need to prevent the default behavior of the browser
     if (e.ctrlKey && e.key === 'k')
       e.preventDefault()
   },
 })
 
 whenever(ctrl_k, () => {
-  set(quickActionModalActive, !get(quickActionModalActive));
+  toggleActionModal();
+});
+
+// color mode
+
+const preferredColor = usePreferredColorScheme();
+const colorMode = useColorMode();
+
+onMounted(() => {
+  const colorModeLocalStorage = useStorage('color-mode', null, localStorage);
+
+  // sync preferred color with colorMode
+  // this needs to be done before setting the initial value otherwise it will be overwritten
+  syncRef(preferredColor, colorMode)
+
+  // set initial value from localStorage or preferred color
+  set(colorMode, get(colorModeLocalStorage) || get(preferredColor));
+
+  // sync localStorage with state
+  syncRef(colorMode, colorModeLocalStorage);
 })
 
-let mode: 'light' | 'dark';
+watch(colorMode, () => {
+  // whenever the color mode changes, we update the html attribute
+  useHead({
+    htmlAttrs: {
+      'data-mode': get(colorMode),
+    }
+  });
+});
 
-if (process.client && !window.matchMedia('(prefers-color-scheme: dark)').matches) {
-  mode = 'light'
-} else {
-  mode = 'dark'
-}
+// head
 
 useHead({
-  htmlAttrs: {
-    'data-mode': mode,
-  },
   link: [
     {
       rel: 'icon',
