@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NuxtLoadingIndicator color="#f6f8fa" :height="2" />
+    <NuxtLoadingIndicator :color="colorMode === 'dark' ? '#f6f8fa' : '#14151a'" :height="2" />
     <ClientOnly>
       <QuickActionModal v-model:active="quickActionModalActive" />
     </ClientOnly>
