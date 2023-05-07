@@ -6,5 +6,5 @@
   </component>
 </template>
 <script setup lang="ts">
-import NuxtLink from "#app/components/nuxt-link.mjs";
+import NuxtLink from "#app/components/nuxt-link";
 </script>
