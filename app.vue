@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NuxtLoadingIndicator :color="colorMode === 'dark' ? '#f6f8fa' : '#14151a'" :height="2" />
+    <NuxtLoadingIndicator :color="colorScheme === 'dark' ? '#f6f8fa' : '#14151a'" :height="2" />
     <ClientOnly>
       <QuickActionModal v-model:active="quickActionModalActive" />
     </ClientOnly>
@@ -25,7 +25,7 @@ import {onMounted, watch} from "vue";
 import QuickActionModal from "~/components/quickactions/QuickActionModal.vue";
 import Footer from "~/components/generics/Footer.vue";
 import {useHead} from "unhead";
-import {useColorMode} from "~/composables/states";
+import {useColorScheme} from "~/composables/states";
 
 // quick action modal toggle
 
@@ -46,28 +46,28 @@ whenever(ctrl_k, () => {
 
 // color mode
 
-const preferredColor = usePreferredColorScheme();
-const colorMode = useColorMode();
+const preferredColorScheme = usePreferredColorScheme();
+const colorScheme = useColorScheme();
 
 onMounted(() => {
-  const colorModeLocalStorage = useStorage('color-mode', null, localStorage);
+  const localStorageColorScheme = useStorage('color-scheme', null, localStorage);
 
-  // sync preferred color with colorMode
+  // sync preferred color with colorScheme
   // this needs to be done before setting the initial value otherwise it will be overwritten
-  syncRef(preferredColor, colorMode)
+  syncRef(preferredColorScheme, colorScheme)
 
-  // set initial value from localStorage or preferred color
-  set(colorMode, get(colorModeLocalStorage) || get(preferredColor));
+  // set initial value from localStorage or preferred color scheme
+  set(colorScheme, get(localStorageColorScheme) || get(preferredColorScheme));
 
   // sync localStorage with state
-  syncRef(colorMode, colorModeLocalStorage);
+  syncRef(colorScheme, localStorageColorScheme);
 })
 
-watch(colorMode, () => {
+watch(colorScheme, () => {
   // whenever the color mode changes, we update the html attribute
   useHead({
     htmlAttrs: {
-      'data-mode': get(colorMode),
+      'data-color-scheme': get(colorScheme),
     }
   });
 });

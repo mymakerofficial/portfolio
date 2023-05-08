@@ -25,11 +25,11 @@ a:focus-visible, button:focus-visible {
     @apply outline-none ring-2 ring-gray-500/50;
 }
 
-[data-mode="dark"] {
+[data-color-scheme="dark"] {
     color-scheme: dark;
 }
 
-[data-mode="light"] {
+[data-color-scheme="light"] {
     color-scheme: light;
 }
 

@@ -1,3 +1,3 @@
 import { useState } from "nuxt/app";
 
-export const useColorMode = () => useState<'dark' | 'light'>('colorMode', () => 'dark');
+export const useColorScheme = () => useState<'dark' | 'light'>('colorScheme', () => 'dark');

@@ -25,7 +25,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: {
-        'data-mode': 'dark',
+        'data-color-scheme': 'dark',
       },
       bodyAttrs: {
         class: 'bg-white text-dark-900 dark:bg-gray-900 dark:text-gray-100 overflow-x-hidden',
