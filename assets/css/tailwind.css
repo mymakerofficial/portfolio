@@ -25,5 +25,13 @@ a:focus-visible, button:focus-visible {
     @apply outline-none ring-2 ring-gray-500/50;
 }
 
+[data-mode="dark"] {
+    color-scheme: dark;
+}
+
+[data-mode="light"] {
+    color-scheme: light;
+}
+
 @tailwind components;
 @tailwind utilities;
