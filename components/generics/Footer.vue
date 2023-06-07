@@ -1,24 +1,27 @@
 <template>
-  <footer class="mx-auto px-8 my-24">
-    <div class="flex flex-col gap-8 text-center text-md text-gray-300 dark:text-gray-600 fill-gray-300 dark:fill-gray-600">
-      <div class="flex flex-col gap-8">
-        <div class="flex flex-row gap-8 justify-center items-center">
+  <footer class="px-16 my-16">
+    <div class="text-md text-gray-300 dark:text-gray-600 fill-gray-300 dark:fill-gray-600">
+      <hr class="w-8 h-1 mb-16 bg-gray-300 dark:bg-gray-800 border-none rounded-full" />
+      <div class="flex justify-between">
+        <div class="flex flex-col gap-8">
+          <div class="flex gap-4 underline">
+            <NuxtLink to="/">Home</NuxtLink>
+            <NuxtLink to="/projects">Projects</NuxtLink>
+            <NuxtLink to="/privacy-policy">Privacy Policy</NuxtLink>
+          </div>
+          <div class="flex flex-col gap-2">
+            <p>
+              Proudly build with <NuxtIcon class="h-4 inline" /> Nuxt and other awesome technologies.
+            </p>
+            <p>
+              © 2023 My_Maker. All rights reserved.
+            </p>
+          </div>
+        </div>
+        <div class="flex gap-6 mt-auto">
           <QuickactionsOpenQuickActionModalButton />
           <ColorModeSwitcher />
         </div>
-        <div class="flex gap-4 justify-center underline">
-          <NuxtLink to="/">Home</NuxtLink>
-          <NuxtLink to="/projects">Projects</NuxtLink>
-          <NuxtLink to="/privacy-policy">Privacy Policy</NuxtLink>
-        </div>
-      </div>
-      <div class="flex flex-col gap-2">
-        <p>
-          Proudly build with <NuxtIcon class="h-4 inline" /> Nuxt and other awesome technologies.
-        </p>
-        <p>
-          © 2023 My_Maker. All rights reserved. All trademarks are property of their respective owners.
-        </p>
       </div>
     </div>
   </footer>
