@@ -9,8 +9,9 @@
           Below you'll find all my projects and some other random stuff about me.
         </div>
       </div>
-      <div class="text-gray-600 dark:text-gray-300">
+      <div class="text-gray-600 dark:text-gray-300 flex gap-8">
         <GenericButton class="inline-flex gap-2 font-medium" :href="GitHubUrl"><SvgIcon type="mdi" :path="mdiGithub" />GitHub</GenericButton>
+        <GenericButton class="inline-flex gap-2 font-medium" :href="EmailUrl"><SvgIcon type="mdi" :path="mdiEmailOutline" />Contact</GenericButton>
       </div>
     </div>
   </Container>
@@ -21,7 +22,8 @@ import Container from "~/components/generics/Container.vue";
 import GenericButton from "~/components/forms/GenericButton.vue";
 //@ts-ignore
 import SvgIcon from '@jamescoyle/vue-icon';
-import { mdiGithub } from '@mdi/js';
+import { mdiGithub, mdiEmailOutline } from '@mdi/js';
 
 const GitHubUrl = import.meta.env.VITE_GITHUB_URL;
+const EmailUrl = import.meta.env.VITE_EMAIL_URL;
 </script>
