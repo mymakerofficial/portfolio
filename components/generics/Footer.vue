@@ -1,8 +1,8 @@
 <template>
-  <footer class="px-16 my-16">
+  <footer class="m-12 md:m-16">
     <div class="text-md text-gray-300 dark:text-gray-600 fill-gray-300 dark:fill-gray-600">
       <hr class="w-8 h-1 mb-16 bg-gray-300 dark:bg-gray-800 border-none rounded-full" />
-      <div class="flex justify-between">
+      <div class="flex flex-col md:flex-row gap-8 justify-between">
         <div class="flex flex-col gap-8">
           <div class="flex gap-4 underline">
             <NuxtLink to="/">Home</NuxtLink>
