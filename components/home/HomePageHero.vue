@@ -10,8 +10,8 @@
         </div>
       </div>
       <div class="text-gray-600 dark:text-gray-300 flex gap-8">
-        <GenericButton class="inline-flex gap-2 font-medium" :href="GitHubUrl"><SvgIcon type="mdi" :path="mdiGithub" />GitHub</GenericButton>
-        <GenericButton class="inline-flex gap-2 font-medium" :href="EmailUrl"><SvgIcon type="mdi" :path="mdiEmailOutline" />Contact</GenericButton>
+        <GenericButton class="inline-flex gap-2 font-medium" :href="gitHubUrl"><SvgIcon type="mdi" :path="mdiGithub" />GitHub</GenericButton>
+        <GenericButton class="inline-flex gap-2 font-medium" :href="emailUrl"><SvgIcon type="mdi" :path="mdiEmailOutline" />Contact</GenericButton>
       </div>
     </div>
   </Container>
@@ -24,6 +24,6 @@ import GenericButton from "~/components/forms/GenericButton.vue";
 import SvgIcon from '@jamescoyle/vue-icon';
 import { mdiGithub, mdiEmailOutline } from '@mdi/js';
 
-const GitHubUrl = import.meta.env.VITE_GITHUB_URL;
-const EmailUrl = import.meta.env.VITE_EMAIL_URL;
+const gitHubUrl = import.meta.env.VITE_GITHUB_URL;
+const emailUrl = import.meta.env.VITE_EMAIL_URL;
 </script>
