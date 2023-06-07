@@ -18,6 +18,9 @@
     <DraggableSticker v-if="stickers.isGame" class="absolute right-[12%] md:-right-[3%] top-12 md:top-6 z-10" :rotation="0" :rotation-randomize="23">
       <JoystickSticker class="h-20 md:h-28 pointer-events-none" />
     </DraggableSticker>
+    <DraggableSticker v-if="stickers.isCs" class="absolute right-[6%] top-20 z-10" :rotation-randomize="30" :x-randomize="30" :y-randomize="30">
+      <CsSticker class="h-16 md:h-20 pointer-events-none" />
+    </DraggableSticker>
     <NuxtLink :to="project.htmlUrl" class="rounded-2xl">
       <Card :hoverable="true" class="flex flex-col gap-6 p-8">
         <div v-if="showThumbnail" class="w-full aspect-video rounded-lg overflow-hidden">
@@ -48,6 +51,7 @@ import VueSticker from "~/components/stickers/VueSticker.vue";
 import NuxtSticker from "~/components/stickers/NuxtSticker.vue";
 import JoystickSticker from "~/components/stickers/JoystickSticker.vue";
 import {useDateFormat} from "@vueuse/core";
+import CsSticker from "~/components/stickers/CsSticker.vue";
 
 const props = defineProps<{
   project: CompactProjectInfo
@@ -61,6 +65,7 @@ const stickers = reactive({
   isGame: computed(() => props.project.type === "game" && !props.project.tags.includes('chess')),
   isJs: computed(() => props.project.technologies.includes('js') && !props.project.technologies.includes('ts')),
   isTs: computed(() => props.project.technologies.includes('ts')),
+  isCs: computed(() => props.project.technologies.includes('cs')),
   isVue: computed(() => (props.project.technologies.includes('vue-2') || props.project.technologies.includes('vue-3')) && !props.project.technologies.includes('nuxt-3')),
   isNuxt: computed(() => props.project.technologies.includes('nuxt-3')),
 });
