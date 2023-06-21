@@ -9,7 +9,7 @@
           Below you'll find all my projects and some other random stuff about me.
         </div>
       </div>
-      <div class="text-gray-600 dark:text-gray-300 flex flex-col gap-8">
+      <div class="header-nav-buttons text-gray-600 dark:text-gray-300 flex flex-col gap-8">
         <div class="flex gap-8 items-center">
           <GenericButton class="inline-flex gap-2 font-medium" to="/projects"><SvgIcon type="mdi" :path="mdiBrush" />Projects</GenericButton>
           <GenericButton class="inline-flex gap-2 font-medium" to="/games"><SvgIcon type="mdi" :path="mdiController" />Games</GenericButton>
