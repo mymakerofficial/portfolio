@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div v-if="!hide">
     <DraggableSticker class="absolute right-1/4 -top-2 z-10" :rotation="-16">
       <LiveSticker class="h-20 pointer-events-none" />
     </DraggableSticker>
-    <NuxtLink :href="listening?.shareUrl" target="_blank" class="rounded-2xl" v-if="!hide">
+    <NuxtLink :href="listening?.shareUrl" target="_blank" class="rounded-2xl">
       <Card class="fun-card p-8 flex flex-col lg:flex-row gap-4">
         <div v-if="listening.albumArtUrl" class="w-28 h-28 overflow-hidden">
           <img :alt="listening.albumName" :src="listening.albumArtUrl" class="absolute w-full h-full z-10" />
