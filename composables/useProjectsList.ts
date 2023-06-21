@@ -4,6 +4,7 @@ import {Ref} from "vue";
 
 export interface ProjectsListOptions {
   query?: string;
+  type?: string;
   groupBy?: string;
   includeOther?: boolean;
   featuredFist?: boolean;
@@ -17,6 +18,10 @@ export const useProjectsList = async (options?: ProjectsListOptions): Promise<Re
 
   if (options?.query) {
     params.append('q', options.query);
+  }
+
+  if (options?.type) {
+    params.append('type', options.type);
   }
 
   if (options?.groupBy) {

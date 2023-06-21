@@ -263,6 +263,7 @@ export default defineEventHandler(
   async (event): Promise<ProjectsResponse> => {
     const query = new URLSearchParams(event.req.url?.split('?')[1])
     const searchQuery = query.get("q") || undefined; // search query
+    const projectType = query.get("type") || undefined; // search query
     let groupBy = query.get("group_by") || undefined; // group by technology or date
     let groupByProperty = groupBy?.split(':')[0] || undefined; // what to group by
     let groupByValue = groupBy?.split(':')[1] || undefined; // what to group by
@@ -279,6 +280,11 @@ export default defineEventHandler(
     // filter out non public projects if not dev environment
     if (process.env.NODE_ENV !== 'development' || process.env.SHOW_NON_PUBLIC_PROJECTS !== 'true') {
       projectsData = projectsData.filter((project) => project.public);
+    }
+
+    // filter by project type
+    if (projectType) {
+      projectsData = projectsData.filter((project) => project.type.slug === projectType);
     }
 
     let technologies = null;
