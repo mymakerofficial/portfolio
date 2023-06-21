@@ -1,6 +1,6 @@
 <template>
   <GenericButton
-    class="relative inline-block rounded-2xl overflow-hidden bg-gray-100 dark:bg-gray-800 duration-500 ease-in-out"
+    class="relative inline-block rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 duration-500 ease-in-out"
   >
     <ClientOnly>
       <SpotlightEffectElement class="opacity-10" />
