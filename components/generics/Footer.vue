@@ -7,6 +7,7 @@
           <div class="flex gap-4 underline">
             <NuxtLink to="/">Home</NuxtLink>
             <NuxtLink to="/projects">Projects</NuxtLink>
+            <NuxtLink to="/games">Games</NuxtLink>
             <NuxtLink to="/privacy-policy">Privacy Policy</NuxtLink>
           </div>
           <div class="flex flex-col gap-2">
