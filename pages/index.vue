@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-12 md:gap-28 my-12 md:mt-36">
+  <div class="flex flex-col gap-12 md:gap-28 my-12 md:my-36">
     <section>
       <HomePageHero />
     </section>
@@ -7,18 +7,13 @@
       <Container class="2xl:w-5/12">
         <div class="flex flex-col gap-6">
           <template v-for="item in list" :key="item.key">
-            <ProjectCard v-if="item.type === CardType.Project" :project="item.data" />
+            <ProjectCard v-if="item.type === CardType.Project" :project="item.data" show-stickers />
             <PlaceholderCard v-else-if="item.type === CardType.Placeholder" />
             <MediaPlayerCard v-else-if="item.type === CardType.MediaPlayer" :data="item.data" />
             <GitHubCommitCard v-else-if="item.type === CardType.GitHubCommit" :data="item.data" />
             <PhoneBatteryCard v-else-if="item.type === CardType.PhoneBattery" :data="item.data" />
             <ClockCard v-else-if="item.type === CardType.Clock" />
           </template>
-          <div>
-            <div class="flex justify-center">
-              <GenericButton class="inline-flex gap-2 font-medium p-6 text-gray-600 dark:text-gray-300" to="/projects"><SvgIcon type="mdi" :path="mdiArrowExpandAll" />All Projects</GenericButton>
-            </div>
-          </div>
         </div>
       </Container>
     </main>
@@ -41,10 +36,6 @@ import PhoneBatteryCard from "~/components/funcards/PhoneBatteryCard.vue";
 import ClockCard from "~/components/funcards/ClockCard.vue";
 import {defineOgImageScreenshot, useProjectsList} from "#imports";
 import {useSeoMeta} from "unhead";
-import GenericButton from "~/components/forms/GenericButton.vue";
-//@ts-ignore
-import SvgIcon from '@jamescoyle/vue-icon';
-import { mdiArrowExpandAll } from '@mdi/js';
 
 enum CardType {
   Project = "project",
