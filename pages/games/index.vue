@@ -2,9 +2,11 @@
   <div class="flex flex-col gap-12 md:gap-28 my-12 md:my-36">
     <section>
       <Container class="2xl:w-5/12">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 leading-loose">Games</h1>
-        <div class="text-lg font-medium text-gray-900 dark:text-gray-100 leading-loose tracking-wide">
-          I worked on some games. You can play them here.
+        <div class="mx-8 md:mx-12">
+          <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 leading-loose">Games</h1>
+          <p class="text-lg font-medium text-gray-900 dark:text-gray-100 leading-loose tracking-wide">
+            I worked on some games. You can play them here.
+          </p>
         </div>
       </Container>
     </section>

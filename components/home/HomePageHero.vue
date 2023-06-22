@@ -3,11 +3,11 @@
     <div class="flex flex-col gap-8 justify-center mx-8 md:mx-12">
       <div>
         <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 leading-loose">Hai I'm My_Maker.</h1>
-        <div class="text-lg font-medium text-gray-900 dark:text-gray-100 leading-loose tracking-wide">
+        <p class="text-lg font-medium text-gray-900 dark:text-gray-100 leading-loose tracking-wide">
           Making mostly silly websites and games online.
           Developer and designer living in germany. Passionate about all things coding.
           Below you'll find all my projects and some other random stuff about me.
-        </div>
+        </p>
       </div>
       <div class="header-nav-buttons text-gray-600 dark:text-gray-300 flex flex-col gap-8">
         <div class="flex gap-8 items-center">
