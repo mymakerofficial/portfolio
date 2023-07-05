@@ -1,6 +1,6 @@
 <template>
   <Container class="2xl:w-7/12 p-8 mb-12">
-    <div class="md:mx-6">
+    <div class="home-button md:mx-6">
       <NuxtLink to="/">
         <GenericButton class="flex gap-2 items-center"><SvgIcon type="mdi" :path="mdiArrowLeft" class="h-4" /> Home</GenericButton>
       </NuxtLink>
@@ -47,6 +47,6 @@ defineOgImageScreenshot({
   width: 1280,
   height: 720,
   colorScheme: 'dark',
-  mask: '.toast, nav',
+  mask: '.toast, nav, footer, .home-button',
 });
 </script>
