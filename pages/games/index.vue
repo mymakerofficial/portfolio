@@ -26,20 +26,8 @@ import {defineOgImageScreenshot, useProjectsList} from "#imports";
 import {useSeoMeta} from "unhead";
 import {get, set} from "@vueuse/core";
 import {CompactProjectInfo} from "~/lib/projects";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import ProjectCard from "~/components/home/ProjectCard.vue";
-
-useSeoMeta({
-  title: "Games by My_Maker",
-  description:  "Hai Im My_Maker. I make games and you can play them here.",
-});
-
-defineOgImageScreenshot({
-  width: 1280,
-  height: 720,
-  colorScheme: 'dark',
-  mask: '.fun-card, .toast, nav',
-});
 
 // fetch projects
 const projectsResponse = await useProjectsList({
@@ -52,4 +40,16 @@ const games = ref<CompactProjectInfo[]>();
 if (get(projectsResponse)?.data !== null) {
   set(games, get(projectsResponse).data);
 }
+
+// get thumbnail of first game
+
+const firstThumbnailUrl = computed(() => {
+  return get(games)?.[0]?.thumbnailUrl ?? undefined;
+})
+
+useSeoMeta({
+  title: "Games by My_Maker",
+  description:  "Hai Im My_Maker. I make games and you can play them here.",
+  ogImage: get(firstThumbnailUrl),
+});
 </script>
