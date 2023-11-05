@@ -9,6 +9,9 @@
     <DraggableSticker v-if="stickers.isVue && showStickers" class="absolute right-8 md:-right-4 bottom-0 z-10" :rotation="-10" :rotation-randomize="4" :x-randomize="30" :y-randomize="20">
       <VueSticker class="h-16 md:h-20 pointer-events-none" />
     </DraggableSticker>
+    <DraggableSticker v-if="stickers.isSvelte && showStickers" class="absolute right-8 md:-right-4 bottom-0 z-10" :rotation="-10" :rotation-randomize="4" :x-randomize="30" :y-randomize="20">
+      <SvelteSticker class="h-16 md:h-20 pointer-events-none" />
+    </DraggableSticker>
     <DraggableSticker v-if="stickers.isNuxt && showStickers" class="absolute right-8 bottom-0 z-10" :rotation="-10" :rotation-randomize="4" :x-randomize="30" :y-randomize="20">
       <NuxtSticker class="h-16 md:h-20 pointer-events-none" />
     </DraggableSticker>
@@ -52,6 +55,7 @@ import NuxtSticker from "~/components/stickers/NuxtSticker.vue";
 import JoystickSticker from "~/components/stickers/JoystickSticker.vue";
 import {useDateFormat} from "@vueuse/core";
 import CsSticker from "~/components/stickers/CsSticker.vue";
+import SvelteSticker from "~/components/stickers/SvelteSticker.vue";
 
 const props = defineProps<{
   project: CompactProjectInfo
@@ -68,6 +72,7 @@ const stickers = reactive({
   isTs: computed(() => props.project?.technologies.includes('ts')),
   isCs: computed(() => props.project?.technologies.includes('cs')),
   isVue: computed(() => (props.project?.technologies.includes('vue-2') || props.project?.technologies.includes('vue-3')) && !props.project?.technologies.includes('nuxt-3')),
+  isSvelte: computed(() => props.project?.technologies.includes('svelte')),
   isNuxt: computed(() => props.project?.technologies.includes('nuxt-3')),
 });
 </script>
