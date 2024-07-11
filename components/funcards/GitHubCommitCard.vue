@@ -2,7 +2,8 @@
   <NuxtLink :href="data.repo.htmlUrl" target="_blank" class="rounded-2xl">
     <Card class="fun-card p-8">
       <div class="flex flex-col gap-4">
-        <div class="mr-9">
+        <div class="flex flex-col gap-3 mr-9">
+          <p class="text-xs text-gray-900 dark:text-gray-100">Last public commit</p>
           <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100 truncate">{{ data.commit.message }}</h1>
         </div>
         <div class="flex flex-wrap gap-2 items-baseline text-sm text-gray-700 dark:text-gray-400 group-hover/card:text-gray-900 group-hover/card:dark:text-gray-100 duration-500 ease-in-out">
