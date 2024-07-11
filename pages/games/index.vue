@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import Container from "~/components/generics/Container.vue";
-import {defineOgImageScreenshot, useProjectsList} from "#imports";
+import {useProjectsList} from "#imports";
 import {useSeoMeta} from "unhead";
 import {get, set} from "@vueuse/core";
 import {CompactProjectInfo} from "~/lib/projects";

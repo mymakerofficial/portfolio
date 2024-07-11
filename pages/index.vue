@@ -6,8 +6,13 @@
     <main>
       <Container class="2xl:w-5/12">
         <div class="flex flex-col gap-6">
-          <template v-for="item in list" :key="item.key">
-            <ProjectCard v-if="item.type === CardType.Project" :project="item.data" show-stickers />
+          <template v-for="(item, index) in list" :key="item.key">
+            <ProjectCard
+              v-if="item.type === CardType.Project"
+              :project="item.data"
+              show-stickers
+              :show-thumbnail="index === 0"
+            />
             <PlaceholderCard v-else-if="item.type === CardType.Placeholder" />
             <MediaPlayerCard v-else-if="item.type === CardType.MediaPlayer" :data="item.data" />
             <GitHubCommitCard v-else-if="item.type === CardType.GitHubCommit" :data="item.data" />

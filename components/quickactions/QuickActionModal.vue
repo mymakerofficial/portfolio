@@ -165,6 +165,14 @@ const buildResult = async (query: string) => {
           useRouter().push('/projects');
         }
       },
+      {
+        displayName: 'Games',
+        key: 'games',
+        keyWords: ['games', 'play', 'list'],
+        action: () => {
+          useRouter().push('/games');
+        }
+      },
     ]
   });
 

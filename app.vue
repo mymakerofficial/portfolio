@@ -10,7 +10,6 @@
 </template>
 
 <script setup lang="ts">
-import {NavBarOption} from "~/components/navbar/NavBarWrapper.vue";
 import {
   get,
   set,
