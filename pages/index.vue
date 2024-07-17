@@ -11,7 +11,7 @@
               v-if="item.type === CardType.Project"
               :project="item.data"
               show-stickers
-              :show-thumbnail="index === 0"
+              :show-thumbnail="showThumbnail(index, item.data)"
             />
             <PlaceholderCard v-else-if="item.type === CardType.Placeholder" />
             <MediaPlayerCard v-else-if="item.type === CardType.MediaPlayer" :data="item.data" />
@@ -41,6 +41,7 @@ import PhoneBatteryCard from "~/components/funcards/PhoneBatteryCard.vue";
 import ClockCard from "~/components/funcards/ClockCard.vue";
 import {defineOgImageScreenshot, useProjectsList} from "#imports";
 import {useSeoMeta} from "unhead";
+import {CompactProjectInfo} from "~/lib/projects";
 
 enum CardType {
   Project = "project",
@@ -179,6 +180,10 @@ const createFunCards = async () => {
   cards.splice(Math.floor(Math.random() * (cards.length - 1) + 1), 0, timeCard);
 
   set(funCards, cards);
+}
+
+function showThumbnail(index: number, project: CompactProjectInfo) {
+  return index % 3 === 0 && project.featured;
 }
 
 onMounted(async () => {
