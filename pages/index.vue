@@ -183,7 +183,16 @@ const createFunCards = async () => {
 }
 
 function showThumbnail(index: number, project: CompactProjectInfo) {
-  return index % 3 === 0 && project.featured;
+  if (index === 0) {
+    return true
+  }
+  if (!project.featured) {
+    return false;
+  }
+  if (project.type === "game") {
+    return true
+  }
+  return false
 }
 
 onMounted(async () => {
