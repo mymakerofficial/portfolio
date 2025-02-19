@@ -148,36 +148,39 @@ const getTimeCardItem = async () => {
 
 const createFunCards = async () => {
   const cards: CardItem[] = [];
-
-  const mediaPlayerCard = await getMediaPlayerItem();
-  const githubCommitCard = await getGitHubCommitItem();
-  const phoneBatteryCard = await getPhoneBatteryItem();
-  const timeCard = await getTimeCardItem();
-
+  
   // add media player card
-  if (mediaPlayerCard.data?.contentId !== null) {
-    cards.push(mediaPlayerCard);
-  }
+  await getMediaPlayerItem().then((mediaPlayerCard) => {
+    if (mediaPlayerCard.data?.contentId !== null) {
+      cards.push(mediaPlayerCard);
+    }
+  }).catch(console.error)
 
   // add github commit card
-  if (githubCommitCard.data?.eventId !== null) {
-    // add github commit card on top if it's less than 4 hours old
-    if (
-        new Date(githubCommitCard.data.createdAt).getTime() > (Date.now() - (1000 * 60 * 60 * 4)) // 4 hours
-    ) {
-      // add on top
-      cards.unshift(githubCommitCard);
-    } else {
-      // add next
-      cards.push(githubCommitCard);
+  await getGitHubCommitItem().then((githubCommitCard) => {
+    if (githubCommitCard.data?.eventId !== null) {
+      // add github commit card on top if it's less than 4 hours old
+      if (
+          new Date(githubCommitCard.data.createdAt).getTime() > (Date.now() - (1000 * 60 * 60 * 4)) // 4 hours
+      ) {
+        // add on top
+        cards.unshift(githubCommitCard);
+      } else {
+        // add next
+        cards.push(githubCommitCard);
+      }
     }
-  }
+  }).catch(console.error)
 
   // add phone battery card
-  cards.push(phoneBatteryCard);
+  await getPhoneBatteryItem().then((phoneBatteryCard) => {
+    cards.push(phoneBatteryCard);
+  }).catch(console.error)
 
   // add time card at random position
-  cards.splice(Math.floor(Math.random() * (cards.length - 1) + 1), 0, timeCard);
+  await getTimeCardItem().then((timeCard) => {
+    cards.splice(Math.floor(Math.random() * (cards.length - 1) + 1), 0, timeCard);
+  }).catch(console.error)
 
   set(funCards, cards);
 }
